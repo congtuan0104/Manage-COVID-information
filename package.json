@@ -1,0 +1,31 @@
+{
+  "name": "manage_covid_information",
+  "version": "1.0.0",
+  "description": "Đồ án cuối kì môn Lập trình ứng dụng WEB",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/congtuan0104/Manage-COVID-information.git"
+  },
+  "keywords": [
+    "covid"
+  ],
+  "author": "18120441 18120483 19120418 19120422 19120457",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/congtuan0104/Manage-COVID-information/issues"
+  },
+  "homepage": "https://github.com/congtuan0104/Manage-COVID-information#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2",
+    "express-session": "^1.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
