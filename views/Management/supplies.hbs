@@ -1,0 +1,116 @@
+<div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h4 class="text-secondary pb-2 text-left"><b>CÁC GÓI NHU YẾU PHẨM</b></h4>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="" accept-charset="UTF-8" method="get">
+                        <div class="input-group">
+                            <input type="text" name="search" id="search"
+                                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                                placeholder="Tìm kiếm gói sản phẩm" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+                                    <i class='bx bx-search'></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-3">
+
+
+        <div class="col">
+            <div class="row">Tên gói</div>
+        </div>
+        <div class="col-2"> Giá gói</div>
+        <div class="col-2">SLSP</div>
+        <div class="col-2"> Số lượng tồn</div>
+        <div class="col-2"> Tiêu thụ</div>
+        <div class="col-1 text-primary">---</div>
+    </div>
+
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col">
+            <div class="row">Gói cơ bản</div>
+        </div>
+        <div class="col-2">500.000đ</div>
+        <div class="col-2">2</div>
+        <div class="col-2">5.000</div>
+        <div class="col-2">10.000</div>
+        <div class="col-1">
+            <a href="/sales-channel/product?productID={{this.MaSP}}">
+                <i class='bx bx-edit' style="font-size: 30px;"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col">
+            <div class="row">Gói bình dân</div>
+        </div>
+        <div class="col-2">700.000đ</div>
+        <div class="col-2">2</div>
+        <div class="col-2">5.000</div>
+        <div class="col-2">10.000</div>
+        <div class="col-1">
+            <a href="/sales-channel/product?productID={{this.MaSP}}">
+                <i class='bx bx-edit' style="font-size: 30px;"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col">
+            <div class="row">Gói cao cấp</div>
+        </div>
+        <div class="col-2">1.000.000đ</div>
+        <div class="col-2">2</div>
+        <div class="col-2">5.000</div>
+        <div class="col-2">10.000</div>
+        <div class="col-1">
+            <a href="/sales-channel/product?productID={{this.MaSP}}">
+                <i class='bx bx-edit' style="font-size: 30px;"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row text-center mt-3">
+        <div class="col">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
+                <i class='bx bx-plus-circle'></i> Thêm gói mới
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm gói sản phẩm mới</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="packageName"
+                                placeholder="Nhập tên gói nhu yếu phẩm" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

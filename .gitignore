@@ -1,2 +1,5 @@
 node_modules
 desktop.files.json
+TestController.js
+TestModel.js
+test.js

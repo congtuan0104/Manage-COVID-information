@@ -23,7 +23,16 @@ const hbs = handlebars.create({
                 return option.fn(this)
             }
             return option.inverse(this)
-        }
+        },
+
+        if_even(conditional, options){
+            if(conditional%2==0){
+                return options.fn(this);
+            }
+            else{
+                return options.inverse(this);
+            }
+        },
     }
 })
 
