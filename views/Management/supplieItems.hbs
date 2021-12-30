@@ -1,0 +1,168 @@
+<div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h4 class=" pb-2 text-left" style=" font-weight:bold"><b>DANH SÁCH NHU YẾU PHẨM</b></h4>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="" accept-charset="UTF-8" method="get">
+                        <div class="input-group">
+                            <input type="text" name="search" id="search"
+                                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                                placeholder="Tìm kiếm nhu yếu phẩm" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+                                    <i class='bx bx-search'></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row" style=" font-weight:bold">Tên sản phẩm
+
+            </div>
+        </div>
+        <div class="col-3" style="font-weight:bold">Hình ảnh
+
+        </div>
+        <div class="col-3" style=" font-weight:bold">Giá tiền (VND)</div>
+        <div class="col-3" style="font-weight:bold">Định lượng</div>
+
+    </div>
+
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row">Gạo
+            </div>
+        </div>
+        <div class="col-3">
+            <img src="/img/rice.jpg" class="img-fluid">
+        </div>
+        <div class="col-3">
+            120.000
+        </div>
+        <div class="col-3">
+            10 (KG)
+        </div>
+    </div>
+
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row">Rau muống
+            </div>
+        </div>
+        <div class="col-3">
+            <img src="/img/vegetable.jpg" class="img-fluid">
+        </div>
+        <div class="col-3">
+            20.000
+        </div>
+        <div class="col-3">
+            1 (KG)
+        </div>
+    </div>
+
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row">Khẩu trang
+            </div>
+        </div>
+        <div class="col-3">
+            <img src="/img/mask.png" class="img-fluid">
+        </div>
+        <div class="col-3">
+            50.000
+        </div>
+        <div class="col-3">
+            1 (Hộp)
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row">Gạo
+            </div>
+        </div>
+        <div class="col-3">
+            <img src="/img/rice.jpg" class="img-fluid">
+        </div>
+        <div class="col-3">
+            120.000
+        </div>
+        <div class="col-3">
+            10 (KG)
+        </div>
+    </div>
+
+    <div class="row align-items-center border-bottom py-4">
+        <div class="col-3">
+            <div class="row">Rau muống
+            </div>
+        </div>
+        <div class="col-3">
+            <img src="/img/vegetable.jpg" class="img-fluid">
+        </div>
+        <div class="col-3">
+            20.000
+        </div>
+        <div class="col-3">
+            1 (KG)
+        </div>
+    </div>
+
+    <div class="row text-center mt-3">
+        <div class="col">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
+                <i class='bx bx-plus-circle'></i> Thêm nhu yếu phẩm
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Nhu yếu phẩm</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group row">
+
+                        <div class="col-sm-12">
+                            <label for="">Tên nhu yếu phẩm</label>
+                            <input type="text" class="form-control" id="packageName" name="packageName"
+                                placeholder="Nhập tên nhu yếu phẩm" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Hình ảnh</label>
+                            <input type="file" class="form-control" placeholder="Chọn hình ảnh" required>
+                        </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Giá tiền</label>
+                            <input type="text" class="form-control" placeholder="Nhập giá tiền" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Khối lượng</label>
+                            <input type="text" class="form-control" placeholder="Nhập khối lượng" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

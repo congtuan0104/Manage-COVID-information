@@ -38,10 +38,11 @@
             </a>
         </div>
         <div class="col-1" style=" font-weight:bold">Năm sinh</div>
-        <div class="col-2" style="font-weight:bold">Trạng thái 
+        <div class="col-2" style="font-weight:bold">Trạng thái
             <a href="#">
                 <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
-            </a> </div>
+            </a>
+        </div>
         <div class="col-2" style=" font-weight:bold">Nơi điều trị <a href="#">
                 <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
             </a> </div>
@@ -127,8 +128,63 @@
     <div class="row text-center mt-3">
         <div class="col">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
-                <i class='bx bx-plus-circle'></i> Thêm gói mới
+                <i class='bx bx-plus-circle'></i> Thêm người bệnh
             </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Tên người bệnh</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group row">
+
+                        <div class="col-sm-12">
+                            <label for="">Tên người bệnh</label>
+                            <input type="text" class="form-control" id="packageName" name="packageName"
+                                placeholder="Nhập tên người bệnh" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">CMND</label>
+                            <input type="text" class="form-control" placeholder="Nhập CMND" required>
+                        </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Năm sinh</label>
+                            <input type="text" class="form-control" placeholder="Năm sinh" required>
+                        </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Trạng thái</label>
+                            <input type="text" class="form-control" placeholder="Tình trạng hiện tại" required>
+                        </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Nơi điều trị</label>
+                            <input type="text" class="form-control" placeholder="Nhập nơi điều trị" required>
+                        </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Các F liên quan</label>
+                            <input type="text" class="form-control" placeholder="Nhập tên các F liên quan" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Lịch sử quản lý</label>
+                            <input type="text" class="form-control" placeholder="Nhập lịch sử quản lý" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
