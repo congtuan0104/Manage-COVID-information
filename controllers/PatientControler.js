@@ -14,7 +14,7 @@ class PatientControler {
         });
     }
     detailInfo(req, res, next) {
-        res.render('Management/patientDetailInfo', {
+        res.render('Patient/patientDetailInfo', {
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -25,7 +25,7 @@ class PatientControler {
         });
     }
     payment(req, res, next) {
-        res.render('Management/payment', {
+        res.render('Patient/payment', {
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -36,7 +36,7 @@ class PatientControler {
         });
     }
     manageHistory(req, res, next) {
-        res.render('Management/manageHistory', {
+        res.render('Patient/manageHistory', {
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -58,7 +58,7 @@ class PatientControler {
         });
     }
     changePassword(req, res, next) {
-        res.render('Management/changePassword', {
+        res.render('Patient/changePassword', {
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
