@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class=" pb-2 text-left" style=" font-weight:bold"><b>DANH SÁCH HÓA ĐƠN</b></h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr class="align-self-center">
+                                    <th>Mã Hóa Đơn</th>
+                                    <th>Tên Khách Hàng</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngày tạo hóa đơn</th>
+                                    <th>Số tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>HD001</td>
+                                    <td>Trần Thái Bảo</td>
+                                    <td>Gói Nhu yếu phẩm loại 2</td>
+                                    <td>5/8/2021</td>
+                                    <td>600,000 VNĐ</td>
+                                    <td><span class="badge badge-pill badge-success">Đã thanh toán</span></td>
+                                    <td><span class="btn btn-success disabled">Thanh Toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td>HD002</td>
+                                    <td>Trần Thái Bảo</td>
+                                    <td>Gói Nhu yếu phẩm loại 1</td>
+                                    <td>5/8/2021</td>
+                                    <td>500,000 VNĐ</td>
+                                    <td><span class="badge badge-pill badge-danger">Chưa thanh toán</span></td>
+                                    <td><span class="btn btn-success">Thanh Toán</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pt-3 border-top text-right"><a href="#" class="text-primary" data-toggle="modal" data-target="#exampleModal">Xem tất cả <i class="mdi mdi-arrow-right"></i></a></div>
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Tổng số nợ</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div id="invoice">
+                                                    <div class="invoice overflow-auto">
+                                                        <div style="min-width: 600px">
+                                                            <main>
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                <h4>#ID</h4>
+                                                                            </th>
+                                                                            <th class="text-left">
+                                                                                <h4>Mô tả</h4>
+                                                                            </th>
+                                                                            <th class="text-right">
+                                                                                <h4>Số tiền</h4>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="no">HD002</td>
+                                                                            <td class="text-left">
+                                                                                <h5>
+                                                                                    Gói Nhu yếu phẩm loại 1
+                                                                                </h5>
+                                                                            </td>
+                                                                            <td class="total">500.000 VNĐ</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <td colspan="1"></td>
+                                                                            <td colspan="1">Tổng cộng</td>
+                                                                            <td>500.000 VNĐ</td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </main>
+                                                        </div>
+                                                        <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
