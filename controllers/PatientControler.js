@@ -4,6 +4,7 @@ class PatientControler {
     //[GET]/
     home(req, res, next) {
         res.render('home', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -15,6 +16,7 @@ class PatientControler {
     }
     detailInfo(req, res, next) {
         res.render('Patient/patientDetailInfo', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -26,6 +28,7 @@ class PatientControler {
     }
     payment(req, res, next) {
         res.render('Patient/payment', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -37,6 +40,7 @@ class PatientControler {
     }
     manageHistory(req, res, next) {
         res.render('Patient/manageHistory', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -48,6 +52,7 @@ class PatientControler {
     }
     supplies(req, res, next) {
         res.render('Management/supplieItems', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
@@ -59,6 +64,7 @@ class PatientControler {
     }
     changePassword(req, res, next) {
         res.render('Patient/changePassword', {
+            layout: 'userLayout',
             title: 'Trang chủ',
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',

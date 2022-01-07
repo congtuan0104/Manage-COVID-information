@@ -9,5 +9,6 @@ route.get('/payment', patientController.payment);
 route.get('/manageHistory', patientController.manageHistory);
 route.get('/supplies', patientController.supplies);
 route.get('/changePassword', patientController.changePassword);
+route.get('/',patientController.home);
 
 module.exports = route;
