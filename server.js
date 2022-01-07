@@ -37,12 +37,12 @@ const hbs = handlebars.create({
 })
 
 
-//app.set('trust proxy', 1) // trust first proxy
+
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  //cookie: { secure: true }
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    //cookie: { secure: true }
 }))
 
 app.engine('hbs', hbs.engine);
@@ -55,11 +55,10 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 
-
 //Init routes
 route(app);
 
 app.listen(port, () => {
-    
+
     console.log(`App listening at http://localhost:${port}`)
 })
