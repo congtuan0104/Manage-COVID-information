@@ -8,7 +8,7 @@ const session = require('express-session');
 
 
 const hbs = handlebars.create({
-    defaultLayout: 'main',
+    defaultLayout: 'mainLayout',
     extname: 'hbs',
     helpers: {
         ifStr(s1, s2, option) {

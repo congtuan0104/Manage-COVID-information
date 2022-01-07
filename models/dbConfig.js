@@ -6,13 +6,14 @@ const schema = 'public';
 const cn={
     user: 'postgres',
     host: 'localhost',
-    database: 'qlbh',
+    database: 'qltt',
     password: '1234',
     port: 5432,
     max: 30,
 };
 
 const db=pgp(cn);
+
 
 exports.load = async tbName =>{
     const table = new pgp.helpers.TableName({table: tbName, schema: schema});
