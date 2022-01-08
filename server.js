@@ -11,7 +11,7 @@ const hbs = handlebars.create({
     defaultLayout: 'mainLayout',
     extname: 'hbs',
     helpers: {
-        ifStr(s1, s2, option) {
+        ifStr(s1, s2, options) {
             if (s1 === s2) {
                 return options.fn(this)
             }
@@ -40,6 +40,13 @@ const hbs = handlebars.create({
 
         sub(s1,s2){
             return parseInt(s1)-parseInt(s2);
+        },
+
+        for(from, to, incr, block){
+            var accum = '';
+            for(var i = from; i < to; i += incr)
+                accum += block.fn(i);
+            return accum;
         },
 
     }

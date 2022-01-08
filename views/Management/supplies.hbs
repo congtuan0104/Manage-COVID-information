@@ -21,22 +21,26 @@
         <div class="item col-xs-3 col-lg-4">
             <div class="thumbnail card w-100">
                 <div class="img-event">
-                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                    <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies{{this.supplies_id}}">
+                        <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                    </a>
                 </div>
                 <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        {{this.supplies_name}}
-                    </h4>
+                    <a class="text-primary text-decoration-none" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies{{this.supplies_id}}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            {{this.supplies_name}}
+                        </h4>
+                    </a>
                     <div class="row">
                         <div class="col-10 text-left">
                             <p class="lead">{{this.price}}đ/{{this.unit}}</p>
                         </div>
                         <div class="col-2">
-                            <a class="text-primary" data-toggle="modal"
-                                style="cursor: pointer;" data-target="#edtSupplies{{this.supplies_id}}">
-
-                                <i class='bx bx-edit' style="font-size: 35px;"></i>
-
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deleteSupplies{{this.supplies_id}}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
                             </a>
 
                         </div>
@@ -48,10 +52,27 @@
 
     </div>
 
+    <div class="row text-center mt-3 mb-3">
+        <div class="col">
+            <ul class="pagination justify-content-center">
+                <li class="page-item{{#eq page 1}} disabled{{/eq}}">
+                    <a class="page-link" href="/manager/supplies?page={{sub page 1}}">Trước</a>
+                </li>
+                {{#each pageList}}
+                <li class="page-item {{#ifStr this '...'}} disabled{{/ifStr}}"><a class="page-link" href="/manager/supplies?page={{this}}">{{this}}</a></li>
+                {{/each}}
+                <li class="page-item{{#eq page numberOfPage}} disabled{{/eq}}">
+                    <a class="page-link" href="/manager/supplies?page={{sum page 1}}">Tiếp</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
 
-    <div class="fixed-bottom" style="bottom: 10px; right:10px">
-        <button class="btn btn-success float-right rounded-circle justify-content-center" 
-        aria-controls="collapseExample" data-toggle="modal" data-target="#dialog2">
+
+    <div class="fixed-bottom" style="bottom: 10px; right:10px;">
+        <button class="btn btn-success float-right rounded-circle justify-content-center"
+            aria-controls="collapseExample" data-toggle="modal" data-target="#dialog2" style="border: 3px solid rgb(110, 192, 28);">
             <i class="fa fa-plus text-white" aria-hidden="true" style="font-size:40px;"></i>
         </button>
     </div>
@@ -113,8 +134,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
                 </div>
             </form>
         </div>
@@ -128,7 +149,8 @@
         <div class="modal-content">
             <form action="/manager/updateSupplies" method="post">
                 <div class="modal-header text-primary text-uppercase">
-                    <h5 class="modal-title">Chỉnh sửa thông tin</h5>
+                    <h5 class="modal-title text-left">Chỉnh sửa thông tin</h5>
+                    <h5 class="modal-title text-right">MÃ SP: {{this.supplies_id}}</h5>
                 </div>
                 <input type="hidden" name="suppliesID" value="{{this.supplies_id}}">
                 <div class="modal-body">
@@ -136,7 +158,7 @@
 
                         <div class="col-sm-12">
                             <label for="">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productName" name="productName"
+                            <input type="text" class="form-control" id="productName" name="suppliesName"
                                 value="{{this.supplies_name}}" required>
                         </div>
                         {{!-- <div class="col-sm-12">
@@ -177,8 +199,35 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
                     <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{#each supplies}}
+<div class="modal fade" id="deleteSupplies{{this.supplies_id}}" role="dialog" aria-hidden="true"
+    style="border-radius: 25%;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="/manager/deleteSupplies" method="post">
+
+                <input type="hidden" name="suppliesID" value="{{this.supplies_id}}">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col ml-auto"><button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
+                    </div>
+                    <h5>Bạn có chắc muốn xoá sản phẩm {{this.supplies_name}}?</h5>
+                    <p class="text-secondary">Thông tin sản phẩm trong các gói nhu yếu phẩm cũng sẽ được xoá bỏ</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
                 </div>
             </form>
         </div>
