@@ -1,0 +1,134 @@
+<div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
+    <div class="row my-3">
+        <div class="col-sm-12 col-md-10 text-left text-secondary">
+            <h4><b>CÁC GÓI NHU YẾU PHẨM</b></h4>
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-info" id="list">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <button class="btn btn-danger" id="grid">
+                        <i class="fa fa-th-large"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="products" class="row view-group">
+        {{#each packages}}
+        <div class="item col-xs-3 col-lg-4">
+            <div class="thumbnail card w-100">
+                <div class="img-event">
+                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                </div>
+                <div class="caption card-body">
+                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                        {{this.package_name}}
+                    </h4>
+                    <div class="row">
+                        <div class="col-10 text-left">
+                            <p class="lead">Tối đa {{this.package_limit}} gói/{{this.time_limit}}</p>
+                            <h6>Số lượng sản phẩm: {{this.slsp}}</h6>
+                        </div>
+                        <div class="col-2">
+                            <a href="#">
+                                <i class='bx bx-edit' style="font-size: 30px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        
+    </div>
+    <div class="row text-center mt-3">
+        <div class="col">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
+                <i class='bx bx-plus-circle'></i> Thêm gói mới
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Thêm gói nhu yếu phẩm mới</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group row">
+
+                        <div class="col-sm-12">
+                            <label for="">Tên gói nhu yếu phẩm</label>
+                            <input type="text" class="form-control" id="packageName" name="packageName"
+                                placeholder="Nhập tên gói nhu yếu phẩm" required>
+                        </div>
+                        {{!-- <div class="col-sm-12">
+                            <label for="">Số lượng sản phẩm trong gói</label>
+                            <input type="number" class="form-control" name="numberPackage" id="numberPackage" value="2"
+                                min="2" max="10" required>
+                        </div> --}}
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Giới hạn cho mỗi người</label>
+                            <input type="number" class="form-control" name="limit" id="numberPackage" value="1" min="1"
+                                max="50" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Thời gian giới hạn</label>
+                            <select class="form-control" name="limitTime" required id="">
+                                <option selected value="day">Ngày</option>
+                                <option value="week">Tuần</option>
+                                <option value="month">Tháng</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-12 pt-2 mt-4 text-center">
+                            +++++++++ CÁC SẢN PHẨM TRONG GÓI +++++++++
+                        </div>
+
+                        <div class="col-sm-9 mt-4">
+                            <select class="form-control" name="product1" required id="">
+                                <option value="">Chọn sản phẩm</option>
+                                <option value="ID1">Sản phẩm 1</option>
+                                <option value="ID2">Sản phẩm 2</option>
+                                <option value="ID3">Sản phẩm 3</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 mt-4">
+                            <input type="number" class="form-control" name="nProduct1" id="nProduct1" value="1" min="1"
+                                max="50" required>
+                        </div>
+
+                        <div class="col-sm-9 mt-4">
+                            <select class="form-control" name="product1" required id="">
+                                <option value="">Chọn sản phẩm</option>
+                                <option value="ID1">Sản phẩm 1</option>
+                                <option value="ID2">Sản phẩm 2</option>
+                                <option value="ID3">Sản phẩm 3</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 mt-4">
+                            <input type="number" class="form-control" name="number1" id="numberPackage" value="1"
+                                min="1" max="50" required>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

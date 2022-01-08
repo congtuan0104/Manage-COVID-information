@@ -1,95 +1,4 @@
 <div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
-    <div class="row">
-        <div class="col">
-            <div class="row">
-                <h4 class="text-secondary pb-2 text-left"><b>CÁC GÓI NHU YẾU PHẨM</b></h4>
-            </div>
-        </div>
-        <div class="col">
-            <div class="row">
-                <div class="col-md-12">
-                    <form action="" accept-charset="UTF-8" method="get">
-                        <div class="input-group">
-                            <input type="text" name="search" id="search"
-                                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
-                                placeholder="Tìm kiếm gói sản phẩm" class="form-control">
-                            <span class="input-group-btn">
-                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
-                                    <i class='bx bx-search'></i>
-                                </button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-3">
-
-
-        <div class="col">
-            <div class="row">Tên gói</div>
-        </div>
-        <div class="col-2"> Giá gói</div>
-        <div class="col-2">SLSP</div>
-        <div class="col-2"> Số lượng tồn</div>
-        <div class="col-2"> Tiêu thụ</div>
-        <div class="col-1 text-primary">---</div>
-    </div>
-
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col">
-            <div class="row">Gói cơ bản</div>
-        </div>
-        <div class="col-2">500.000đ</div>
-        <div class="col-2">2</div>
-        <div class="col-2">5.000</div>
-        <div class="col-2">10.000</div>
-        <div class="col-1">
-            <a href="/sales-channel/product?productID={{this.MaSP}}">
-                <i class='bx bx-edit' style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col">
-            <div class="row">Gói bình dân</div>
-        </div>
-        <div class="col-2">700.000đ</div>
-        <div class="col-2">2</div>
-        <div class="col-2">5.000</div>
-        <div class="col-2">10.000</div>
-        <div class="col-1">
-            <a href="/sales-channel/product?productID={{this.MaSP}}">
-                <i class='bx bx-edit' style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col">
-            <div class="row">Gói cao cấp</div>
-        </div>
-        <div class="col-2">1.000.000đ</div>
-        <div class="col-2">2</div>
-        <div class="col-2">5.000</div>
-        <div class="col-2">10.000</div>
-        <div class="col-1">
-            <a href="/sales-channel/product?productID={{this.MaSP}}">
-                <i class='bx bx-edit' style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row text-center mt-3">
-        <div class="col">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
-                <i class='bx bx-plus-circle'></i> Thêm gói mới
-            </button>
-        </div>
-    </div>
-</div>
-
-
-<div class="container-md px-5 mt-5 py-3 text-center" style="background-color: white;border-radius:25px">
     <div class="row my-3">
         <div class="col-sm-12 col-md-10 text-left text-secondary">
             <h4><b>DANH SÁCH SẢN PHẨM</b></h4>
@@ -108,219 +17,52 @@
         </div>
     </div>
     <div id="products" class="row view-group">
-        <div class="item col-xs-4 col-lg-4">
-            <div class="thumbnail card">
+        {{#each supplies}}
+        <div class="item col-xs-3 col-lg-4">
+            <div class="thumbnail card w-100">
                 <div class="img-event">
                     <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
                 </div>
                 <div class="caption card-body">
                     <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        Mì tôm hảo hảo
+                        {{this.supplies_name}}
                     </h4>
                     <div class="row">
                         <div class="col-10 text-left">
-                            <p class="lead">
-                                110.000đ/thùng</p>
+                            <p class="lead">{{this.price}}đ/{{this.unit}}</p>
                         </div>
                         <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <a class="text-primary" data-toggle="modal"
+                                style="cursor: pointer;" data-target="#edtSupplies{{this.supplies_id}}">
 
-        <div class="item col-xs-4 col-lg-4">
-            <div class="thumbnail card">
-                <div class="img-event">
-                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
-                </div>
-                <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        Mì tôm hảo hảo
-                    </h4>
-                    <div class="row">
-                        <div class="col-10 text-left">
-                            <p class="lead">
-                                110.000đ/thùng</p>
-                        </div>
-                        <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <i class='bx bx-edit' style="font-size: 35px;"></i>
 
-        <div class="item col-xs-4 col-lg-4">
-            <div class="thumbnail card">
-                <div class="img-event">
-                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
-                </div>
-                <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        Mì tôm hảo hảo
-                    </h4>
-                    <div class="row">
-                        <div class="col-10 text-left">
-                            <p class="lead">
-                                110.000đ/thùng</p>
-                        </div>
-                        <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
                             </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="item col-xs-4 col-lg-4">
-            <div class="thumbnail card">
-                <div class="img-event">
-                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
-                </div>
-                <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        Mì tôm hảo hảo
-                    </h4>
-                    <div class="row">
-                        <div class="col-10 text-left">
-                            <p class="lead">
-                                110.000đ/thùng</p>
-                        </div>
-                        <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        {{/each}}
 
-        <div class="item col-xs-4 col-lg-4">
-            <div class="thumbnail card">
-                <div class="img-event">
-                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
-                </div>
-                <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        Mì tôm hảo hảo
-                    </h4>
-                    <div class="row">
-                        <div class="col-10 text-left">
-                            <p class="lead">
-                                110.000đ/thùng</p>
-                        </div>
-                        <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="row text-center mt-3">
-        <div class="col">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog2">
-                <i class='bx bx-plus-circle'></i> Thêm sản phẩm
-            </button>
-        </div>
+
+
+    <div class="fixed-bottom" style="bottom: 10px; right:10px">
+        <button class="btn btn-success float-right rounded-circle justify-content-center" 
+        aria-controls="collapseExample" data-toggle="modal" data-target="#dialog2">
+            <i class="fa fa-plus text-white" aria-hidden="true" style="font-size:40px;"></i>
+        </button>
     </div>
-</div>
 
-
-<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form>
-                <div class="modal-header text-primary text-uppercase">
-                    <h5 class="modal-title">Thêm gói nhu yếu phẩm mới</h5>
-                </div>
-
-                <div class="modal-body">
-                    <div class="form-group row">
-
-                        <div class="col-sm-12">
-                            <label for="">Tên gói nhu yếu phẩm</label>
-                            <input type="text" class="form-control" id="packageName" name="packageName"
-                                placeholder="Nhập tên gói nhu yếu phẩm" required>
-                        </div>
-                        {{!-- <div class="col-sm-12">
-                            <label for="">Số lượng sản phẩm trong gói</label>
-                            <input type="number" class="form-control" name="numberPackage" id="numberPackage" value="2"
-                                min="2" max="10" required>
-                        </div> --}}
-                        <div class="col-sm-12 mt-4">
-                            <label for="">Giới hạn cho mỗi người</label>
-                            <input type="number" class="form-control" name="limit" id="numberPackage" value="1" min="1"
-                                max="50" required>
-                        </div>
-                        <div class="col-sm-12 mt-4">
-                            <label for="">Thời gian giới hạn</label>
-                            <select class="form-control" name="limitTime" required id="">
-                                <option selected value="day">Ngày</option>
-                                <option value="week">Tuần</option>
-                                <option value="month">Tháng</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-12 pt-2 mt-4 text-center">
-                            +++++++++ CÁC SẢN PHẨM TRONG GÓI +++++++++
-                        </div>
-
-                        <div class="col-sm-9 mt-4">
-                            <select class="form-control" name="product1" required id="">
-                                <option value="">Chọn sản phẩm</option>
-                                <option value="ID1">Sản phẩm 1</option>
-                                <option value="ID2">Sản phẩm 2</option>
-                                <option value="ID3">Sản phẩm 3</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3 mt-4">
-                            <input type="number" class="form-control" name="nProduct1" id="nProduct1" value="1" min="1"
-                                max="50" required>
-                        </div>
-
-                        <div class="col-sm-9 mt-4">
-                            <select class="form-control" name="product1" required id="">
-                                <option value="">Chọn sản phẩm</option>
-                                <option value="ID1">Sản phẩm 1</option>
-                                <option value="ID2">Sản phẩm 2</option>
-                                <option value="ID3">Sản phẩm 3</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3 mt-4">
-                            <input type="number" class="form-control" name="number1" id="numberPackage" value="1"
-                                min="1" max="50" required>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Lưu lại</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 
 <div class="modal fade" id="dialog2" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form>
+            <form action="/manager/addSupplies" method="post">
                 <div class="modal-header text-primary text-uppercase">
                     <h5 class="modal-title">Thêm sản phẩm mới</h5>
                 </div>
@@ -343,7 +85,7 @@
                             <div class="input-group mb-3">
 
                                 <input type="number" class="form-control" name="price" id="price" value="1000"
-                                    min="1000" required aria-label="Recipient's username"
+                                    min="1000" step="1000" required aria-label="Recipient's username"
                                     aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">VNĐ</span>
@@ -378,3 +120,68 @@
         </div>
     </div>
 </div>
+
+
+{{#each supplies}}
+<div class="modal fade" id="edtSupplies{{this.supplies_id}}" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="/manager/updateSupplies" method="post">
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Chỉnh sửa thông tin</h5>
+                </div>
+                <input type="hidden" name="suppliesID" value="{{this.supplies_id}}">
+                <div class="modal-body">
+                    <div class="form-group row">
+
+                        <div class="col-sm-12">
+                            <label for="">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="productName" name="productName"
+                                value="{{this.supplies_name}}" required>
+                        </div>
+                        {{!-- <div class="col-sm-12">
+                            <label for="">Số lượng sản phẩm trong gói</label>
+                            <input type="number" class="form-control" name="numberPackage" id="numberPackage" value="2"
+                                min="2" max="10" required>
+                        </div> --}}
+                        <div class="col-sm-12 mt-4">
+                            <label for="price">Giá tiền</label>
+                            <div class="input-group mb-3">
+
+                                <input type="number" class="form-control" name="price" id="price" value="{{this.price}}"
+                                    min="1000" step="1000" required aria-label="Recipient's username"
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="unit">Đơn vị định lượng</label>
+                            <input type="text" class="form-control" id="unit" name="unit" value="{{this.unit}}"
+                                required>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="container">
+                                <fieldset class="form-group">
+                                    <a href="javascript:void(0)" onclick="$('#pro-image').click()">Thêm ảnh</a>
+                                    <input type="file" id="pro-image" name="pro-image" style="display: none;"
+                                        class="form-control" multiple>
+                                </fieldset>
+                                <div class="preview-images-zone">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{/each}}

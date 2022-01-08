@@ -1,5 +1,6 @@
-//File này chỉ lưu config của db
-const cn = {
+const pgp = require('pg-promise')({capSQL: true});
+
+const config = {
     user: 'postgres',
     host: 'localhost',
     database: 'qltt',
@@ -7,4 +8,6 @@ const cn = {
     port: 5432,
     max: 30,
 };
-module.exports = cn;
+
+const db = pgp(config);
+module.exports = db;

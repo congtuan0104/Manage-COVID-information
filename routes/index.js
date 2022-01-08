@@ -1,6 +1,6 @@
 const siteRoute = require('./site');
 const patientRoute = require('./patient');
-const managerRoute = require('./test');
+const managerRoute = require('./manager');
 
 function route(app) {
     //app.use('/admin', adminController); //Dành cho phân hệ quản trị/  Minh Lợi

@@ -629,7 +629,7 @@ nav .profile-details i {
 }
 
 .dropdown-item:hover {
-    background: #055716;
+    background: #669770;
 }
 
 .dropdown-item img {
@@ -642,13 +642,13 @@ nav .profile-details i {
 }
 
 .dropdown-item .text h4 {
-    color: #777;
+    color: rgb(27, 26, 26);
     font-size: 16px;
     margin-top: 3px
 }
 
 .dropdown-item .text p {
-    color: #aaa;
+    color: rgb(27, 27, 27);
     font-size: 12px
 }
 
