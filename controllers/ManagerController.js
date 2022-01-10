@@ -1,3 +1,4 @@
+const { addPatient } = require('../models/ManagerModel');
 const db = require('../models/ManagerModel');
 
 class ManagerController {
@@ -71,6 +72,36 @@ class ManagerController {
         });
     }
 
+    //[GET]/patients
+    async patients(req, res, next) {
+        const patientsList = await db.getPatientList();
+
+        for (let i = 0; i < patientsList.length; i++) {
+            var d = new Date(patientsList[i].birthday);
+            patientsList[i].birthday = d.getUTCFullYear();
+        }
+
+        res.render('./Management/patients', {
+            layout: 'managementLayout',
+            title:'Bệnh nhân',
+            patients: patientsList,
+            cssP: () => 'style-supplies',
+            scriptP: () => 'script',
+            scriptP: () => 'script',
+            footerP: () => 'footer',
+        });
+    }
+
+    //[POST]/addPatients
+    async addPatient(req, res){
+        const patient_name = req.body.patient_name;
+        const identity_card = req.body.identity_card;
+       const birthday = req.body.birthday;
+        const address = req.body.address;
+        const status = req.body.status;
+        await db.addPatient(patient_name, identity_card, birthday, address, status);
+        res.redirect('/manager/patients');
+    }
 
     //[POST]/addSupplies
     async addSupplies(req, res) {

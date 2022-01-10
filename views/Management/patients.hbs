@@ -50,14 +50,15 @@
         <div class="col-1" style="font-weight:bold">Lịch sử</div>
     </div>
 
+    {{#each patients}}
     <div class="row align-items-center border-bottom py-4">
         <div class="col-2">
-            <div class="row">Nguyễn văn A</div>
+            <div class="row">{{this.patient_name}}</div>
         </div>
-        <div class="col-2">187885151</div>
-        <div class="col-1">1992</div>
-        <div class="col-2">F0</div>
-        <div class="col-2">HCM</div>
+        <div class="col-2">{{this.identity_card}}</div>
+        <div class="col-1">{{this.birthday}}</div>
+        <div class="col-2">F{{this.status}}</div>
+        <div class="col-2">{{this.address}}</div>
         <div class="col-2">Nguyễn văn B</div>
         <div class="col-1">
             <a href="#">
@@ -65,66 +66,7 @@
             </a>
         </div>
     </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col-2">
-            <div class="row">Nguyễn văn A</div>
-        </div>
-        <div class="col-2">187885151</div>
-        <div class="col-1">1992</div>
-        <div class="col-2">F0</div>
-        <div class="col-2">HCM</div>
-        <div class="col-2">Nguyễn văn B</div>
-        <div class="col-1">
-            <a href="#">
-                <i class="bx bx-list-ul" style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col-2">
-            <div class="row">Nguyễn văn A</div>
-        </div>
-        <div class="col-2">187885151</div>
-        <div class="col-1">1992</div>
-        <div class="col-2">F0</div>
-        <div class="col-2">HCM</div>
-        <div class="col-2">Nguyễn văn B</div>
-        <div class="col-1">
-            <a href="#">
-                <i class="bx bx-list-ul" style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col-2">
-            <div class="row">Nguyễn văn A</div>
-        </div>
-        <div class="col-2">187885151</div>
-        <div class="col-1">1992</div>
-        <div class="col-2">F0</div>
-        <div class="col-2">HCM</div>
-        <div class="col-2">Nguyễn văn B</div>
-        <div class="col-1">
-            <a href="#">
-                <i class="bx bx-list-ul" style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
-    <div class="row align-items-center border-bottom py-4">
-        <div class="col-2">
-            <div class="row">Nguyễn văn A</div>
-        </div>
-        <div class="col-2">187885151</div>
-        <div class="col-1">1992</div>
-        <div class="col-2">F0</div>
-        <div class="col-2">HCM</div>
-        <div class="col-2">Nguyễn văn B</div>
-        <div class="col-1">
-            <a href="#">
-                <i class="bx bx-list-ul" style="font-size: 30px;"></i>
-            </a>
-        </div>
-    </div>
+    {{/each}}
     <div class="row text-center mt-3">
         <div class="col">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
@@ -137,7 +79,7 @@
 <div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form>
+            <form action="/manager/addPatient" method="post">
                 <div class="modal-header text-primary text-uppercase">
                     <h5 class="modal-title">Tên người bệnh</h5>
                 </div>
@@ -147,27 +89,31 @@
 
                         <div class="col-sm-12">
                             <label for="">Tên người bệnh</label>
-                            <input type="text" class="form-control" id="packageName" name="packageName"
+                            <input type="text" class="form-control" id="patient_name" name="patient_name"
                                 placeholder="Nhập tên người bệnh" required>
                         </div>
                         <div class="col-sm-12 mt-4">
                             <label for="">CMND</label>
-                            <input type="text" class="form-control" placeholder="Nhập CMND" required>
+                            <input type="text" class="form-control" id="identity_card" name="identity_card" 
+                             placeholder="Nhập CMND" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Năm sinh</label>
-                            <input type="text" class="form-control" placeholder="Năm sinh" required>
+                            <input type="text" class="form-control" id="birthday" name="birthday" 
+                              placeholder="Năm sinh" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Trạng thái</label>
-                            <input type="text" class="form-control" placeholder="Tình trạng hiện tại" required>
+                            <input type="text" class="form-control" id="status" name="status" 
+                              placeholder="Tình trạng hiện tại" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Nơi điều trị</label>
-                            <input type="text" class="form-control" placeholder="Nhập nơi điều trị" required>
+                            <input type="text" class="form-control" id="address" name="address" 
+                              placeholder="Nhập nơi điều trị" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
