@@ -1,0 +1,213 @@
+<div class="row mx-2">
+    <div class="col-5 mx-3 mb-4 h-100" style="border-radius:25px;min-width:350px;">
+
+        <div class="row pt-4 pb-2 px-4 mx-1 mb-4" style="background-color: white; border-radius:25px;min-width:350px;">
+            <div class="text-center mb-4">
+                <img src="/img/product-mix3.png" class="img-thumbnail rounded-circle"
+                    style="width:50%;border:1px solid red" alt="">
+            </div>
+            <div class="col">
+
+                <form method="post" action="/manager/updatePackageInfo">
+                    {{#each package}}
+                    <input type="hidden" name="packageID" value="{{this.package_id}}">
+                    <div class="form-group">
+                        <label for="inputName">> Tên gói sản phẩm</label>
+                        <input type="text" class="form-control" id="inputName" name="packageName"
+                            value="{{this.package_name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEx">> Giới hạn mỗi người</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" value="{{this.package_limit}}" min="1"
+                                aria-label="inputEx" name="packageLimit" aria-describedby="basic-addon1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">gói</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="limitTime">> Giới hạn theo</label>
+                        <select class="form-control" name="limitTime" required id="">
+                            <option selected value="d">ngày</option>
+                            <option value="w">tuần</option>
+                            <option value="m">tháng</option>
+                        </select>
+
+                    </div>
+
+                    {{/each}}
+                    <div class="form-group row text-center mt-4">
+                        <div class="col text-right">
+                            <button type="submit" class="btn btn-success">Cập nhật thông tin</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <form method="post" action="/manager/updatePackageDetail" class="row py-2 px-4 mx-1"
+            style="background-color: white; border-radius:25px;min-width:350px;">
+            <div class="col-12 text-center mt-4">
+                <h4 class="text-primary">CÁC SẢN PHẨM THUỘC GÓI</h4>
+            </div>
+            <div class="col-8 mt-4 mb-4">
+                Các sản phẩm trong gói
+            </div>
+            <div class="col-4 mt-4 mb-4 text-center">
+                SL tối đa
+            </div>
+            {{#each supplies1}}
+            <div class="col-12">
+                <div class="input-group mb-3 row">
+                    <div class="col">
+                        <div class="input-group-prepend h-100">
+                            <div class="input-group-text h-100 w-100">
+                                <input type="checkbox" value="{{this.supplies_id}}" checked
+                                    onmousedown="this.form.nProduct{{this.supplies_id}}.disabled=this.checked"
+                                    name="suppliesID">
+                                &ensp; {{this.supplies_name}}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <input type="number" id="nProduct{{this.supplies_id}}" class="form-control" min="1"
+                            name="nProduct" value="{{this.quantity_limit}}" required>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            <div class="col-12 text-center">
+                <h4>----------------------------------</h4>
+            </div>
+            {{#each supplies2}}
+            <div class="col-12">
+                <div class="input-group mb-3 row">
+                    <div class="col">
+                        <div class="input-group-prepend h-100">
+                            <div class="input-group-text h-100 w-100">
+                                <input type="checkbox" value="{{this.supplies_id}}"
+                                    onmousedown="this.form.nProduct{{this.supplies_id}}.disabled=this.checked"
+                                    name="suppliesID">
+                                &ensp; {{this.supplies_name}}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <input type="number" id="nProduct{{this.supplies_id}}" class="form-control" min="1" disabled
+                            name="nProduct" value="{{this.quantity_limit}}" required>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+
+            <div class="col-12 text-right">
+                <button type="submit" class="btn btn-success">Cập nhật danh sách</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{{#if discount}}
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/admin/updateDiscount">
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Cập nhật đợt giảm giá</h5>
+                </div>
+                {{#each product}}
+                <input type="hidden" name="productID" value="{{this.MaSP}}">
+                {{/each}}
+                <div class="modal-body">
+                    <div class="form-group row">
+                        {{#each discount}}
+                        <div class="col-sm-12">
+                            <label for="discountRate">Phần trăm giảm</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" value="{{this.Giam}}" id="discountRate"
+                                    name="discountRate" min="1" max="100" aria-describedby="basic-addon1" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày bắt đầu</label>
+                            <input readonly type="date" class="form-control" id="startDate" name="startDate"
+                                value="{{this.NgayBatDau}}" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày kết thúc</label>
+                            <input readonly type="date" class="form-control" id="endtDate" name="endDate"
+                                value="{{this.NgayKetThuc}}" required>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                    <h6 class="text-danger">Ngày bắt đầu và ngày kết thúc không thể thay đổi</h6>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/admin/addDiscount">
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Thiết lập giảm giá</h5>
+                </div>
+                {{#each product}}
+                <input type="hidden" name="productID" value="{{this.MaSP}}">
+                {{/each}}
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="discountRate">Phần trăm giảm</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="discountRate" name="discountRate" min="1"
+                                    max="100" aria-describedby="basic-addon1" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="endtDate" name="endDate" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{/if}}

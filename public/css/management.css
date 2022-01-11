@@ -652,6 +652,12 @@ nav .profile-details i {
     font-size: 12px
 }
 
+.package:hover{
+    background-color: rgba(128, 128, 128, 0.243);
+    outline: 2px solid green;
+    border-radius: 5px;
+}
+
 
 /* Responsive Media Query */
 

@@ -54,6 +54,7 @@ class ManagerController {
         const page = parseInt(req.query.page) || 1;
         const packageList = await db.getPackageList(page);
         const numberOfPage = await db.getNumberOfPage('package', 12);
+        const supplies = await db.getAllSupplies();
         packageList.forEach(element => {
             if (element.time_limit == 'd') element.time_limit = 'ngày';
             if (element.time_limit == 'w') element.time_limit = 'tuần';
@@ -66,15 +67,35 @@ class ManagerController {
             }
         }
 
-
         res.render('./Management/packages', {
             layout: 'managementLayout',
             title: 'Gói nhu yếu phẩm',
             packages: packageList,
+            supplies: supplies,
             cssP: () => 'style-supplies',
             scriptP: () => 'script',
         });
     }
+
+
+    //[GET]/package/:packageID
+    async packageDetail(req, res) {
+        const packageID = req.params.packageID;
+        const packageDetail = await db.getPackageDetail(packageID);
+        const suppliesOfPackage = await db.getSuppliesOfPackage(packageID);
+        const remainingPackage = await db.getRemainingPackage(packageID);
+
+        res.render('./Management/packageDetail', {
+            layout: 'managementLayout',
+            title: 'Gói nhu yếu phẩm',
+            package: packageDetail,
+            supplies1: suppliesOfPackage,
+            supplies2: remainingPackage,
+            cssP: () => 'style-supplies',
+            scriptP: () => 'script',
+        });
+    }
+
 
     //[GET]/patients
     async patients(req, res, next) {
@@ -143,6 +164,35 @@ class ManagerController {
             console.log('Xoá sản phẩm thất bại');
         }
         res.redirect('/manager/supplies');
+        return;
+    }
+
+
+    //[POST]/addPackage
+    async addPackage(req, res) {
+        console.log(req.body);
+        const packageName = req.body.packageName;
+        const limit = req.body.limit;
+        const limitTime = req.body.limitTime;
+        const suppliesList = req.body.suppliesID;
+        const quantityLimit = req.body.nProduct;
+        if(suppliesList.length<2){
+            res.send('Gói sản phẩm cần có ít nhất 2 sản phẩm');
+            return;
+        }
+        
+        const packageID = await db.addPackage(packageName,limit,limitTime);
+        if(packageID==null){
+            res.send('Thêm sản phẩm thất bại');
+            return;
+        }
+
+        var result;
+        for(var i=0;i<suppliesList.length;i++){
+            result = await db.addPackageDetail(packageID,suppliesList[i],quantityLimit[i]);
+        }
+        
+        res.redirect('/manager/dashboard');
         return;
     }
 }

@@ -19,19 +19,22 @@
     <div id="products" class="row view-group">
         {{#each packages}}
         <div class="item col-xs-3 col-lg-4">
-            <div class="thumbnail card w-100">
-                <div class="img-event">
+            <div class="thumbnail card w-100 package">
+                <a class="img-event" href="/manager/packages/{{this.package_id}}">
                     <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
-                </div>
+                </a>
                 <div class="caption card-body">
-                    <h4 class="group card-title inner list-group-item-heading text-left text-primary">
-                        {{this.package_name}}
-                    </h4>
+                    <a class="text-decoration-none" href="/manager/packages/{{this.package_id}}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            {{this.package_name}}
+                        </h4>
+                    </a>
                     <div class="row">
-                        <div class="col-10 text-left">
+                        <a class="col-10 text-left text-decoration-none text-dark"
+                            href="/manager/packages/{{this.package_id}}">
                             <p class="lead">Tối đa {{this.package_limit}} gói/{{this.time_limit}}</p>
                             <h6>Số lượng sản phẩm: {{this.slsp}}</h6>
-                        </div>
+                        </a>
                         <div class="col-2">
                             <a href="#">
                                 <i class='bx bx-edit' style="font-size: 30px;"></i>
@@ -42,7 +45,7 @@
             </div>
         </div>
         {{/each}}
-        
+
     </div>
 
     <div class="row">
@@ -55,7 +58,8 @@
 
     <div class="fixed-bottom" style="bottom: 10px; right:10px;">
         <button class="btn btn-success float-right rounded-circle justify-content-center"
-            aria-controls="collapseExample" data-toggle="modal" data-target="#dialog1" style="border: 3px solid rgb(110, 192, 28);">
+            aria-controls="collapseExample" data-toggle="modal" data-target="#dialog1"
+            style="border: 3px solid rgb(110, 192, 28);">
             <i class="fa fa-plus text-white" aria-hidden="true" style="font-size:40px;"></i>
         </button>
     </div>
@@ -65,7 +69,7 @@
 <div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="/addPackage" method="POST">
+            <form action="/manager/addPackage" method="POST">
                 <div class="modal-header text-primary text-uppercase">
                     <h5 class="modal-title">Thêm gói nhu yếu phẩm mới</h5>
                 </div>
@@ -89,44 +93,44 @@
                                 max="50" required>
                         </div>
                         <div class="col-sm-12 mt-4">
-                            <label for="">Thời gian giới hạn</label>
+                            <label for="">Giới hạn theo</label>
                             <select class="form-control" name="limitTime" required id="">
-                                <option selected value="day">Ngày</option>
-                                <option value="week">Tuần</option>
-                                <option value="month">Tháng</option>
+                                <option selected value="d">Ngày</option>
+                                <option value="w">Tuần</option>
+                                <option value="m">Tháng</option>
                             </select>
                         </div>
 
 
-                        <div class="col-12 pt-2 mt-4 text-center">
-                            +++++++++ CÁC SẢN PHẨM TRONG GÓI +++++++++
+                        <div class="col-8 mt-4 mb-4">
+                            Các sản phẩm trong gói
+                        </div>
+                        <div class="col-4 mt-4 mb-4 text-center">
+                            Giới hạn SL
                         </div>
 
-                        <div class="col-sm-9 mt-4">
-                            <select class="form-control" name="product" required id="">
-                                <option value="">Chọn sản phẩm</option>
-                                <option value="ID1">Sản phẩm 1</option>
-                                <option value="ID2">Sản phẩm 2</option>
-                                <option value="ID3">Sản phẩm 3</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3 mt-4">
-                            <input type="number" class="form-control" name="nProduct" id="nProduct1" value="1" min="1"
-                                max="50" required>
-                        </div>
+                        {{#each supplies}}
+                        <div class="col-12">
+                            <div class="input-group mb-3 row">
+                                <div class="col">
+                                    <div class="input-group-prepend h-100">
+                                        <div class="input-group-text h-100 w-100">
+                                            <input type="checkbox" value="{{this.supplies_id}}"
+                                                onmousedown="this.form.nProduct{{this.supplies_id}}.disabled=this.checked"
+                                                name="suppliesID">
+                                            &ensp; {{this.supplies_name}}
+                                        </div>
 
-                        <div class="col-sm-9 mt-4">
-                            <select class="form-control" name="product" required id="">
-                                <option value="">Chọn sản phẩm</option>
-                                <option value="ID1">Sản phẩm 1</option>
-                                <option value="ID2">Sản phẩm 2</option>
-                                <option value="ID3">Sản phẩm 3</option>
-                            </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <input type="number" disabled id="nProduct{{this.supplies_id}}" class="form-control"
+                                        min="1" name="nProduct" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-3 mt-4">
-                            <input type="number" class="form-control" name="number" id="numberPackage" value="1"
-                                min="1" max="50" required>
-                        </div>
+                        {{/each}}
 
                     </div>
                 </div>
@@ -139,4 +143,3 @@
         </div>
     </div>
 </div>
-
