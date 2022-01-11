@@ -17,20 +17,24 @@ class ManagerController {
         const suppliesList = await db.getSuppliesList(page);
         const numberOfPage = await db.getNumberOfPage('supplies', 12);
         var pageList = [];
-        if (numberOfPage <= 7) {           
+        if (numberOfPage <= 7) {
             for (var i = 1; i <= numberOfPage; i++) {
                 pageList.push(i);
             }
         }
         else {
-            for (var i = page; i <= page + 3; i++) {
+
+            for (var i = page - 3; i < page; i++) {
+                if (i < 1) continue;
                 pageList.push(i);
             }
-            pageList.push('...');
-            for (var i = numberOfPage - 3; i <= numberOfPage; i++) {
+
+            for (var i = page; i <= page + 3; i++) {
+                if (i > numberOfPage) continue;
                 pageList.push(i);
             }
         }
+
 
         res.render('./Management/supplies', {
             layout: 'managementLayout',
