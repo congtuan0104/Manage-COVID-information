@@ -31,6 +31,17 @@ module.exports = {
         return res;
     },
 
+    // Xem danh sách người bệnh
+    getPatientList: async ()=> {
+        const res = await db.any("SELECT * FROM patient");
+        return res;
+    },
+    
+    // Thêm người bệnh
+    addPatient: async(patient_name, identity_card,birthday,address,status)=>{
+        await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status)
+        VALUES('${patient_name}', '${identity_card}','${birthday}','${address}','${status}')`);
+    },
 
     //Thêm một sản phẩm mới
     addSupplies: async (productName, price, unit) => {
