@@ -4,7 +4,7 @@ const config = {
     user: 'postgres',
     host: 'localhost',
     database: 'QLTT',
-    password: 'buinguyen2311',
+    password: '141517',
     port: 5432,
     max: 30,
 };

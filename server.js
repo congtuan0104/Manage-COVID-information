@@ -6,7 +6,6 @@ const port = 3000;
 const handlebars = require('express-handlebars');
 const session = require('express-session');
 
-
 const hbs = handlebars.create({
     defaultLayout: 'mainLayout',
     extname: 'hbs',
@@ -64,6 +63,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static(__dirname + '/public'));
+require('./passport')(app);
 app.use(express.urlencoded({
     extended: true,
 }));
