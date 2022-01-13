@@ -3,8 +3,8 @@ const pgp = require('pg-promise')({capSQL: true});
 const config = {
     user: 'postgres',
     host: 'localhost',
-    database: 'QLTT',
-    password: 'buinguyen2311',
+    database: 'qltt',
+    password: '1234',
     port: 5432,
     max: 30,
 };
