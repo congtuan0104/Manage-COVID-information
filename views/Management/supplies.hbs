@@ -19,7 +19,7 @@
     <div id="products" class="row view-group">
         {{#each supplies}}
         <div class="item col-xs-3 col-lg-4">
-            <div class="thumbnail card w-100">
+            <div class="thumbnail card w-100 package">
                 <div class="img-event">
                     <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
                         data-target="#edtSupplies{{this.supplies_id}}">
@@ -34,9 +34,12 @@
                         </h4>
                     </a>
                     <div class="row">
-                        <div class="col-10 text-left">
-                            <p class="lead">{{this.price}}đ/{{this.unit}}</p>
-                        </div>
+                        <a class="text-primary text-decoration-none col-10 text-left" data-toggle="modal"
+                            style="cursor: pointer;" data-target="#edtSupplies{{this.supplies_id}}">
+                            <span class="lead text-secondary">
+                                <span class="money">{{this.price}}</span>đ/{{this.unit}}
+                            </span>
+                        </a>
                         <div class="col-2">
                             <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
                                 data-target="#deleteSupplies{{this.supplies_id}}">
@@ -66,7 +69,8 @@
                     </a>
                 </li>
                 {{#each pageList}}
-                <li class="page-item {{#ifStr this page}} disabled{{/ifStr}}"><a class="page-link" href="/manager/supplies?page={{this}}">{{this}}</a></li>
+                <li class="page-item {{#ifStr this page}} disabled{{/ifStr}}"><a class="page-link"
+                        href="/manager/supplies?page={{this}}">{{this}}</a></li>
                 {{/each}}
                 <li class="page-item{{#eq page numberOfPage}} disabled{{/eq}}">
                     <a class="page-link" href="/manager/supplies?page={{sum page 1}}">
@@ -86,7 +90,8 @@
 
     <div class="fixed-bottom" style="bottom: 10px; right:10px;">
         <button class="btn btn-success float-right rounded-circle justify-content-center"
-            aria-controls="collapseExample" data-toggle="modal" data-target="#dialog2" style="border: 3px solid rgb(110, 192, 28);">
+            aria-controls="collapseExample" data-toggle="modal" data-target="#dialog2"
+            style="border: 3px solid rgb(110, 192, 28);">
             <i class="fa fa-plus text-white" aria-hidden="true" style="font-size:40px;"></i>
         </button>
     </div>
