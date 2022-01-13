@@ -13,6 +13,7 @@ route.get('/packages/:packageID',managerController.packageDetail);
 route.get("/packages", managerController.packages);
 route.get("/supplies", managerController.supplies);
 route.get("/patients", managerController.patients);
+route.get("/patients/:patientID", managerController.patientDetail);
 route.get("/", managerController.home);
 
 module.exports = route;

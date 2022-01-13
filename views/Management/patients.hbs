@@ -37,31 +37,29 @@
                 <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
             </a>
         </div>
-        <div class="col-1" style=" font-weight:bold">Năm sinh</div>
-        <div class="col-2" style="font-weight:bold">Trạng thái
+        <div class="col-2" style=" font-weight:bold">Năm sinh</div>
+        <div class="col-1" style="font-weight:bold; font-size: 16px;">Trạng thái
             <a href="#">
-                <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
+                <i class="bx bxs-sort-alt" style="font-size: 15px;"></i>
             </a>
         </div>
-        <div class="col-2" style=" font-weight:bold">Nơi điều trị <a href="#">
+        <div class="col-3" style=" font-weight:bold">Nơi điều trị <a href="#">
                 <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
             </a> </div>
-        <div class="col-2" style=" font-weight:bold">Các F liên quan</div>
-        <div class="col-1" style="font-weight:bold">Lịch sử</div>
+        <div class="col-2" style="font-weight:bold">Chi tiết và sửa đổi</div>
     </div>
 
     {{#each patients}}
     <div class="row align-items-center border-bottom py-4">
         <div class="col-2">
-            <div class="row">{{this.patient_name}}</div>
+            <div class="row">{{this.patient_name}}</div> <!-- <=> patients.patient_name -->
         </div>
         <div class="col-2">{{this.identity_card}}</div>
-        <div class="col-1">{{this.birthday}}</div>
-        <div class="col-2">F{{this.status}}</div>
-        <div class="col-2">{{this.address}}</div>
-        <div class="col-2">Nguyễn văn B</div>
-        <div class="col-1">
-            <a href="#">
+        <div class="col-2">{{this.birthday}}</div>
+        <div class="col-1">F{{this.status}}</div>
+        <div class="col-3">{{this.address}}</div>
+        <div class="col-2">
+            <a href="/manager/patients/{{this.patient_id}}">
                 <i class="bx bx-list-ul" style="font-size: 30px;"></i>
             </a>
         </div>
@@ -94,35 +92,26 @@
                         </div>
                         <div class="col-sm-12 mt-4">
                             <label for="">CMND</label>
-                            <input type="text" class="form-control" id="identity_card" name="identity_card" 
-                             placeholder="Nhập CMND" required>
+                            <input type="text" class="form-control" id="identity_card" name="identity_card"
+                                placeholder="Nhập CMND" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Năm sinh</label>
-                            <input type="text" class="form-control" id="birthday" name="birthday" 
-                              placeholder="Năm sinh" required>
+                            <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Năm sinh"
+                                required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Trạng thái</label>
-                            <input type="text" class="form-control" id="status" name="status" 
-                              placeholder="Tình trạng hiện tại" required>
+                            <input type="number" class="form-control" id="status" value="0" name="status"
+                                placeholder="Tình trạng hiện tại" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Nơi điều trị</label>
-                            <input type="text" class="form-control" id="address" name="address" 
-                              placeholder="Nhập nơi điều trị" required>
-                        </div>
-
-                        <div class="col-sm-12 mt-4">
-                            <label for="">Các F liên quan</label>
-                            <input type="text" class="form-control" placeholder="Nhập tên các F liên quan" required>
-                        </div>
-                        <div class="col-sm-12 mt-4">
-                            <label for="">Lịch sử quản lý</label>
-                            <input type="text" class="form-control" placeholder="Nhập lịch sử quản lý" required>
+                            <input type="text" class="form-control" id="address" name="address"
+                                placeholder="Nhập nơi điều trị" required>
                         </div>
                     </div>
                 </div>
