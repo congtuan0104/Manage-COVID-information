@@ -80,6 +80,23 @@ module.exports = {
         return res;
     },
 
+    getPatientDetail: async (patientID) => {
+        const res = await db.one("SELECT * FROM patient WHERE patient_id=$1", [patientID]);
+        if(res.length == 0) return null;
+        return res;
+    },
+
+    getListTreatmentPlace: async()=>{
+        const res= await db.any("SELECT * FROM treatment_place");
+        if(res.length==0) return null;
+        return res;
+    },
+    getTreatmentPlaceByID: async (placeID) =>{
+        const res = await db.one("SELECT * FROM treatment_place WHERE place_id=$1", [placeID]);
+        if(res.length == 0) return null;
+        return res.place_name;
+    },
+
     // Thêm người bệnh
     addPatient: async (patient_name, identity_card, birthday, address, status) => {
         await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status)
@@ -113,7 +130,6 @@ module.exports = {
         }
         return 1;
     },
-
 
     //Xoá sản phẩm
     deleteSupplies: async (suppliesID) => {
@@ -159,6 +175,7 @@ module.exports = {
         if (res.length == 0) return null;
         return res;
     },
+
 
 
     // Lấy danh sách các sản phẩm trong gói nhu yếu phẩm
