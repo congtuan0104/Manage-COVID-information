@@ -1,3 +1,4 @@
+const { async } = require('@firebase/util');
 const { addPatient } = require('../models/ManagerModel');
 const db = require('../models/ManagerModel');
 
@@ -15,7 +16,7 @@ class ManagerController {
     //[GET]/supplies
     async supplies(req, res) {
         const page = parseInt(req.query.page) || 1;
-        const suppliesList = await db.getSuppliesList(page);
+        var suppliesList = await db.getSuppliesList(page);
         const numberOfPage = await db.getNumberOfPage('supplies', 12);
         var pageList = [];
         if (numberOfPage <= 7) {
@@ -34,6 +35,16 @@ class ManagerController {
                 if (i > numberOfPage) continue;
                 pageList.push(i);
             }
+        }
+
+        // await suppliesList.forEach( supplies => {
+        //     supplies.img = db.getSuppliesImg(supplies.supplies_id);        
+        //     //console.log(supplies);
+        // });
+
+
+        for (var i = 0; i < suppliesList.length; i++) {
+            suppliesList[i].img = await db.getSuppliesImg(suppliesList[i].supplies_id);
         }
 
 
@@ -108,7 +119,7 @@ class ManagerController {
 
         res.render('./Management/patients', {
             layout: 'managementLayout',
-            title:'Bệnh nhân',
+            title: 'Bệnh nhân',
             patients: patientsList,
             cssP: () => 'style-supplies',
             scriptP: () => 'script',
@@ -118,10 +129,10 @@ class ManagerController {
     }
 
     //[POST]/addPatients
-    async addPatient(req, res){
+    async addPatient(req, res) {
         const patient_name = req.body.patient_name;
         const identity_card = req.body.identity_card;
-       const birthday = req.body.birthday;
+        const birthday = req.body.birthday;
         const address = req.body.address;
         const status = req.body.status;
         await db.addPatient(patient_name, identity_card, birthday, address, status);
@@ -130,13 +141,20 @@ class ManagerController {
 
     //[POST]/addSupplies
     async addSupplies(req, res) {
+        const imagesList = req.files;
         const productName = req.body.productName;
         const price = req.body.price;
         const unit = req.body.unit;
-        const result = await db.addSupplies(productName, price, unit);
-        if (result == 0) {
+        const suppliesID = await db.addSupplies(productName, price, unit);
+        if (!suppliesID) {
             console.log('Thêm sản phẩm thất bại');
+            return;
         }
+        imagesList.forEach(async image => {
+            await db.uploadImage(suppliesID, image);
+        });
+
+
         res.redirect('/manager/supplies');
         return;
     }
@@ -176,23 +194,36 @@ class ManagerController {
         const limitTime = req.body.limitTime;
         const suppliesList = req.body.suppliesID;
         const quantityLimit = req.body.nProduct;
-        if(suppliesList.length<2){
+        if (suppliesList.length < 2) {
             res.send('Gói sản phẩm cần có ít nhất 2 sản phẩm');
             return;
         }
-        
-        const packageID = await db.addPackage(packageName,limit,limitTime);
-        if(packageID==null){
+
+        const packageID = await db.addPackage(packageName, limit, limitTime);
+        if (packageID == null) {
             res.send('Thêm sản phẩm thất bại');
             return;
         }
 
         var result;
-        for(var i=0;i<suppliesList.length;i++){
-            result = await db.addPackageDetail(packageID,suppliesList[i],quantityLimit[i]);
+        for (var i = 0; i < suppliesList.length; i++) {
+            result = await db.addPackageDetail(packageID, suppliesList[i], quantityLimit[i]);
         }
-        
-        res.redirect('/manager/dashboard');
+
+        res.redirect('/manager/packages');
+        return;
+    }
+
+
+    //[POST]/uploadImage
+    async uploadImage(req, res) {
+        const image = req.files;
+        const obj = JSON.parse(JSON.stringify(req.body));
+        console.log(obj);
+        console.log(req.files);
+        //const upload = db.uploadImage(image);
+        res.redirect('/manager/supplies');
+        //res.send('upload');
         return;
     }
 }

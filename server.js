@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const path = require('path');
 const route = require('./routes/index');
@@ -68,6 +69,7 @@ app.use(express.urlencoded({
     extended: true,
 }));
 app.use(express.json());
+app.use(cors());
 
 
 //Init routes

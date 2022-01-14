@@ -18,12 +18,29 @@
     </div>
     <div id="products" class="row view-group">
         {{#each supplies}}
-        <div class="item col-xs-3 col-lg-4">
+
+        <div class="item col-xs-3 col-lg-4 mb-4">
             <div class="thumbnail card w-100 package">
                 <div class="img-event">
                     <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
                         data-target="#edtSupplies{{this.supplies_id}}">
-                        <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                        
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {{#if img}}
+                                {{#each img}}
+                                <div class="carousel-item {{#eq @index 0}}active{{/eq}}">
+                                    <img src="{{this.image_url}}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>
+                                {{/each}}
+                                {{else}}
+                                    <img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                {{/if}}
+                            </div>
+                            
+                        </div>
+                        
+                        
                     </a>
                 </div>
                 <div class="caption card-body">
@@ -51,6 +68,7 @@
                 </div>
             </div>
         </div>
+
         {{/each}}
 
     </div>
@@ -99,10 +117,11 @@
 </div>
 
 
+
 <div class="modal fade" id="dialog2" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="/manager/addSupplies" method="post">
+            <form action="/manager/addSupplies" method="post" enctype="multipart/form-data">
                 <div class="modal-header text-primary text-uppercase">
                     <h5 class="modal-title">Thêm sản phẩm mới</h5>
                 </div>
@@ -113,13 +132,9 @@
                         <div class="col-sm-12">
                             <label for="">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" name="productName"
-                                placeholder="Nhập tên sản phẩm" required>
+                                placeholder="Nhập tên sản phẩm">
                         </div>
-                        {{!-- <div class="col-sm-12">
-                            <label for="">Số lượng sản phẩm trong gói</label>
-                            <input type="number" class="form-control" name="numberPackage" id="numberPackage" value="2"
-                                min="2" max="10" required>
-                        </div> --}}
+
                         <div class="col-sm-12 mt-4">
                             <label for="price">Giá tiền</label>
                             <div class="input-group mb-3">
@@ -135,7 +150,7 @@
                         <div class="col-sm-12 mt-4">
                             <label for="unit">Đơn vị định lượng</label>
                             <input type="text" class="form-control" id="unit" name="unit"
-                                placeholder="cái/chiếc/thùng/..." required>
+                                placeholder="cái/chiếc/thùng/...">
                         </div>
                         <div class="col-sm-12">
                             <div class="container">
@@ -180,11 +195,7 @@
                             <input type="text" class="form-control" id="productName" name="suppliesName"
                                 value="{{this.supplies_name}}" required>
                         </div>
-                        {{!-- <div class="col-sm-12">
-                            <label for="">Số lượng sản phẩm trong gói</label>
-                            <input type="number" class="form-control" name="numberPackage" id="numberPackage" value="2"
-                                min="2" max="10" required>
-                        </div> --}}
+
                         <div class="col-sm-12 mt-4">
                             <label for="price">Giá tiền</label>
                             <div class="input-group mb-3">
@@ -202,7 +213,7 @@
                             <input type="text" class="form-control" id="unit" name="unit" value="{{this.unit}}"
                                 required>
                         </div>
-                        <div class="col-sm-12">
+                        {{!-- <div class="col-sm-12">
                             <div class="container">
                                 <fieldset class="form-group">
                                     <a href="javascript:void(0)" onclick="$('#pro-image').click()">Thêm ảnh</a>
@@ -213,7 +224,7 @@
 
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -240,7 +251,7 @@
                         <div class="col ml-auto"><button type="button" class="close" data-dismiss="modal"
                                 aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
                     </div>
-                    <h5>Bạn có chắc muốn xoá sản phẩm {{this.supplies_name}}?</h5>
+                    <h5>Bạn có chắc muốn xoá <span class="text-primary">{{this.supplies_name}}</span> ?</h5>
                     <p class="text-secondary">Thông tin sản phẩm trong các gói nhu yếu phẩm cũng sẽ được xoá bỏ</p>
                 </div>
 

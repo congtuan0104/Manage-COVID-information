@@ -55,7 +55,7 @@ function readImage() {
 
             picReader.readAsDataURL(file);
         }
-        $("#pro-image").val('');
+        $("#pro-image").val(picReader);
     } else {
         console.log('Browser not support');
     }
