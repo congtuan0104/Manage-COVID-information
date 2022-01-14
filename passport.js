@@ -1,6 +1,6 @@
 const passport = require('passport')
     , LocalStrategy = require('passport-local').Strategy;
-const accountM = require('./models/AccountModel');
+const siteM = require('./models/SiteModel');
 const bcrypt = require('bcrypt');
 
 module.exports = app => {
@@ -11,7 +11,7 @@ module.exports = app => {
         async (username, password, done) => {            
             let user;
             try {
-                user = await accountM.get(username, 'account', 'username');                
+                user = await siteM.get(username, 'account', 'username');                
                 if (!user) {
                     return done(null, false, { message: 'Incorrect username.' });
                 }
@@ -31,7 +31,7 @@ module.exports = app => {
 
     passport.deserializeUser(async (user, done) => {
         try {
-            const u = await accountM.get(user.username, 'account', 'username');
+            const u = await siteM.get(user.username, 'account', 'username');
             done(null, u);
         } catch (error) {
             done(new Error('error'), null);

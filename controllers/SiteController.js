@@ -1,4 +1,4 @@
-const accountM = require('../models/AccountModel');
+const siteM = require('../models/SiteModel');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
@@ -19,7 +19,7 @@ class SiteController {
         if (req.user) {
             return res.redirect('/');
         }
-        const users = await accountM.all('account');
+        const users = await siteM.all('account');
         if (users.length > 0) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
@@ -45,7 +45,7 @@ class SiteController {
         const username = req.body.username;
         const pwd = req.body.pwd;
         const repwd = req.body.repwd;
-        const user = await accountM.get(username, 'account', 'username');
+        const user = await siteM.get(username, 'account', 'username');
         if (user) {
             res.render('./Account/adminSignUp', {
                 title: 'Đăng ký',
@@ -76,7 +76,7 @@ class SiteController {
             password: pwdHashed,
             role: 2
         };
-        await accountM.add(newUser, 'account');
+        await siteM.add(newUser, 'account');
         res.render('./Account/adminSignUp', {
             title: 'Đăng ký',
             navP: () => 'accountNav',
@@ -92,7 +92,7 @@ class SiteController {
         const username = req.body.username;
         const pwd = req.body.pwd;
         const repwd = req.body.repwd;
-        const user = await accountM.get(username, 'account', 'username');
+        const user = await siteM.get(username, 'account', 'username');
         if (user) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
@@ -132,8 +132,8 @@ class SiteController {
             place_id: null,
             username: username
         };
-        await accountM.add(newAccount, 'account');
-        await accountM.add(newPatient, 'patient');
+        await siteM.add(newAccount, 'account');
+        await siteM.add(newPatient, 'patient');
         res.render('./Account/userSignUp', {
             title: 'Đăng ký',
             navP: () => 'accountNav',
