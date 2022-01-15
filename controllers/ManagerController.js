@@ -129,6 +129,8 @@ class ManagerController {
         const patientID = req.params.patientID;
         const patientDetail = await db.getPatientDetail(patientID);
         const treatmentPlace = await db.getTreatmentPlaceByID(patientDetail.place_id);
+        const listTreatmentPlace = await db.getListTreatmentPlace();
+
 
         var d = new Date(patientDetail.birthday);
         patientDetail.birthday = d.getUTCFullYear();
@@ -137,6 +139,7 @@ class ManagerController {
             layout: "managementLayout",
             patient: patientDetail,
             treatmentPlace: treatmentPlace,
+            listTreatmentPlace: listTreatmentPlace,
             cssP: () => "style-supplies",
             scriptP: () => "script",
             scriptP: () => "script",
