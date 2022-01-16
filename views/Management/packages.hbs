@@ -18,7 +18,7 @@
     </div>
     <div id="products" class="row view-group">
         {{#each packages}}
-        <div class="item col-xs-3 col-lg-4">
+        <div class="item col-xs-3 col-lg-4 mb-4">
             <div class="thumbnail card w-100 package">
                 <a class="img-event" href="/manager/packages/{{this.package_id}}">
                     <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
@@ -36,8 +36,9 @@
                             <h6>Số lượng sản phẩm: {{this.slsp}}</h6>
                         </a>
                         <div class="col-2">
-                            <a href="#">
-                                <i class='bx bx-edit' style="font-size: 30px;"></i>
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deletePackage{{this.package_id}}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
                             </a>
                         </div>
                     </div>
@@ -143,3 +144,30 @@
         </div>
     </div>
 </div>
+
+{{#each packages}}
+<div class="modal fade" id="deletePackage{{this.package_id}}" role="dialog" aria-hidden="true"
+    style="border-radius: 25%;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="/manager/deletePackage" method="post">
+
+                <input type="hidden" name="packageID" value="{{this.package_id}}">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col ml-auto"><button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
+                    </div>
+                    <h5>Bạn có chắc muốn xoá <span class="text-primary">{{this.package_name}}</span> ?</h5>
+                    
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{/each}}

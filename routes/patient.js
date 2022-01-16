@@ -4,14 +4,11 @@ const route = express.Router();
 
 const patientController = require('../controllers/PatientControler');
 
-route.get('/detailInfo/:patientID', patientController.detailInfo);
+route.get('/detailInfo', patientController.detailInfo);
 route.get('/payment', patientController.payment);
 route.get('/manageHistory', patientController.manageHistory);
-route.get('/packages', patientController.packages);
-route.get('/packages/:packageID',patientController.packageDetail);
+route.get('/supplies', patientController.supplies);
 route.get('/changePassword', patientController.changePassword);
 route.get('/',patientController.home);
-
-route.post('/buyPacket/:packageID', patientController.buyPackage);
 
 module.exports = route;

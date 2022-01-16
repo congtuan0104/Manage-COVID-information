@@ -4,9 +4,8 @@
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                 <img class="rounded-circle mt-5" width="150px"
                     src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-                <span class="font-weight-bold">{{patient.patient_name}}</span>
-                <span class="text-black-50 text-break">CMND: {{patient.identity_card}}</span>
-                
+                <span class="font-weight-bold">Trần Thái Bảo</span>
+                <span class="text-black-50 text-break">tranthaibao29112001@gmail.com</span>
             </div>
         </div>
         <div class="col-md-4 border-right">
@@ -15,16 +14,29 @@
                     <h4 class="text-right">Thông tin cá nhân</h4>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-12"><label class="labels">Họ Tên</label><input type="text" class="form-control"
-                            value="{{patient.patient_name}}" placeholder="Họ Tên"disabled></div>
-                    <div class="col-md-12"><label class="labels">Năm sinh</label><input type="text" class="form-control"
-                            value="{{patient.birthday}}" placeholder="Năm sinh"disabled></div>
+                    <div class="col-md-6"><label class="labels">Họ</label><input type="text" class="form-control"
+                            placeholder="Họ" value="Trần" disabled></div>
+                    <div class="col-md-6"><label class="labels">Tên</label><input type="text" class="form-control"
+                            value=" Thái Bảo" placeholder="Tên" disabled></div>
+                    <div class="col-md-6"><label class="labels">Giới tính</label><input type="text" class="form-control"
+                            value="Nam" placeholder="Tên" disabled></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Địa chỉ nơi ở</label><input type="text"
-                            class="form-control" placeholder="Địa chỉ" value="{{patient.address}}"disabled></div>
+                    <div class="col-md-12"><label class="labels">Số điện thoại </label><input type="text"
+                            class="form-control" placeholder="Số điện thoại" value="0842227693" disabled></div>
+                    <div class="col-md-12"><label class="labels">Địa chỉ thường trú</label><input type="text"
+                            class="form-control" placeholder="Địa chỉ" value="Tân Định, Tân An, Đăk Pơ, Gia Lai"
+                            disabled></div>
+                    <div class="col-md-12"><label class="labels">Địa chỉ tạm trú</label><input type="text"
+                            class="form-control" placeholder="Địa chỉ" value="Tân Định, Tân An, Đăk Pơ, Gia Lai"
+                            disabled></div>
+                    <div class="col-md-12"><label class="labels">Tỉnh/Thành phố</label><input type="text"
+                            class="form-control" placeholder="Tỉnh/Thành phố" value="Gia Lai" disabled></div>
                 </div>
-
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Quốc tịch</label><input type="text" class="form-control"
+                            placeholder="Quốc gia" value="Việt Nam" disabled></div>
+                </div>
             </div>
 
         </div>
@@ -34,10 +46,11 @@
                     <h4 class="text-right">Thông tin dịch tể</h4>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Trạng thái hiện tại (F) </label><input type="text"
-                            class="form-control" placeholder="Trạng thái" value="{{patient.status}}"disabled></div>
+                    <div class="col-md-12"><label class="labels">Trạng thái hiện tại </label><input type="text"
+                            class="form-control" placeholder="Số điện thoại" value="0842227693" disabled></div>
                     <div class="col-md-12"><label class="labels">Địa chỉ điều trị/cách ly</label><input type="text"
-                            class="form-control" placeholder="Địa chỉ" value="{{treatmentPlace}}"disabled></div>
+                            class="form-control" placeholder="Địa chỉ" value="Tân Định, Tân An, Đăk Pơ, Gia Lai"
+                            disabled></div>
                     <div class="col-md-12">
                         <h4 class="pt-4">Danh sách người liên quan Covid</h4>
                         <div class="container mt-3 mb-4">
@@ -54,22 +67,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{#each patients}}
                                                     <tr class="candidates-list">
-                                                
                                                         <td>
-                                                            <div class="">{{this.patient_name}}</span>
+                                                            <div class="">Trần Thái Bảo</span>
                                                         </td>
                                                         <td>
-                                                            <div class="">{{this.birthday}}</span>
+                                                            <div class="">1999</span>
                                                         </td>
                                                         <td>
                                                             <div class="text-center"
-                                                                class="candidate-list-time order-1">F{{this.status}}</span>
+                                                                class="candidate-list-time order-1">F0</span>
                                                         </td>
                                                     </tr>
-                                                    {{/each}}
-                                                    
                                                 </tbody>
                                             </table>
                                             <div class="text-center mt-3 mt-sm-3">

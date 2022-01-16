@@ -2,148 +2,53 @@
     <div class="box">
         <div class="right-side">
             <div class="box-topic">Tổng số ca nhiễm</div>
-            <div class="number">5,876</div>
+            <div class="number money">{{#with totalCases}}{{totalcases}}{{/with}}</div>
             <div class="indicator">
-                <i class='bx bx-up-arrow-alt'></i>
-                <span class="text">Tăng 10 ca hôm nay</span>
+                <i class='fa fa-calendar'></i>
+                <span class="text">Tính đến ngày {{#with staToday}}{{date}}{{/with}}</span>
             </div>
         </div>
-        <i class='bx bx-cart-alt cart'></i>
+        <img class="cart one" src="/img/COVID-19.svg" alt="">
+        {{!-- <i class='bx bx-cart-alt cart'></i> --}}
     </div>
     <div class="box">
         <div class="right-side">
             <div class="box-topic">Số ca khỏi bệnh</div>
-            <div class="number">4,824</div>
+            <div class="number money">{{#with totalCases}}{{totalrecovered}}{{/with}}</div>
             <div class="indicator">
-                <i class='bx bx-up-arrow-alt'></i>
-                <span class="text">Thêm 5 ca khỏi bệnh hôm nay</span>
+                <i class='fa fa-calendar'></i>
+                <span class="text">Tính đến ngày {{#with staToday}}{{date}}{{/with}}</span>
             </div>
         </div>
-        <i class='bx bxs-cart-add cart two'></i>
+        <img class='cart two' src="/img/virus-slash-solid.svg"></img>
     </div>
     <div class="box">
         <div class="right-side">
-            <div class="box-topic">Số lượng F0</div>
-            <div class="number">876</div>
+            <div class="box-topic">Nợ chưa thanh toán</div>
+            <div class="number money">{{#with staToday}} {{debt}} {{/with}}</div>
             <div class="indicator">
                 <i class='bx bx-up-arrow-alt'></i>
-                <span class="text">Tăng 5% so với ngày hôm qua</span>
+                <span class="text">Tăng 2% so với ngày hôm qua</span>
             </div>
         </div>
-        <i class='bx bx-cart cart three'></i>
+        <i class='fa fa-usd cart three'></i>
     </div>
 
 </div>
 
 <div class="sales-boxes">
     <div class="recent-sales box">
-        <div class="title text-primary">Ca nhiễm mới nhất</div>
-        <div class="sales-details">
-            <ul class="details">
-                <li class="topic">Ngày</li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">30-12-2021</a></li>
-                <li><a href="#">29-12-2021</a></li>
-                <li><a href="#">29-12-2021</a></li>
-            </ul>
-            <ul class="details text-center">
-                <li class="topic">Giờ</li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-                <li><a href="#">15:05</a></li>
-            </ul>
-            <ul class="details">
-                <li class="topic">Người bệnh</li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                <li><a href="#">Tên người bệnh</a></li>
-                
-            </ul>
-            <ul class="details text-center">
-                <li class="topic">Tình trạng</li>
-                <li><a href="#">F0</a></li>
-                <li><a href="#">F0</a></li>
-                <li><a href="#">F1</a></li>
-                <li><a href="#">F0</a></li>
-                <li><a href="#">F1</a></li>
-                <li><a href="#">F0</a></li>
-                <li><a href="#">F1</a></li>
-                <li><a href="#">F0</a></li>
-            </ul>
-            
-        </div>
+        <div class="title text-primary">Thống kê 14 ngày gần đây</div>
+        <canvas id="staOverTime" class="mt-2" width="100%"></canvas>
         <div class="button">
-            <a class="py-2 px-2" href="#">Xem tất cả</a>
+            <a class="py-2 px-2 mt-2" href="/manager/statistic">Xem tất cả</a>
         </div>
     </div>
     <div class="top-sales box">
-        <div class="title text-primary">Các gói nhu yếu phẩm</div>
-        <ul class="top-sales-details">
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            <li>
-                <a href="#">
-                    <img class="border" src="" alt="">
-                    <span class="product">Tên gói</span>
-                </a>
-                <span class="price">SL tiêu thụ</span>
-            </li>
-            
-
-        </ul>
+        <div class="title text-primary">Hôm nay</div>
+        <canvas id="staToday" width="100%"></canvas>
+        <div class="button">
+            <a class="py-2 px-2 mt-3" href="#">Chi tiết</a>
+        </div>
     </div>
 </div>

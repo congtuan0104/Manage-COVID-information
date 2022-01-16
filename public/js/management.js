@@ -55,7 +55,7 @@ function readImage() {
 
             picReader.readAsDataURL(file);
         }
-        $("#pro-image").val('');
+        $("#pro-image").val(picReader);
     } else {
         console.log('Browser not support');
     }
@@ -86,3 +86,4 @@ for (let i = 0, len = money.length; i < len; i++) {
     money[i].innerHTML = num;
     money[i].classList.add("currSign");
 }
+
