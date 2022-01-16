@@ -1,11 +1,11 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const path = require('path');
 const route = require('./routes/index');
 const port = 3000;
 const handlebars = require('express-handlebars');
 const session = require('express-session');
+
 
 const hbs = handlebars.create({
     defaultLayout: 'mainLayout',
@@ -64,12 +64,10 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static(__dirname + '/public'));
-require('./passport')(app);
 app.use(express.urlencoded({
     extended: true,
 }));
 app.use(express.json());
-app.use(cors());
 
 
 //Init routes

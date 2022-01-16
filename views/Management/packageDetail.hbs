@@ -32,9 +32,9 @@
                     <div class="form-group">
                         <label for="limitTime">> Giới hạn theo</label>
                         <select class="form-control" name="limitTime" required id="">
-                            <option {{#eq time_limit 'd'}}selected{{/eq}} value="d">ngày</option>
-                            <option {{#eq time_limit 'w'}}selected{{/eq}} value="w">tuần</option>
-                            <option {{#eq time_limit 'm'}}selected{{/eq}} value="m">tháng</option>
+                            <option selected value="d">ngày</option>
+                            <option value="w">tuần</option>
+                            <option value="m">tháng</option>
                         </select>
 
                     </div>
@@ -119,3 +119,95 @@
         </form>
     </div>
 </div>
+
+{{#if discount}}
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/admin/updateDiscount">
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Cập nhật đợt giảm giá</h5>
+                </div>
+                {{#each product}}
+                <input type="hidden" name="productID" value="{{this.MaSP}}">
+                {{/each}}
+                <div class="modal-body">
+                    <div class="form-group row">
+                        {{#each discount}}
+                        <div class="col-sm-12">
+                            <label for="discountRate">Phần trăm giảm</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" value="{{this.Giam}}" id="discountRate"
+                                    name="discountRate" min="1" max="100" aria-describedby="basic-addon1" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày bắt đầu</label>
+                            <input readonly type="date" class="form-control" id="startDate" name="startDate"
+                                value="{{this.NgayBatDau}}" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày kết thúc</label>
+                            <input readonly type="date" class="form-control" id="endtDate" name="endDate"
+                                value="{{this.NgayKetThuc}}" required>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                    <h6 class="text-danger">Ngày bắt đầu và ngày kết thúc không thể thay đổi</h6>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="modal fade" id="dialog1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/admin/addDiscount">
+                <div class="modal-header text-primary text-uppercase">
+                    <h5 class="modal-title">Thiết lập giảm giá</h5>
+                </div>
+                {{#each product}}
+                <input type="hidden" name="productID" value="{{this.MaSP}}">
+                {{/each}}
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="discountRate">Phần trăm giảm</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="discountRate" name="discountRate" min="1"
+                                    max="100" aria-describedby="basic-addon1" required>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="endtDate" name="endDate" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{/if}}

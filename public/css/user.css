@@ -651,6 +651,12 @@ nav .profile-details i {
     color: #aaa;
     font-size: 12px
 }
+.package:hover{
+    background-color: rgba(128, 128, 128, 0.243);
+    outline: 2px solid green;
+    border-radius: 5px;
+}
+
 
 
 /* Responsive Media Query */
@@ -680,6 +686,7 @@ nav .profile-details i {
         left: 220px;
     }
 }
+
 
 @media (max-width: 1150px) {
     .home-content .sales-boxes {
