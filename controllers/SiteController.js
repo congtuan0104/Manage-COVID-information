@@ -2,6 +2,9 @@ const siteM = require('../models/SiteModel');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
+const { JSDOM } = require('jsdom');
+const { window } = new JSDOM("");
+const $ = require('jquery')(window);
 
 class SiteController {
     //[GET]/
@@ -19,7 +22,7 @@ class SiteController {
         if (req.user) {
             return res.redirect('/');
         }
-        const users = await siteM.all('account');
+        const users = await siteM.all('account');       
         if (users.length > 0) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
@@ -179,7 +182,7 @@ class SiteController {
                     color: 'danger'
                 });
             }
-            req.logIn(user, function (err) {
+            req.logIn(user, async function (err) {
                 if (err) {
                     return res.render('./Account/signin', {
                         title: 'Đăng nhập',
@@ -191,17 +194,23 @@ class SiteController {
                         color: 'danger'
                     });
                 }
-                if (user.role === 2) {
+                if (user.role === 2) {  
+                    req.session.admin = await siteM.get(user.username, 'manager', 'username');                
                     return res.redirect('/');
                 }
                 if (user.role === 1) {
+                    req.session.manager = await siteM.get(user.username, 'manager', 'username');
                     return res.redirect('/manager');
                 }
                 if (user.role === 0) {
+                    req.session.patient = await siteM.get(user.username, 'patient', 'identity_card');
                     return res.redirect('/user');
                 }
             });
         })(req, res, next);
+    }
+    async getAddress(req, res, next) {
+
     }
 }
 
