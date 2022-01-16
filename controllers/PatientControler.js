@@ -47,7 +47,6 @@ class PatientControler {
       const orderList = await db.getOrderListDetail(1);
       for(var i =0;i<orderList.length;i++){
         let supplies = await db.getOrderDetailByOrderId(orderList[i].order_id);
-        console.log(supplies);
         orderList[i].supplies = supplies;
       };
         res.render('Patient/payment', {

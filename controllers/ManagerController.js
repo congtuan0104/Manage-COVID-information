@@ -261,33 +261,30 @@ class ManagerController {
 
     //[GET]/statistic
     async statistical(req, res) {
-        if (req.session.user) {
-            if (req.session.manager) {
-                var day = new Date().getDate();
-                var month = new Date().getMonth() + 1;
-                const year = new Date().getFullYear();
-                if (parseInt(day) < 10) day = '0' + day;
-                if (parseInt(month) < 10) month = '0' + month;
-                const today = year + '-' + month + '-' + day;
-                day = parseInt(day) - parseInt(13);
-                if (parseInt(day) < 10) day = '0' + day;
-                const startDay = year + '-' + month + '-' + day;
-                const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
 
-                res.render("./Management/statistical", {
-                    layout: "managementLayout",
-                    title: 'Thống kê',
-                    staOverTime: staOverTime,
-                    startDay: startDay,
-                    today: today,
-                    cssP: () => "style-supplies",
-                    scriptP: () => "statisticScript",
-                    footerP: () => "footer",
-                });
-                return;
-            }
-            res.send('Bạn không có quyền truy cập trang web')
-        }
+        var day = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        if (parseInt(day) < 10) day = '0' + day;
+        if (parseInt(month) < 10) month = '0' + month;
+        const today = year + '-' + month + '-' + day;
+        day = parseInt(day) - parseInt(13);
+        if (parseInt(day) < 10) day = '0' + day;
+        const startDay = year + '-' + month + '-' + day;
+        const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
+
+        res.render("./Management/statistical", {
+            layout: "managementLayout",
+            title: 'Thống kê',
+            staOverTime: staOverTime,
+            startDay: startDay,
+            today: today,
+            cssP: () => "style-supplies",
+            scriptP: () => "statisticScript",
+            footerP: () => "footer",
+        });
+        return;
+
 
     }
 

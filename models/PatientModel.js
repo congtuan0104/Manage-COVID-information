@@ -52,9 +52,6 @@ module.exports = {
     getRelatedPatients: async(patientID) =>{
         const res = await db.any("SELECT * FROM related_patients,patient WHERE related_patients.patient_id1=$1 AND related_patients.patient_id2 = patient.patient_id", [patientID]);
         if(res.length == 0) return null;
-        res.forEach(element =>{
-            console.log(element);
-        })
         return res;
     },
 
@@ -111,7 +108,6 @@ module.exports = {
         return res;
     },
     addPackageConsumption: async (package_id,date)=>{
-        console.log(package_id);
         await db.none(`INSERT INTO package_consumption(package_id, date,consume)
         VALUES('${package_id}', '${date}', 1)`);
     },
@@ -140,10 +136,8 @@ module.exports = {
         minutes = lastDate.getMinutes();
         second = lastDate.getSeconds();
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
-        console.log(lastDateStr);
         const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
         if(res.length==0) return null;
-        console.log(res.length);
         return res;
     },
     getOrderListByIdByWeek: async(packageID)=>{
@@ -165,7 +159,6 @@ module.exports = {
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
         const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
         if(res.length==0) return null;
-        console.log(res.length);
         return res;
     },
     getOrderListByIdByMonth: async(packageID)=>{
@@ -187,7 +180,6 @@ module.exports = {
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
         const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
         if(res.length==0) return null;
-        console.log(res.length);
         return res;
     },
     getListTreatmentHistoryById: async(patient_id)=>{
