@@ -11,7 +11,7 @@ class ManagerController {
         const today = year + '-' + month + '-' + day;
         const startDay = year + '-' + month + '-' + (parseInt(day) - parseInt(13));
         const totalCases = await db.getTotalCases(today);
-        const staOverTime = await db.getRangeStatistic(startDay,today,'ASC');
+        const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
         const staToday = await db.getStatistic(today);
 
         res.render("./Management/dashboard", {
@@ -141,6 +141,8 @@ class ManagerController {
         const patientID = req.params.patientID;
         const patientDetail = await db.getPatientDetail(patientID);
         const treatmentPlace = await db.getTreatmentPlaceByID(patientDetail.place_id);
+        const listTreatmentPlace = await db.getListTreatmentPlace();
+
 
         var d = new Date(patientDetail.birthday);
         patientDetail.birthday = d.getUTCFullYear();
@@ -148,7 +150,9 @@ class ManagerController {
         res.render("./Management/patientDetail", {
             layout: "managementLayout",
             patient: patientDetail,
+            title: 'Bệnh nhân',
             treatmentPlace: treatmentPlace,
+            listTreatmentPlace: listTreatmentPlace,
             cssP: () => "style-supplies",
             scriptP: () => "script",
             scriptP: () => "script",
@@ -257,31 +261,38 @@ class ManagerController {
 
     //[GET]/statistic
     async statistical(req, res) {
-        var day = new Date().getDate();
-        var month = new Date().getMonth() + 1;
-        const year = new Date().getFullYear();       
-        if(parseInt(day)<10) day='0'+day;
-        if(parseInt(month)<10) month='0'+month;
-        const today = year + '-' + month + '-' + day;
-        day = parseInt(day) - parseInt(13);
-        if(parseInt(day)<10) day='0'+day;
-        const startDay = year + '-' + month + '-' + day;
-        const staOverTime = await db.getRangeStatistic(startDay,today,'ASC');
+        if (req.session.user) {
+            if (req.session.manager) {
+                var day = new Date().getDate();
+                var month = new Date().getMonth() + 1;
+                const year = new Date().getFullYear();
+                if (parseInt(day) < 10) day = '0' + day;
+                if (parseInt(month) < 10) month = '0' + month;
+                const today = year + '-' + month + '-' + day;
+                day = parseInt(day) - parseInt(13);
+                if (parseInt(day) < 10) day = '0' + day;
+                const startDay = year + '-' + month + '-' + day;
+                const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
 
-        res.render("./Management/statistical", {
-            layout: "managementLayout",
-            title: 'Thống kê',
-            staOverTime: staOverTime,
-            startDay: startDay,
-            today: today,
-            cssP: () => "style-supplies",
-            scriptP: () => "statisticScript",
-            footerP: () => "footer",
-        });
+                res.render("./Management/statistical", {
+                    layout: "managementLayout",
+                    title: 'Thống kê',
+                    staOverTime: staOverTime,
+                    startDay: startDay,
+                    today: today,
+                    cssP: () => "style-supplies",
+                    scriptP: () => "statisticScript",
+                    footerP: () => "footer",
+                });
+                return;
+            }
+            res.send('Bạn không có quyền truy cập trang web')
+        }
+
     }
 
     //[GET]/searchStatistic  --> Xem chi tiết thống kê của một ngày
-    async searchStatistic(req,res){
+    async searchStatistic(req, res) {
         const date = req.query.d;
         const sta = await db.getStatistic(date);
         res.send(sta);
@@ -289,10 +300,10 @@ class ManagerController {
 
 
     //[GET]/searchRange  --> Xem thống kê trong một khoảng thời gian
-    async searchRange(req,res){
+    async searchRange(req, res) {
         const start = req.query.start;
         const end = req.query.end;
-        const sta = await db.getRangeStatistic(start,end,'ASC');
+        const sta = await db.getRangeStatistic(start, end, 'ASC');
         res.send(sta);
     }
 }
