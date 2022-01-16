@@ -179,7 +179,7 @@ class SiteController {
                     color: 'danger'
                 });
             }
-            req.logIn(user, function (err) {
+            req.logIn(user,async function (err) {
                 if (err) {
                     return res.render('./Account/signin', {
                         title: 'Đăng nhập',
@@ -191,13 +191,17 @@ class SiteController {
                         color: 'danger'
                     });
                 }
+                console.log(user);
                 if (user.role === 2) {
+                    req.session.admin = await db.getManagerDetail(user.username);
                     return res.redirect('/');
                 }
                 if (user.role === 1) {
+                    req.session.manager = await db.getManagerDetail(user.username);
                     return res.redirect('/manager');
                 }
                 if (user.role === 0) {
+                    req.session.patient = await db.getPatientDetail(user.username);
                     return res.redirect('/user');
                 }
             });

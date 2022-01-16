@@ -1,7 +1,7 @@
 const db = require('./dbConfig');
 const storage = require('./firebaseConfig');
 const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
-global.XMLHttpRequest = require("xhr2"); // must be used to avoid bug
+global.XMLHttpRequest = require("xhr2");
 
 module.exports = {
     //Tải ảnh lên firebase và lấy link về
@@ -38,7 +38,7 @@ module.exports = {
 
     //Xem danh sách nhu yếu phẩm
     getSuppliesList: async (page) => {
-        const res = await db.any(`SELECT * FROM Supplies ORDER BY supplies_id LIMIT 12 OFFSET $1`, [(page - 1) * 12]);
+        const res = await db.any(`SELECT * FROM Supplies WHERE status=1 ORDER BY supplies_id LIMIT 12 OFFSET $1`, [(page - 1) * 12]);
         if (res.length == 0) return null;
         return res;
     },
@@ -54,7 +54,7 @@ module.exports = {
 
     //Lấy tất cả nhu yếu phẩm
     getAllSupplies: async () => {
-        const res = await db.any('SELECT * FROM Supplies');
+        const res = await db.any('SELECT * FROM Supplies WHERE status=1');
         if (res.length == 0) return null;
         return res;
     },
@@ -65,7 +65,7 @@ module.exports = {
         const res = await db.any(`
         SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
         FROM Package p, Package_Detail pd
-        WHERE p.Package_ID = pd.Package_ID
+        WHERE p.Package_ID = pd.Package_ID AND Status=1
         GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
         ORDER BY p.Package_ID
         LIMIT 12 OFFSET $1`, [(page - 1) * 12]);
@@ -133,7 +133,7 @@ module.exports = {
 
     //Xoá sản phẩm
     deleteSupplies: async (suppliesID) => {
-        const res = await db.none(`DELETE FROM supplies WHERE supplies_id=$1`, [suppliesID]);
+        const res = await db.none(`UPDATE supplies SET status = 0 WHERE supplies_id=$1`, [suppliesID]);
         if (res) {
             console.log(res);
             return 0;
@@ -195,5 +195,42 @@ module.exports = {
         if (res.length == 0) return null;
         return res;
     },
+
+
+    //Xoá gói sản phẩm
+    deletePackage: async (packageID) => {
+        const res = await db.none(`UPDATE package SET status = 0 WHERE package_id=$1`, [packageID]);
+        if (res) {
+            console.log(res);
+            return 0;
+        }
+        return 1;
+    },
+
+
+    //Lấy số liệu thống kê của một ngày
+    getStatistic: async(date) =>{
+        const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
+         FROM statistical WHERE date='${date}'`);
+        if (res.length == 0) return null;
+        return res;
+    },
+
+
+    //Lấy số liệu thống kê trong khoảng thời gian
+    getRangeStatistic: async(start,end,orderBy) =>{
+        const res = await db.any(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
+        FROM statistical WHERE date>='${start}' AND date<='${end}'
+        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`,orderBy);
+        if (res.length == 0) return null;
+        return res;
+    },
+
+    getTotalCases: async(date)=> {
+        const res = await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
+         FROM statistical WHERE date<='${date}'`);
+        if (res.length == 0) return null;
+        return res;
+    }
 
 }
