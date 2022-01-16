@@ -1,0 +1,31 @@
+<script>
+$(document).ready(function() {
+    $("input").change(function(){
+        var sumCost = 0;
+        var listProduct = $('input[type=number]');
+        listProduct.each((index,element) =>{
+            if($(element).attr('price') && !$(element).is(':disabled')){
+                let count = $(element).val();
+                let price = $(element).attr('price');
+                sumCost+=count*price;
+            }
+        })
+        $('#cost').text('Tổng giá thành: ' + sumCost + " VNĐ");
+        $('#lastCost').val(sumCost);
+    });
+    
+});
+
+$(document).ready(function() {
+    document.getElementById('pro-image').addEventListener('change', readImage, false);
+    
+    $( ".preview-images-zone" ).sortable();
+    
+    $(document).on('click', '.image-cancel', function() {
+        let no = $(this).data('no');
+        $(".preview-image.preview-show-"+no).remove();
+    });
+});
+
+
+</script>

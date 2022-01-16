@@ -8,25 +8,19 @@
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr class="align-self-center">
-                                    <th>STT</th>
-                                    <th>Người quản lí</th>
                                     <th>Thời điểm thực hiện</th>
-                                    <th>Trạng thái cũ</th>
                                     <th>Trạng thái mới</th>
-                                    <th>Nơi điều trị cũ</th>
                                     <th>Nơi điều trị mới</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Trần Thái Bảo</td>
-                                    <td>5/8/2021</td>
-                                    <td>F1</td>
-                                    <td>F2</td>
-                                    <td>Gia Lai</td>
-                                    <td>TP Hồ Chí Minh</td>
-                                </tr>
+                                {{#each history}}
+                                    <tr>
+                                        <td>{{this.update_time}}</td>
+                                        <td>F{{this.status}}</td>
+                                        <td>{{this.place_name}}</td>
+                                    </tr>
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>
