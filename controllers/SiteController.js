@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
 
+
 class SiteController {
     //[GET]/
     home(req, res, next) {
@@ -19,7 +20,7 @@ class SiteController {
         if (req.user) {
             return res.redirect('/');
         }
-        const users = await siteM.all('account');
+        const users = await siteM.all('account');       
         if (users.length > 0) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
@@ -179,7 +180,7 @@ class SiteController {
                     color: 'danger'
                 });
             }
-            req.logIn(user,async function (err) {
+            req.logIn(user, async function (err) {
                 if (err) {
                     return res.render('./Account/signin', {
                         title: 'Đăng nhập',
@@ -191,21 +192,23 @@ class SiteController {
                         color: 'danger'
                     });
                 }
-                console.log(user);
-                if (user.role === 2) {
-                    req.session.admin = await db.getManagerDetail(user.username);
+                if (user.role === 2) {  
+                    req.session.admin = await siteM.get(user.username, 'manager', 'username');                
                     return res.redirect('/');
                 }
                 if (user.role === 1) {
-                    req.session.manager = await db.getManagerDetail(user.username);
+                    req.session.manager = await siteM.get(user.username, 'manager', 'username');
                     return res.redirect('/manager');
                 }
                 if (user.role === 0) {
-                    req.session.patient = await db.getPatientDetail(user.username);
+                    req.session.patient = await siteM.get(user.username, 'patient', 'identity_card');
                     return res.redirect('/user');
                 }
             });
         })(req, res, next);
+    }
+    async getAddress(req, res, next) {
+
     }
 }
 
