@@ -1,0 +1,35 @@
+<div
+  class="container-md px-5 py-3 text-center"
+  style="background-color: white;border-radius:25px"
+>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tên </th>
+        <th scope="col">Địa chỉ </th>
+        <th scope="col">Sức chứa</th>
+        <th scope="col">Số lượng tiếp nhận hiện tại</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each Locations}}
+        <tr>
+          <th scope="row">{{this.place_id}}</th>
+          <td>{{this.place_name}}</td>
+          <td>{{this.address}}</td>
+          <td>{{this.max_capacity}}</td>
+          <td>{{this.cur_capacity}}</td>
+          <td><a href="/admin/edit-location/{{this.place_id}}">Điều chỉnh</a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="fluid-container">
+    <a
+      class="btn btn-primary btn-lg"
+      href="/admin/add-location"
+      role="button"
+    >Thêm địa điểm</a>
+  </div>
+</div>
