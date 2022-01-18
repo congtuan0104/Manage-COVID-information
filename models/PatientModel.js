@@ -85,9 +85,11 @@ module.exports = {
         return res;
     },
     // Thêm đơn hàng
-    addPackage: async(order_id, patient_id,timeorder,package_id,quantity,grand_total,status)=>{
-        await db.none(`INSERT INTO orders(order_id, patient_id,timeorder,package_id,quantity,grand_total,status)
-        VALUES('${order_id}', '${patient_id}','${timeorder}','${package_id}','${quantity}','${grand_total}','${status}')`);
+    addPackage: async(patient_id,timeorder,package_id,quantity,grand_total,status)=>{
+        await db.none(`INSERT INTO orders(patient_id,timeorder,package_id,quantity,grand_total,status)
+        VALUES('${patient_id}','${timeorder}','${package_id}','${quantity}','${grand_total}','${status}')`);
+        const orderID=db.one('`SELECT MAX(order_id) FROM orders');
+        return orderID;
     },
     // Thêm đơn hàng
     addOrderDetail: async(order_id,supplies_id,quantity,total)=>{

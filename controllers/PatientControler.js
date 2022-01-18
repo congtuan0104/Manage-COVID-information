@@ -157,8 +157,7 @@ class PatientControler {
   }
   async buyPackage(req, res) {
     if (req.session.patient) {
-      const orders = await db.getOrderList(1);
-      const order_id = orders.length;
+
       const packageID = req.params.packageID;
       const patientID = req.session.patient.patient_id;
       let date = new Date(Date.now());
@@ -212,7 +211,7 @@ class PatientControler {
         }
       }
 
-      const result = await db.addPackage(order_id, patientID, timeOrder, packageID, quantity, grandToltal, status);
+      const orderID = await db.addPackage(patientID, timeOrder, packageID, quantity, grandToltal, status);
       const newDate = `${year}-${month}-${day}`;
       var isPackageConsumtionExists = await db.isExistPackageConsumption(packageID, newDate);
       if (isPackageConsumtionExists) {
@@ -223,7 +222,7 @@ class PatientControler {
       }
       const suppliesofPackage = await db.getSuppliesOfPackage(packageID);
       suppliesofPackage.forEach(async (supply, index) => {
-        let res = await db.addOrderDetail(order_id, supply.supplies_id, nProduct[index], supply.price * nProduct[index]);
+        let res = await db.addOrderDetail(orderID, supply.supplies_id, nProduct[index], supply.price * nProduct[index]);
 
       });
       if (result == 0) {
