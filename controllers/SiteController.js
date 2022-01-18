@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
 
-
 class SiteController {
     //[GET]/
     home(req, res, next) {
@@ -20,10 +19,12 @@ class SiteController {
         if (req.user) {
             return res.redirect('/');
         }
-        const users = await siteM.all('account');       
+        const users = await siteM.all('account');
+        const provinces = await siteM.all('province');          
         if (users.length > 0) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
+                provinces: provinces,
                 navP: () => 'accountNav',
                 cssP: () => 'style',
                 scriptP: () => 'script',
@@ -92,7 +93,7 @@ class SiteController {
     async userSignUp(req, res, next) {
         const username = req.body.username;
         const pwd = req.body.pwd;
-        const repwd = req.body.repwd;
+        const repwd = req.body.repwd;      
         const user = await siteM.get(username, 'account', 'username');
         if (user) {
             res.render('./Account/userSignUp', {
@@ -124,11 +125,12 @@ class SiteController {
             password: pwdHashed,
             role: 0
         };
+        const address = `${req.body.address}, ${req.body.ward}, ${req.body.district}, ${req.body.province}`;
         let newPatient = {
             patient_name: req.body.fullname,
             identity_card: username,
             birthday: req.body.bday,
-            address: req.body.address,
+            address: address,
             status: null,
             place_id: null,
             username: username
@@ -210,8 +212,15 @@ class SiteController {
             });
         })(req, res, next);
     }
-    async getAddress(req, res, next) {
-
+    async getDistrict(req, res) {       
+        const province = await siteM.get(req.query.province_name, 'province', 'province_name');
+        const districts = await siteM.getN(province.province_id, 'district', 'province_id');
+        res.send(districts);
+    }
+    async getWard(req, res) {       
+        const district = await siteM.get(req.query.district_name, 'district', 'district_name');
+        const wards = await siteM.getN(district.district_id, 'ward', 'district_id');
+        res.send(wards);
     }
 }
 
