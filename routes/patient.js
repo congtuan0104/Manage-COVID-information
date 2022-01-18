@@ -4,7 +4,7 @@ const route = express.Router();
 
 const patientController = require('../controllers/PatientControler');
 
-route.get('/detailInfo/:patientID', patientController.detailInfo);
+route.get('/detailInfo', patientController.detailInfo);
 route.get('/payment', patientController.payment);
 route.get('/manageHistory', patientController.manageHistory);
 route.get('/packages', patientController.packages);
