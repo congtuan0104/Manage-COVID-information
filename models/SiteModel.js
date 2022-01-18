@@ -10,12 +10,12 @@ module.exports = {
             const res = await db.any(qStr);
             return res;
         } catch (error) {
-            console.log('error accountM/all:', error);
+            console.log('error siteM/all:', error);
         }
     },
-    get: async (username, tblName, fieldName) => {
+    get: async (value, tblName, fieldName) => {
         const table = new pgp.helpers.TableName({ table: tblName, schema: schema });
-        const qStr = pgp.as.format(`SELECT * FROM $1 WHERE "${fieldName}"='${username}'`, table);
+        const qStr = pgp.as.format(`SELECT * FROM $1 WHERE "${fieldName}"='${value}'`, table);
         try {
             const res = await db.any(qStr);
             if (res.length > 0) {
@@ -23,7 +23,20 @@ module.exports = {
             }
             return null;
         } catch (error) {
-            console.log('error accountM/get:', error);
+            console.log('error siteM/get:', error);
+        }
+    },
+    getN: async (value, tblName, fieldName) => {
+        const table = new pgp.helpers.TableName({ table: tblName, schema: schema });
+        const qStr = pgp.as.format(`SELECT * FROM $1 WHERE "${fieldName}"='${value}'`, table);
+        try {
+            const res = await db.any(qStr);
+            if (res.length > 0) {
+                return res;
+            }
+            return null;
+        } catch (error) {
+            console.log('error siteM/get:', error);
         }
     },
     add: async (entity, tblName) => {
@@ -33,7 +46,7 @@ module.exports = {
             const res = await db.any(qStr);
             return res;
         } catch (error) {
-            console.log('error accountM/add:', error);
+            console.log('error siteM/add:', error);
         }
     },
 };
