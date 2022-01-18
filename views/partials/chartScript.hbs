@@ -1,0 +1,82 @@
+<script>
+    const staOverTime = document.getElementById('staOverTime').getContext('2d');
+    const Chart1 = new Chart(staOverTime, {
+        type: 'line',
+        data: {
+            labels: [{{#each staOverTime}} '{{date}}', {{/each}}],
+            datasets: [{
+                label: 'F0',
+                data: [{{#each staOverTime}} {{f0}}, {{/each}}],
+
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            },
+
+            {
+                label: 'F1',
+                data: [{{#each staOverTime}} {{f1}}, {{/each}}],
+              
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'F2',
+                data: [{{#each staOverTime}} {{f2}}, {{/each}}],
+              
+                borderColor: [                   
+                    'rgba(255, 206, 86, 1)',               
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'F3',
+                data: [{{#each staOverTime}} {{f3}}, {{/each}}],
+              
+                borderColor: [
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    const staToday = document.getElementById('staToday').getContext('2d');
+    const Chart2 = new Chart(staToday, {
+        type: 'doughnut',
+        data: {
+            
+            datasets: [{
+              
+                data: [{{#with staToday}}{{this.f0}},{{this.f1}},{{this.f2}},{{this.f3}},{{this.f4}}{{/with}}],
+                
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    
+                ],
+                borderWidth: 1,
+                hoverOffset: 12,
+            }],
+
+            labels: ['F0', 'F1', 'F2', 'F3', 'Khác'],
+        },
+        
+    });
+
+</script>
+

@@ -1,0 +1,80 @@
+<div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h4 class=" pb-2 text-left text-secondary">
+                    <b>SỐ LƯỢNG BỆNH NHÂN THEO THỜI GIAN</b>
+
+                    <div class="dropdown">
+                        <a class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-expanded="false">
+                            Lọc dữ liệu <i class="fa fa-filter"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="input-group">
+                                <label for="startDay">Từ </label>
+                                <input type="date" name="startDay" id="startDay" value="{{startDay}}"
+                                    style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                                    class="form-control" onchange="getDistrict(this.value)">
+                                <input type="date" name="endDay" id="endDay" value="{{today}}"
+                                    style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                                    class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"
+                                        onclick="searchRange()">
+                                        <i class='fa fa-filter'></i>
+                                    </button>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </h4>
+
+            </div>
+        </div>
+        <div class="col pr-5">
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-info" onclick="showChart()">
+                        <i class="fa fa-line-chart"></i> Biểu đồ
+                    </button>
+                    <button class="btn btn-danger" onclick="showDetail()">
+                        <i class="fa fa-database"></i> Số liệu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4" id="titleTable1" style="display: none;">
+        <div class="col-2">
+            <div class="row" style=" font-weight:bold">Ngày
+                <a href="#">
+                    <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-2" style="font-weight:bold">SL F0</div>
+        <div class="col-2" style="font-weight:bold">SL F1</div>
+        <div class="col-2" style="font-weight:bold">SL F2</div>
+        <div class="col-2" style="font-weight:bold">SL F3 </div>
+        <div class="col-2" style="font-weight:bold">Khỏi bệnh</div>
+    </div>
+    <canvas id="staOverTime" class="mb-5" width="100%"></canvas>
+    <div id="updateSta" style="display: none;">
+        {{#each staOverTime}}
+        <div class="row align-items-center border-bottom py-4">
+            <div class="col-2">
+                <div class="row">{{this.date}}</div>
+            </div>
+            <div class="col-2">{{this.f0}}</div>
+            <div class="col-2">{{this.f1}}</div>
+            <div class="col-2">{{this.f2}}</div>
+            <div class="col-2">{{this.f3}}</div>
+            <div class="col-2">{{this.cured}}</div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>

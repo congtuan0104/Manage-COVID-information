@@ -86,3 +86,4 @@ for (let i = 0, len = money.length; i < len; i++) {
     money[i].innerHTML = num;
     money[i].classList.add("currSign");
 }
+

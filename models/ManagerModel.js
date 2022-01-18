@@ -70,7 +70,7 @@ module.exports = {
       `
         SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
         FROM Package p, Package_Detail pd
-        WHERE p.Package_ID = pd.Package_ID
+        WHERE p.Package_ID = pd.Package_ID AND Status=1
         GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
         ORDER BY p.Package_ID
         LIMIT 12 OFFSET $1`,
@@ -219,21 +219,55 @@ module.exports = {
     const res = await db.any(
       `SELECT p.supplies_id, supplies_name, quantity_limit
                                  FROM package_detail p, supplies s 
-                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`,
-      [packageID]
-    );
-    if (res.length == 0) return null;
-    return res;
-  },
+                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`, [packageID]);
+        if (res.length == 0) return null;
+        return res;
+    },
 
-  // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
-  getRemainingPackage: async (packageID) => {
-    const res = await db.any(
-      `SELECT supplies_id, supplies_name from supplies where supplies_id not in
-        (SELECT supplies_id FROM package_detail WHERE package_id=$1)`,
-      [packageID]
-    );
-    if (res.length == 0) return null;
-    return res;
-  },
-};
+
+    // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
+    getRemainingPackage: async (packageID) => {
+        const res = await db.any(`SELECT supplies_id, supplies_name from supplies where supplies_id not in
+        (SELECT supplies_id FROM package_detail WHERE package_id=$1)`, [packageID]);
+        if (res.length == 0) return null;
+        return res;
+    },
+
+
+    //Xoá gói sản phẩm
+    deletePackage: async (packageID) => {
+        const res = await db.none(`UPDATE package SET status = 0 WHERE package_id=$1`, [packageID]);
+        if (res) {
+            console.log(res);
+            return 0;
+        }
+        return 1;
+    },
+
+
+    //Lấy số liệu thống kê của một ngày
+    getStatistic: async(date) =>{
+        const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
+         FROM statistical WHERE date='${date}'`);
+        if (res.length == 0) return null;
+        return res;
+    },
+
+
+    //Lấy số liệu thống kê trong khoảng thời gian
+    getRangeStatistic: async(start,end,orderBy) =>{
+        const res = await db.any(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
+        FROM statistical WHERE date>='${start}' AND date<='${end}'
+        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`,orderBy);
+        if (res.length == 0) return null;
+        return res;
+    },
+
+    getTotalCases: async(date)=> {
+        const res = await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
+         FROM statistical WHERE date<='${date}'`);
+        if (res.length == 0) return null;
+        return res;
+    }
+
+}

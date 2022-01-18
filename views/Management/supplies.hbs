@@ -24,7 +24,7 @@
                 <div class="img-event">
                     <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
                         data-target="#edtSupplies{{this.supplies_id}}">
-                        
+
                         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 {{#if img}}
@@ -34,13 +34,13 @@
                                 </div>
                                 {{/each}}
                                 {{else}}
-                                    <img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                <img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
                                 {{/if}}
                             </div>
-                            
+
                         </div>
-                        
-                        
+
+
                     </a>
                 </div>
                 <div class="caption card-body">
@@ -86,8 +86,9 @@
                         <i class="fa fa-chevron-left" aria-hidden="true"></i>
                     </a>
                 </li>
+                
                 {{#each pageList}}
-                <li class="page-item {{#ifStr this page}} disabled{{/ifStr}}"><a class="page-link"
+                <li class="page-item {{#eq this page}} disabled{{/eq}}"><a class="page-link"
                         href="/manager/supplies?page={{this}}">{{this}}</a></li>
                 {{/each}}
                 <li class="page-item{{#eq page numberOfPage}} disabled{{/eq}}">

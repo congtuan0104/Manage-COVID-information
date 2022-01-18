@@ -1,0 +1,154 @@
+<script>
+    const staOverTime = document.getElementById('staOverTime').getContext('2d');
+    var Chart1 = new Chart(staOverTime, {
+        type: 'line',
+        data: {
+            labels: [{{#each staOverTime}} '{{date}}', {{/each}}],
+            datasets: [{
+                label: 'F0',
+                data: [{{#each staOverTime}} {{f0}}, {{/each}}],
+
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            },
+
+            {
+                label: 'F1',
+                data: [{{#each staOverTime}} {{f1}}, {{/each}}],
+              
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'F2',
+                data: [{{#each staOverTime}} {{f2}}, {{/each}}],
+              
+                borderColor: [                   
+                    'rgba(255, 206, 86, 1)',               
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'F3',
+                data: [{{#each staOverTime}} {{f3}}, {{/each}}],
+              
+                borderColor: [
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    const staToday = document.getElementById('staToday').getContext('2d');
+    const Chart2 = new Chart(staToday, {
+        type: 'doughnut',
+        data: {
+            
+            datasets: [{
+              
+                data: [{{#with staToday}}{{this.f0}},{{this.f1}},{{this.f2}},{{this.f3}},{{this.f4}}{{/with}}],
+                
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    
+                ],
+                borderWidth: 1,
+                hoverOffset: 12,
+            }],
+
+            labels: ['F0', 'F1', 'F2', 'F3', 'Khác'],
+        },
+        
+    });
+
+
+    function searchStatistic(){
+        
+        const endDay = $('[name="endDay"]').val();
+        console.log(endDay);
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            const res = JSON.parse(this.responseText);
+
+            document.getElementById("updateSta").innerHTML = `
+            <div class="row align-items-center border-bottom py-4">
+                <div class="col-2">
+                    <div class="row">${res.date}</div> 
+                </div>
+                <div class="col-2">${res.f0}</div>
+                <div class="col-2">${res.f1}</div>
+                <div class="col-2">${res.f2}</div>
+                <div class="col-2">${res.f3}</div>
+                <div class="col-2">${res.cured}</div>
+            </div>`;
+
+        }
+        xhr.open("GET", "/manager/searchStatistic?d="+endDay);
+        xhr.send();
+    }
+
+
+    function searchRange(){
+        const startDay = $('[name="startDay"]').val();
+        const endDay = $('[name="endDay"]').val();
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            const res = JSON.parse(this.responseText);
+
+            document.getElementById("updateSta").innerHTML = "";
+            var tempStr= "";
+            res.forEach((row) => {               
+                tempStr = tempStr + 
+                `<div class="row align-items-center border-bottom py-4">
+                <div class="col-2">
+                    <div class="row">${row.date}</div> 
+                </div>
+                <div class="col-2">${row.f0}</div>
+                <div class="col-2">${row.f1}</div>
+                <div class="col-2">${row.f2}</div>
+                <div class="col-2">${row.f3}</div>
+                <div class="col-2">${row.cured}</div>
+            </div>`;
+            });
+            document.getElementById("updateSta").innerHTML = tempStr;
+
+            document.getElementById("dynamicChart").innerHTML="";
+
+        }
+        xhr.open("GET", "/manager/searchRange?start="+startDay+"&end="+endDay);
+        xhr.send();
+
+        
+    }
+
+
+    function showChart(){
+        $('#titleTable1').hide();
+        $('#updateSta').hide();
+        $('#staOverTime').show();
+    }
+
+    function showDetail(){
+        $('#staOverTime').hide();
+        $('#titleTable1').show();
+        $('#updateSta').show();
+    }
+</script>
+

@@ -5,32 +5,27 @@
     </div>
 </a>
 <ul class="nav-links">
+    
     <li>
-        <a id="" href="/user">
-            <i class='bx bx-grid-alt'></i>
-            <span class="links_name">Trang chính</span>
-        </a>
-    </li>
-    <li>
-        <a id="detailInfo" href="/user/detailInfo">
+        <a id="" href="/user/detailInfo" {{#eq title 'Thông tin cá nhân'}}class="active"{{/eq}}>
             <i class='bx bxs-user-detail'></i>
             <span class="links_name">Thông tin cá nhân</span>
         </a>
     </li>
     <li>
-        <a id="supplies" href="/user/supplies">
-            <i class='bx bx-box'></i>
-            <span class="links_name">Nhu yếu phẩm</span>
-        </a>
-    </li>
+        <a href="/user/packages" {{#eq title 'Gói nhu yếu phẩm'}}class="active"{{/eq}}>
+            <i class='bx bx-package'></i>
+                <span class="links_name">Gói nhu yếu phẩm</span>
+            </a>
+        </li>
     <li>
-        <a id="manageHistory" href="/user/manageHistory">
+        <a id="" href="/user/manageHistory" {{#eq title 'Lịch sử quản lí'}}class="active"{{/eq}}>
             <i class='bx bx-list-ul'></i>
             <span class="links_name">Lịch sử quản lí</span>
         </a>
     </li>
     <li>
-        <a id="payment" href="/user/payment">
+        <a id="" href="/user/payment" {{#eq title 'Lịch sử thanh toán'}}class="active"{{/eq}}>
             <i class='bi bi-credit-card'></i>
             <span class="links_name">Lịch sử thanh toán</span>
         </a>
@@ -59,4 +54,5 @@
             <span class="links_name">Đăng xuất</span>
         </a>
     </li>
+    
 </ul>

@@ -203,7 +203,10 @@ class SiteController {
                     return res.redirect('/manager');
                 }
                 if (user.role === 0) {
-                    req.session.patient = await siteM.get(user.username, 'patient', 'identity_card');
+                    const temp = await siteM.get(user.username, 'patient', 'username');
+                    req.session.patient = temp;
+                    console.log(req.session.patient);
+                    //res.redirect('/')
                     return res.redirect('/user');
                 }
             });

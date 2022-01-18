@@ -5,11 +5,23 @@ const db = require('../models/ManagerModel');
 class ManagerController {
     //[GET]/
     async home(req, res) {
+        var day = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const today = year + '-' + month + '-' + day;
+        const startDay = year + '-' + month + '-' + (parseInt(day) - parseInt(13));
+        const totalCases = await db.getTotalCases(today);
+        const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
+        const staToday = await db.getStatistic(today);
+
         res.render("./Management/dashboard", {
             layout: "managementLayout",
             title: "Trang chủ",
+            totalCases: totalCases,
+            staToday: staToday,
+            staOverTime: staOverTime,
             cssP: () => "style-supplies",
-            scriptP: () => "script",
+            scriptP: () => "chartScript",
         });
     }
 
@@ -138,6 +150,7 @@ class ManagerController {
         res.render("./Management/patientDetail", {
             layout: "managementLayout",
             patient: patientDetail,
+            title: 'Bệnh nhân',
             treatmentPlace: treatmentPlace,
             listTreatmentPlace: listTreatmentPlace,
             cssP: () => "style-supplies",
@@ -159,79 +172,137 @@ class ManagerController {
 
     //[POST]/addSupplies
     async addSupplies(req, res) {
+        const imageList = req.files;
         const productName = req.body.productName;
         const price = req.body.price;
         const unit = req.body.unit;
-        const result = await db.addSupplies(productName, price, unit);
-        if (result == 0) {
+        const suppliesID = await db.addSupplies(productName, price, unit);
+        if (!suppliesID) {
             console.log("Thêm sản phẩm thất bại");
         }
-    res.redirect("/manager/supplies");
-    return;
-  }
 
-  //[POST]/updateSupplies
-  async updateSupplies(req, res) {
-    const suppliesID = req.body.suppliesID;
-    const suppliesName = req.body.suppliesName;
-    const price = req.body.price;
-    const unit = req.body.unit;
-    const result = await db.updateSupplies(
-      suppliesID,
-      suppliesName,
-      price,
-      unit
-    );
-    if (result == 0) {
-      console.log("Cập nhật thông tin thất bại");
+        imageList.forEach(async image => {
+            await db.uploadImage(suppliesID, image);
+        });
+        res.redirect("/manager/supplies");
+        return;
+    }
+
+    //[POST]/updateSupplies
+    async updateSupplies(req, res) {
+        const suppliesID = req.body.suppliesID;
+        const suppliesName = req.body.suppliesName;
+        const price = req.body.price;
+        const unit = req.body.unit;
+        const result = await db.updateSupplies(suppliesID, suppliesName, price, unit);
+        if (result == 0) {
+            console.log("Cập nhật thông tin thất bại");
         }
         res.redirect("/manager/supplies");
         return;
     }
 
-  //[POST]/deleteSupplies
-  async deleteSupplies(req, res) {
-    const suppliesID = req.body.suppliesID;
-    const result = await db.deleteSupplies(suppliesID);
+    //[POST]/deleteSupplies
+    async deleteSupplies(req, res) {
+        const suppliesID = req.body.suppliesID;
+        const result = await db.deleteSupplies(suppliesID);
 
-    if (result == 0) {
-      console.log("Xoá sản phẩm thất bại");
-    }
-    res.redirect("/manager/supplies");
-    return;
-}
-
-  //[POST]/addPackage
-  async addPackage(req, res) {
-    console.log(req.body);
-    const packageName = req.body.packageName;
-    const limit = req.body.limit;
-    const limitTime = req.body.limitTime;
-    const suppliesList = req.body.suppliesID;
-    const quantityLimit = req.body.nProduct;
-    if (suppliesList.length < 2) {
-        res.send("Gói sản phẩm cần có ít nhất 2 sản phẩm");
+        if (result == 0) {
+            console.log("Xoá sản phẩm thất bại");
+        }
+        res.redirect("/manager/supplies");
         return;
     }
 
-    const packageID = await db.addPackage(packageName, limit, limitTime);
-    if (packageID == null) {
-        res.send("Thêm sản phẩm thất bại");
+    //[POST]/addPackage
+    async addPackage(req, res) {
+        const packageName = req.body.packageName;
+        const limit = req.body.limit;
+        const limitTime = req.body.limitTime;
+        const suppliesList = req.body.suppliesID;
+        const quantityLimit = req.body.nProduct;
+        if (suppliesList.length < 2) {
+            res.send("Gói sản phẩm cần có ít nhất 2 sản phẩm");
+            return;
+        }
+
+        const packageID = await db.addPackage(packageName, limit, limitTime);
+        if (packageID == null) {
+            res.send("Thêm sản phẩm thất bại");
+            return;
+        }
+
+        var result;
+        for (var i = 0; i < suppliesList.length; i++) {
+            result = await db.addPackageDetail(
+                packageID,
+                suppliesList[i],
+                quantityLimit[i]
+            );
+        }
+
+        res.redirect("/manager/packages");
         return;
     }
 
-    var result;
-    for (var i = 0; i < suppliesList.length; i++) {
-      result = await db.addPackageDetail(
-        packageID,
-        suppliesList[i],
-        quantityLimit[i]
-      );
+
+    //[POST]/deletePackage
+    async deletePackage(req, res) {
+        const packageID = req.body.packageID;
+        const result = await db.deletePackage(packageID);
+
+        if (result == 0) {
+            console.log("Xoá gói sản phẩm thất bại");
+        }
+        res.redirect("/manager/packages");
+        return;
     }
 
-    res.redirect("/manager/dashboard");
-    return;
-}
+
+    //[GET]/statistic
+    async statistical(req, res) {
+
+        var day = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        if (parseInt(day) < 10) day = '0' + day;
+        if (parseInt(month) < 10) month = '0' + month;
+        const today = year + '-' + month + '-' + day;
+        day = parseInt(day) - parseInt(13);
+        if (parseInt(day) < 10) day = '0' + day;
+        const startDay = year + '-' + month + '-' + day;
+        const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
+
+        res.render("./Management/statistical", {
+            layout: "managementLayout",
+            title: 'Thống kê',
+            staOverTime: staOverTime,
+            startDay: startDay,
+            today: today,
+            cssP: () => "style-supplies",
+            scriptP: () => "statisticScript",
+            footerP: () => "footer",
+        });
+        return;
+
+
+    }
+
+    //[GET]/searchStatistic  --> Xem chi tiết thống kê của một ngày
+    async searchStatistic(req, res) {
+        const date = req.query.d;
+        const sta = await db.getStatistic(date);
+        res.send(sta);
+    }
+
+
+    //[GET]/searchRange  --> Xem thống kê trong một khoảng thời gian
+    async searchRange(req, res) {
+        const start = req.query.start;
+        const end = req.query.end;
+        const sta = await db.getRangeStatistic(start, end, 'ASC');
+        res.send(sta);
+    }
 }
 
 module.exports = new ManagerController();
