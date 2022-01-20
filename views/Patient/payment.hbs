@@ -154,8 +154,13 @@
             Bạn có chắc muốn thành toán
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Không</button>
-            <form action="/user/callAddPaymentAPI" method="POST">
+            
+            <form class="p-0 m-0" action="#">
+                <div class="form-group">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" >Không</button>
+            </form>
+            <form class="p-0 m-0" action="/user/callAddPaymentAPI" method="POST">
                 <div class="form-group">
                     <input name="totalPayment" type="number" class="form-control" hidden>
                     {{#each orders}}
@@ -164,7 +169,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Chấp nhận</button>
             </form>
-            
         </div>
         </div>
     </div>

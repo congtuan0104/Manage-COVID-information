@@ -1,6 +1,5 @@
 
 const { restart } = require("nodemon");
-
 const db = require("../models/PatientModel");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -14,7 +13,6 @@ const axios = require('axios');
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = 'mySecretKey';
 class PatientControler {
-
   //[GET]/
   async home(req, res, next) {
     res.redirect('/user/detailInfo');
@@ -60,7 +58,6 @@ class PatientControler {
     if(!req.session.patient){
       res.redirect('/signin');
       return;
-
     }
     const notification = await db.getNotification(req.session.patient.patient_id);
     const orderList = await db.getOrderListDetail(req.session.patient.patient_id);
@@ -138,7 +135,6 @@ class PatientControler {
       title: "Gói nhu yếu phẩm",
       packages: packageList,
       supplies: supplies,
-
       patient: req.session.patient,
       notification,notification,
       navP: () => 'nav',
@@ -227,7 +223,6 @@ class PatientControler {
     }
     
   }
-
   //[GET]/package/:packageID
   async packageDetail(req, res) {
     if(!req.session.patient){
@@ -239,7 +234,6 @@ class PatientControler {
     const suppliesOfPackage = await db.getSuppliesOfPackage(packageID);
     const remainingPackage = await db.getRemainingPackage(packageID);
     var defaultPrice = 0;
-
     for (var i = 0; i < suppliesOfPackage.length; i++) {
       suppliesOfPackage[i].img = await db.getSuppliesImg(suppliesOfPackage[i].supplies_id);
     }
@@ -249,7 +243,6 @@ class PatientControler {
       defaultPrice += count * price;
     })
     const notification = await db.getNotification(req.session.patient.patient_id);
-
     res.render("./Patient/packageDetail", {
       layout: "userLayout",
       title: "Gói nhu yếu phẩm",
@@ -258,49 +251,6 @@ class PatientControler {
       patient: req.session.patient,
       supplies2: remainingPackage,
       defaultPrice: defaultPrice,
-
-      navP: () => "nav",
-      sidebarP: () => "patientSidebar",
-      cssP: () => "style",
-      scriptP: () => "packageDetailScript",
-      footerP: () => "footer",
-    });
-  }
-  async buyPackage(req, res) {
-    const orders = await db.getOrderList(1);
-    const order_id = orders.length;
-    const packageID = req.params.packageID;
-    const patientID = 1;
-    let date = new Date(Date.now());
-    let day = date.getUTCDate();
-    let month = date.getUTCMonth() + 1;
-    let year = date.getUTCFullYear();
-    let hour = date.getHours();
-    let minutes = date.getMinutes();
-    let second = date.getSeconds();
-    const dateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
-    const timeOrder = dateStr;
-    const quantity = 1;
-    const grandToltal = req.body.grandTotal;
-    const status = 0;
-    const nProduct = req.body.nProduct;
-
-    const packageDetail = await db.getPackageDetail(packageID);
-    switch (packageDetail.time_limit) {
-      case "d": {
-        let listOrderById = await db.getOrderListByIdByDate(packageID);
-        if (listOrderById.length >= packageDetail.package_limit + 2) {
-          res.redirect("/user/payment");
-          return;
-        }
-        break;
-      }
-      case "w": {
-        let listOrderById = await db.getOrderListByIdByWeek(packageID);
-        if (listOrderById.length >= packageDetail.package_limit) {
-          res.redirect("/user/payment");
-          return;
-
       notification:notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
@@ -348,34 +298,31 @@ class PatientControler {
       headers: {
         'Authorization': 'Bearer  '+token
       }
-    }).then(function (response) {
-      balance = response.balance;
-        if(balance<totalPayment){
-          res.render('Patient/payment', {
-            layout: 'userLayout',
-            title: 'Lịch sử thanh toán',
-            orders: orderList,
-            payLimitPertime:payLimitPertime,
-            patient: req.session.patient,
-            totalGrand: totalPayment,
-            notification:notification,
-            navP: () => 'nav',
-            sidebarP: () => 'patientSidebar',
-            cssP: () => 'style',
-            scriptP: () => 'paymentScript',
-            footerP: () => 'footer',
-            msg:'Số dư trong tài khoản không đủ hay nạp thêm',
-            color:'danger'
-          });
-          return;
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    const orderList = await db.getOrderListDetail(req.session.patient.patient_id);
-  
-    let receive_id =paymentInfo.maint_account;
+    }).then( async function (response) {
+      balance = response.data.balance;
+      var orderList = await db.getOrderListDetail(req.session.patient.patient_id);
+    if(balance<totalPayment){
+      console.log(balance);
+      res.render('Patient/payment', {
+        layout: 'userLayout',
+        title: 'Lịch sử thanh toán',
+        orders: orderList,
+        payLimitPertime:payLimitPertime,
+        patient: req.session.patient,
+        totalGrand: totalPayment,
+        notification:notification,
+        navP: () => 'nav',
+        sidebarP: () => 'patientSidebar',
+        cssP: () => 'style',
+        scriptP: () => 'paymentScript',
+        footerP: () => 'footer',
+        msg:'Số dư trong tài khoản không đủ hay nạp thêm',
+        color:'danger'
+      });
+      return;
+  }
+   
+    let receive_id =paymentInfo.main_account;
     axios.post('http://localhost:3003/addPayment', {
       transfer_id: req.session.patient.username,
       receive_id: receive_id,
@@ -390,7 +337,15 @@ class PatientControler {
         await db.setOrderStatus(checkedOrder[i]);
       }
       var date = new Date();
-      await db.addNotification(req.session.patient.patient_id,date,"Thanh toán thành công");
+      let day = date.getUTCDate();
+      let month = date.getUTCMonth() + 1;
+      let year = date.getUTCFullYear();
+      let hour = date.getHours();
+      let minutes = date.getUTCMinutes();
+      let second = date.getUTCSeconds();
+      const dateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
+      await db.addNotification(req.session.patient.patient_id,dateStr,"Thanh toán thành công");
+      orderList = await db.getOrderListDetail(req.session.patient.patient_id);
       res.render('Patient/payment', {
         layout: 'userLayout',
         title: 'Lịch sử thanh toán',
@@ -431,6 +386,11 @@ class PatientControler {
     .catch(function (error) {
       console.log(error);
     });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
   }
   async buyPackage(req, res) {
     if (req.session.patient) {
@@ -486,11 +446,8 @@ class PatientControler {
 
           }
           break;
-
         }
       }
-
-    
       if(isOverLimit){
           const packageDetail = await db.getPackageDetail(packageID);
           const suppliesOfPackage = await db.getSuppliesOfPackage(packageID);
@@ -520,8 +477,6 @@ class PatientControler {
             footerP: () => 'footer',
             msg:msg
           });
-
-        
           return;
       }
       const orderID = await db.addPackage(patientID, timeOrder, packageID, quantity, grandToltal, status);
@@ -544,10 +499,8 @@ class PatientControler {
       res.redirect("/user/payment");
       return;
     }
-
     res.redirect('/signin');
-
   }
 }
 
-module.exports = new PatientControler();
+module.exports = new PatientControler;
