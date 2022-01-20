@@ -41,6 +41,14 @@
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <div class="dropdown-item" href="#">
+                    {{#each notifications}}
+                        <div class="text">
+                            <i class='bi bi-credit-card'></i>
+                            <p> {{this.message}}</p>
+                        </div>
+                        </div>
+                    {{/each}}
+                    {{!-- 
                         <div class="text">
                             <i class='bi bi-credit-card'></i>
                             <p> HD001 thanh toán thành công</p>
@@ -51,7 +59,7 @@
                             <i class='bx bx-list-ul'></i>
                             <p>Người quản lí vừa cập nhật thông tin</p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
