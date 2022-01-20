@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const adminM = require("../models/AdminModel");
-
+const siteM = require("../models/SiteModel");
 class AdminController {
   //[GET]/
   async getManagers(req, res, next) {
@@ -60,10 +60,12 @@ class AdminController {
       Locations: await adminM.getAllTreatmentLocations(),
     });
   }
-  getAddLoction(req, res, next) {
+  async getAddLoction(req, res, next) {
+    const provinces = await siteM.all("province");
     res.render("./Admin/addLocation", {
       layout: "managementLayout",
       title: "Địa điểm điều trị và cách ly",
+      provinces: provinces,
       navP: () => "nav",
       cssP: () => "style",
       scriptP: () => "script",
@@ -99,6 +101,31 @@ class AdminController {
       scriptP: () => "script",
       footerP: () => "footer",
     });
+  }
+
+  async getDistrict(req, res) {
+    const province = await siteM.get(
+      req.query.province_name,
+      "province",
+      "province_name"
+    );
+    const districts = await siteM.getN(
+      province.province_id,
+      "district",
+      "province_id"
+    );
+    console.log(districts);
+    res.send(districts);
+  }
+  //[GET]/getWard
+  async getWard(req, res) {
+    const district = await siteM.get(
+      req.query.district_name,
+      "district",
+      "district_name"
+    );
+    const wards = await siteM.getN(district.district_id, "ward", "district_id");
+    res.send(wards);
   }
 
   //[POST]/

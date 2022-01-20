@@ -1,12 +1,47 @@
-{{!-- Viết thêm script (nếu có) cho trang home tại đấy --}}
+{{! Viết thêm script (nếu có) cho trang home tại đấy }}
 <script>
-    $(document).ready(function () {
-        $('#{{{currentPage}}}').addClass('active');
-    });
-
-    document.querySelector(".inputNumber").addEventListener("keypress", function (evt) {
-        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
-            evt.preventDefault();
-        }
-    });
+  $(document).ready(function () { $('#{{{currentPage}}}').addClass('active');
+  }); document.querySelector(".inputNumber").addEventListener("keypress",
+  function (evt) { if (evt.which != 8 && evt.which != 0 && evt.which < 48 ||
+  evt.which > 57) { evt.preventDefault(); } }); function getDistrict() {
+  $('#ward').empty(); $('#ward').append('<option selected>Chọn
+  Phường/Xã...</option>'); const province_name = $('#province').val(); if
+  (province_name === "Chọn Tỉnh/Thành phố...") { $('#district').empty();
+  $('#district').append('<option selected>Chọn Quận/Huyện...</option>'); return;
+  } $.ajax({ url: "getDistrict", type: "get", data: { province_name:
+  province_name }, success: function (response) { $('#district').empty();
+  $('#district').append('<option selected>Chọn Quận/Huyện...</option>'); for
+  (var district of response) {
+  $('#district').append(`<option>${district.district_name}</option>`); } },
+  error: function (xhr) { console.log(xhr); } }); } function getWard() { const
+  district_name = $('#district').val(); if (district_name === "Chọn
+  Quận/Huyện...") { $('#ward').empty(); $('#ward').append('<option selected>Chọn
+  Phường/Xã...</option>'); return; } $.ajax({ url: "getWard", type: "get", data:
+  { district_name: district_name }, success: function (response) {
+  $('#ward').empty(); for (var ward of response) {
+  $('#ward').append(`<option>${ward.ward_name}</option>`); } }, error: function
+  (xhr) { console.log(xhr); } }); }
+</script>{{! Viết thêm script (nếu có) cho trang home tại đấy }}
+<script>
+  $(document).ready(function () { $('#{{{currentPage}}}').addClass('active');
+  }); document.querySelector(".inputNumber").addEventListener("keypress",
+  function (evt) { if (evt.which != 8 && evt.which != 0 && evt.which < 48 ||
+  evt.which > 57) { evt.preventDefault(); } }); function getDistrict() {
+  $('#ward').empty(); $('#ward').append('<option selected>Chọn
+  Phường/Xã...</option>'); const province_name = $('#province').val(); if
+  (province_name === "Chọn Tỉnh/Thành phố...") { $('#district').empty();
+  $('#district').append('<option selected>Chọn Quận/Huyện...</option>'); return;
+  } $.ajax({ url: "getDistrict", type: "get", data: { province_name:
+  province_name }, success: function (response) { $('#district').empty();
+  $('#district').append('<option selected>Chọn Quận/Huyện...</option>'); for
+  (var district of response) {
+  $('#district').append(`<option>${district.district_name}</option>`); } },
+  error: function (xhr) { console.log(xhr); } }); } function getWard() { const
+  district_name = $('#district').val(); if (district_name === "Chọn
+  Quận/Huyện...") { $('#ward').empty(); $('#ward').append('<option selected>Chọn
+  Phường/Xã...</option>'); return; } $.ajax({ url: "getWard", type: "get", data:
+  { district_name: district_name }, success: function (response) {
+  $('#ward').empty(); for (var ward of response) {
+  $('#ward').append(`<option>${ward.ward_name}</option>`); } }, error: function
+  (xhr) { console.log(xhr); } }); }
 </script>
