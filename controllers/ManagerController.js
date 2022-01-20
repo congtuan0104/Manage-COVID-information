@@ -1,14 +1,7 @@
 const { async } = require('@firebase/util');
 const { addPatient } = require('../models/ManagerModel');
 const db = require('../models/ManagerModel');
-var jwt = require('jsonwebtoken');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const { user } = require("pg/lib/defaults");
-var jwtOptions = {};
 const axios = require('axios'); 
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-jwtOptions.secretOrKey = 'mySecretKey';
 
 class ManagerController {
     //[GET]/
@@ -202,17 +195,9 @@ class ManagerController {
         const dateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
         await db.addNewAccount(username,dateStr,0);
         await db.addPatient(patient_name, identity_card, birthday, address, status,username);
-        let managerId = '234567891';
-        let payload = { account_id: managerId };
-        let token = jwt.sign(payload, jwtOptions.secretOrKey);
         axios.post('http://localhost:3003/addAccount', {
             account_id: username
-            }, {
-            headers: {
-                'Authorization': 'Bearer  '+token
-            }
             }).then(async function (response) {
-                console.log(response.data);
             if(response.data.msg=='success'){
                 const patientsList = await db.getPatientList();
 
