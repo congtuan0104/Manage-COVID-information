@@ -1,9 +1,22 @@
+<div class="row">
+    {{#if msg}}
+        <div class="alert alert-{{color}}" role="alert">
+            {{msg}}
+        </div>
+    {{/if}}
+</div>
 <div class="container">
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class=" pb-2 text-left" style=" font-weight:bold"><b>DANH SÁCH HÓA ĐƠN</b></h4>
+                    <h4 class=" pb-2 text-left" style=" font-weight:bold">
+                        <b>DANH SÁCH HÓA ĐƠN</b>
+                        <div class="text-right money">Tổng dư nợ: {{totalGrand}} VNĐ</div>
+                        <div class="text-right money">Hạn mức thanh toán tối thiểu: {{payLimitPertime}} VNĐ</div>
+                        <input id="payLimitPertime" type="number" value="{{payLimitPertime}}" hidden/>
+                        
+                    </h4>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead>
@@ -14,6 +27,7 @@
                                     <th>Ngày tạo hóa đơn</th>
                                     <th>Số tiền</th>
                                     <th>Trạng thái</th>
+                                    <th onClick="checkAll()">Chọn tất cả</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -24,19 +38,30 @@
                                         <td>{{this.patient_name}}</td>
                                         <td>{{this.package_name}}</td>
                                         <td>{{this.timeorder}}</td>
-                                        <td>{{this.grand_total}}</td>
-                                        {{#if this.status }}
+                                        <td>{{this.grand_total}} VNĐ</td>
+                                        {{#if this.order_status }}
                                             <td><span class="badge badge-pill badge-success">Đã thanh toán</span></td>
-                                            <td><span class="btn btn-success disable">Thanh Toán</span></td>
+                                            <td>
+                                                
+                                            </td>
                                             {{else}}
                                             <td><span class="badge badge-pill badge-danger">Chưa thanh toán</span></td>
-                                            <td><span class="btn btn-success">Thanh Toán</span></td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" order_id ="{{this.order_id}}" class="custom-control-input" grand ="{{this.grand_total}}" id="check{{this.order_id}}">
+                                                    <label class="custom-control-label" for="check{{this.order_id}}"></label>
+                                                </div>
+                                            </td>
                                         {{/if}}
                                         <td><a href="" data-toggle="modal" data-target="#order{{this.order_id}}" >Xem chi tiết</a></td>
                                     </tr>
                                 {{/each}}
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-end">
+                            <div onclick="payBill()" class="btn-success btn text-right" data-toggle="modal" data-target="#payModal">Thanh toán</div>
+                        </div>
+                        
                     </div>
                     {{#each orders}}
                     <div class="modal fade" id="order{{this.order_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -85,15 +110,15 @@
                                                                             <td>
                                                                                 <h4>{{this.quantity}}</h4>
                                                                             </td>
-                                                                            <td class="total">{{this.total}}</td>
+                                                                            <td class="total">{{this.total}}VNĐ</td>
                                                                         </tr>
                                                                         {{/each}}
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>
                                                                             <td colspan="1"></td>
-                                                                            <td colspan="1">Tổng cộng</td>
-                                                                            <td>500.000 VNĐ</td>
+                                                                            <td colspan="2">Tổng cộng</td>
+                                                                            <td class="money">{{grand_total}} VNĐ</td>
                                                                         </tr>
                                                                     </tfoot>
                                                                 </table>
@@ -114,5 +139,34 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="payModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Xác nhận thanh toán</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="announcementPay">
+            Bạn có chắc muốn thành toán
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Không</button>
+            <form action="/user/callAddPaymentAPI" method="POST">
+                <div class="form-group">
+                    <input name="totalPayment" type="number" class="form-control" hidden>
+                    {{#each orders}}
+                        <input id="checkedOrder{{this.order_id}}" name="checkedOrder" type="number" class="custom-control-input" value="{{this.order_id}}" hidden>
+                    {{/each}}
+                </div>
+                <button type="submit" class="btn btn-primary">Chấp nhận</button>
+            </form>
+            
+        </div>
+        </div>
+    </div>
     </div>
 </div>

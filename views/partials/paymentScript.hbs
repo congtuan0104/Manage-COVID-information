@@ -1,0 +1,29 @@
+<script>
+    function payBill(){
+        var totalGrandToPay = 0;
+        $("input[type='checkbox']").each(function(){
+            if($(this).is(':checked')){
+                totalGrandToPay+=parseInt($(this).attr('grand'));
+                var checkId = $(this).attr('order_id');
+                $(`#checkedOrder${checkId}`).prop( "disabled", false );
+            }
+            else{
+                var checkId = $(this).attr('order_id');
+                $(`#checkedOrder${checkId}`).prop( "disabled", true );
+            }
+        })
+        var payLimitPertime = $('#payLimitPertime').val();
+        if(totalGrandToPay<payLimitPertime){
+            alert(`Số tiền cần thanh toán cần lớn hơn hạn mức tối thiểu là ${payLimitPertime} VNĐ`);
+            $('div[data-target="#payModal"]').attr('data-toggle','');
+        }
+        else{
+            $('div[data-target="#payModal"]').attr('data-toggle','modal');
+        }
+        $('#announcementPay').text(`Bạn có chắc muốn thanh toán ${totalGrandToPay} VNĐ ?` );
+        $('input[name=totalPayment]').attr('value',totalGrandToPay);
+    }
+    function checkAll(){
+        $('input').prop("checked", !$('input').prop("checked"));
+    }
+</script>

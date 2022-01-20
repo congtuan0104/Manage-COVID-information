@@ -1,17 +1,67 @@
 <div class="container">
-  <div class="card w-50 m-auto">
-    <div class="card-body">
-      <form method="post" action="./userSignUp">
-        <div class="form-group">
-          <label for="username">Số CMND/CCCD</label>
-          <input
-            class="form-control inputNumber"
-            id="username"
-            name="username"
-            type="text"
-            minlength="9"
-            maxlength="12"
-          />
+
+    <div class="card w-50 m-auto">
+        <div class="card-body">
+            <form method="post" action="./userSignUp">
+                <div class="form-group">
+                    <label for="username">Số CMND/CCCD</label>
+                    <input class="form-control inputNumber" id="username" name="username" type="text" minlength="9" maxlength="12">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="pwd">Mật khẩu</label>
+                        <input type="password" class="form-control" id="pwd" name="pwd">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="repwd">Nhập lại mật khẩu</label>
+                        <input type="password" class="form-control" id="repwd" name="repwd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Họ tên</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname">
+                </div>
+                <div class="form-group">
+                    <label for="bday">Ngày sinh</label>
+                    <input type="date" class="form-control" id="bday" name="bday" required pattern="\d{4}-\d{2}-\d{2}">
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Số nhà, tên đường, khu phố">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="province">Tỉnh/Thành phố</label>
+                        <select id="province" name="province" class="form-control" onchange="getDistrict()">
+                            <option selected>Chọn Tỉnh/Thành phố...</option>
+                            {{#each provinces}}
+                            <option>{{this.province_name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="district">Quận/Huyện</label>
+                        <select id="district" name="district" class="form-control" onchange="getWard()">
+                            <option selected>Chọn Quận/Huyện...</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ward">Phường/Xã</label>
+                        <select id="ward" name="ward" class="form-control">
+                            <option selected>Chọn Phường/Xã...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-primary">Đăng ký</button>
+                </div>
+            </form>
+            {{#if msg}}
+            <div class="alert alert-{{color}}" role="alert">
+                {{msg}}
+            </div>
+            {{/if}}
+
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
