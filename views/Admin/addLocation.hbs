@@ -1,0 +1,74 @@
+<div
+  class="container-md px-5 py-3 text-center"
+  style="background-color: white;border-radius:25px"
+>
+  <form action="/admin/add-location/" method="post">
+    <div class="mb-3">
+      <label for="place_id" class="form-label">ID địa điểm</label>
+      <input type="number" class="form-control" id="place_id" name="place_id" />
+    </div>
+    <div class="mb-3">
+      <label for="locationName" class="form-label">Tên địa điểm cách ly</label>
+      <input
+        class="form-control"
+        id="locationName"
+        type="text"
+        name="place_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="address">Địa chỉ</label>
+      <input
+        type="text"
+        class="form-control"
+        id="address"
+        name="address"
+        placeholder="Số nhà, tên đường, khu phố"
+      />
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="province">Tỉnh/Thành phố</label>
+        <select
+          id="province"
+          name="province"
+          class="form-control"
+          onchange="getDistrict()"
+        >
+          <option selected>Chọn Tỉnh/Thành phố...</option>
+          {{#each provinces}}
+            <option>{{this.province_name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="district">Quận/Huyện</label>
+        <select
+          id="district"
+          name="district"
+          class="form-control"
+          onchange="getWard()"
+        >
+          <option selected>Chọn Quận/Huyện...</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="ward">Phường/Xã</label>
+        <select id="ward" name="ward" class="form-control">
+          <option selected>Chọn Phường/Xã...</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="max_capacity" class="form-label">Sức chứa tối đa</label>
+      <input
+        type="number"
+        class="form-control"
+        id="max_capacity"
+        name="max_capacity"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm địa điểm</button>
+  </form>
+</div>

@@ -1,3 +1,4 @@
+
 const passport = require('passport');
 const { user, password } = require('pg/lib/defaults');
 const db = require('./dbConfig');
@@ -35,49 +36,70 @@ module.exports = {
     },
 
 
-    //Xem danh sách gói nhu yếu phẩm
-    getPackageList: async (page) => {
-        const res = await db.any(`
+  //Lấy tất cả nhu yếu phẩm
+  getAllSupplies: async () => {
+    const res = await db.any("SELECT * FROM Supplies");
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Xem danh sách gói nhu yếu phẩm
+  getPackageList: async (page) => {
+    const res = await db.any(
+      `
         SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
         FROM Package p, Package_Detail pd
         WHERE p.Package_ID = pd.Package_ID
         GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
         ORDER BY p.Package_ID
-        LIMIT 12 OFFSET $1`,[(page - 1) * 12]);
+        LIMIT 12 OFFSET $1`,
+      [(page - 1) * 12]
+    );
 
-        if (res.length == 0) return null;
-        return res;
-    },
+    if (res.length == 0) return null;
+    return res;
+  },
 
-    // Xem danh sách người bệnh
-    getPatientList: async ()=> {
-        const res = await db.any("SELECT * FROM patient");
-        return res;
-    },
+  // Xem danh sách người bệnh
+  getPatientList: async () => {
+    const res = await db.any("SELECT * FROM patient");
+    return res;
+  },
 
-    getPatientDetail: async (patientID) => {
-        const res = await db.one("SELECT * FROM patient WHERE patient_id=$1", [patientID]);
-        if(res.length == 0) return null;
-        return res;
-    },
-    getRelatedPatients: async(patientID) =>{
-        const res = await db.any("SELECT * FROM related_patients,patient WHERE related_patients.patient_id1=$1 AND related_patients.patient_id2 = patient.patient_id", [patientID]);
-        if(res.length == 0) return null;
-        return res;
-    },
+  getPatientDetail: async (patientID) => {
+    const res = await db.one("SELECT * FROM patient WHERE patient_id=$1", [
+      patientID,
+    ]);
+    if (res.length == 0) return null;
+    return res;
+  },
+  getRelatedPatients: async (patientID) => {
+    const res = await db.any(
+      "SELECT * FROM related_patients,patient WHERE related_patients.patient_id1=$1 AND related_patients.patient_id2 = patient.patient_id",
+      [patientID]
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
 
-    getTreatmentPlaceByID: async (placeID) =>{
-        const res = await db.one("SELECT * FROM treatment_place WHERE place_id=$1", [placeID]);
-        if(res.length == 0) return null;
-        return res.place_name;
-    },
+  getTreatmentPlaceByID: async (placeID) => {
+    const res = await db.one(
+      "SELECT * FROM treatment_place WHERE place_id=$1",
+      [placeID]
+    );
+    if (res.length == 0) return null;
+    return res.place_name;
+  },
 
-    // Xem thông tin gói nhu yếu phẩm
-    getPackageDetail: async (packageID)=> {
-        const res = await db.one("SELECT * FROM package WHERE package_id=$1",[packageID]);
-        if(res.length==0) return null;
-        return res;
-    },
+  // Xem thông tin gói nhu yếu phẩm
+  getPackageDetail: async (packageID) => {
+    const res = await db.one("SELECT * FROM package WHERE package_id=$1", [
+      packageID,
+    ]);
+    if (res.length == 0) return null;
+    return res;
+  },
+
 
     //Xem ảnh mô tả của nhu yếu phẩm
     getSuppliesImg: async (suppliesID) => {
@@ -90,11 +112,15 @@ module.exports = {
     // Lấy danh sách các sản phẩm trong gói nhu yếu phẩm
     getSuppliesOfPackage: async (packageID)=> {
         const res = await db.any(`SELECT *
+
                                  FROM package_detail p, supplies s 
-                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`,[packageID]);
-        if(res.length==0) return null;
-        return res;
-    },
+                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`,
+      [packageID]
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
+
 
     // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
     getRemainingPackage: async (packageID)=> {
@@ -232,3 +258,4 @@ module.exports = {
     }
     
 }
+

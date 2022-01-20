@@ -1,0 +1,49 @@
+<div
+  class="container-md px-5 py-3 text-center"
+  style="background-color: white;border-radius:25px"
+>
+  <form action="/admin/edit-location/{{Location.place_id}}" method="post">
+    <div class="mb-3">
+      <label for="locationName" class="form-label">Tên địa điểm cách ly</label>
+      <input
+        class="form-control"
+        id="locationName"
+        type="text"
+        value="{{Location.place_name}}"
+        name="place_name"
+        readonly
+      />
+    </div>
+    <div class="mb-3">
+      <label for="address" class="form-label">Địa chỉ</label>
+      <input
+        type="text"
+        class="form-control"
+        id="address"
+        name="address"
+        value="{{Location.address}}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="max_capacity" class="form-label">Sức chứa tối đa</label>
+      <input
+        type="number"
+        class="form-control"
+        id="max_capacity"
+        name="max_capacity"
+        value="{{Location.max_capacity}}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="cur_capacity" class="form-label">Số lượng tiếp nhận hiện tại</label>
+      <input
+        type="number"
+        class="form-control"
+        id="cur_capacity"
+        name="cur_capacity"
+        value="{{Location.cur_capacity}}"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Điều chỉnh địa điểm</button>
+  </form>
+</div>

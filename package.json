@@ -40,6 +40,8 @@
     "xhr2": "^0.2.1"
   },
   "devDependencies": {
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
     "nodemon": "^2.0.15"
   }
 }
