@@ -20,8 +20,9 @@ class PatientControler {
   //[GET]/patients/:patientID
   async detailInfo(req, res) {
     if (req.session.patient) {
+      
       const patientID = req.session.patient.patient_id;
-
+      const notification = await db.getNotification(patientID);
       const patientDetail = await db.getPatientDetail(patientID);
       var treatmentPlace = treatmentPlace = await db.getTreatmentPlaceByID(patientDetail.place_id);
 
@@ -44,6 +45,7 @@ class PatientControler {
         cssP: () => 'style',
         scriptP: () => 'script',
         footerP: () => 'footer',
+        notification:notification,
         patient: patientDetail,
         patients: patientsRelatedList,
         treatmentPlace: treatmentPlace,
@@ -57,9 +59,10 @@ class PatientControler {
       res.redirect('/signin');
       return;
     }
+    const notification = await db.getNotification(req.session.patient.patient_id);
     const orderList = await db.getOrderListDetail(req.session.patient.patient_id);
-    console.log(orderList);
-    const payLimitPertime = 1000000;
+    let paymentInfo = await db.getPaymentInfomation();
+    const payLimitPertime = paymentInfo.payment_limit;
     var totalGrand = 0;
     for (var i = 0; i < orderList.length; i++) {
       
@@ -77,6 +80,7 @@ class PatientControler {
       payLimitPertime:payLimitPertime,
       patient: req.session.patient,
       totalGrand: totalGrand,
+      notification,notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
       cssP: () => 'style',
@@ -89,12 +93,14 @@ class PatientControler {
       res.redirect('/signin');
       return;
     }
+    const notification = await db.getNotification(req.session.patient.patient_id);
     const history = await db.getListTreatmentHistoryById(req.session.patient.patient_id);
     res.render('Patient/manageHistory', {
       layout: 'userLayout',
       title: 'Lịch sử quản lí',
       history: history,
       patient: req.session.patient,
+      notification:notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
       cssP: () => 'style',
@@ -104,6 +110,10 @@ class PatientControler {
   }
   //[GET]/package
   async packages(req, res) {
+    if(!req.session.patient){
+      res.redirect('/signin');
+      return;
+    }
     const page = parseInt(req.query.page) || 1;
     const packageList = await db.getPackageList(page);
     const numberOfPage = await db.getNumberOfPage("package", 12);
@@ -119,13 +129,14 @@ class PatientControler {
         pageList.push(i);
       }
     }
-
+    const notification = await db.getNotification(req.session.patient.patient_id);
     res.render("./Patient/packages", {
       layout: "userLayout",
       title: "Gói nhu yếu phẩm",
       packages: packageList,
       supplies: supplies,
       patient: req.session.patient,
+      notification,notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
       cssP: () => 'style',
@@ -133,15 +144,17 @@ class PatientControler {
       footerP: () => 'footer',
     });
   }
-  getchangePassword(req, res, next) {
+  async getchangePassword(req, res, next) {
     if(!req.session.patient){
       res.redirect('/signin');
       return;
     }
+    const notification = await db.getNotification(req.session.patient.patient_id);
     res.render('Patient/changePassword', {
       layout: 'userLayout',
       title: 'Trang chủ',
       patient: req.session.patient,
+      notification:notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
       cssP: () => 'style',
@@ -160,11 +173,13 @@ class PatientControler {
     var newPass = req.body.newPassword;
     var retypePass = req.body.retypeNewPassword;
     const challengeResult = await bcrypt.compare(currentPass, userAccount.password);
+    const notification = await db.getNotification(req.session.patient.patient_id);
     if(!challengeResult){
       res.render('Patient/changePassword', {
         layout: 'userLayout',
         title: 'Trang chủ',
         patient: req.session.patient,
+        notification:notification,
         navP: () => 'nav',
         sidebarP: () => 'patientSidebar',
         cssP: () => 'style',
@@ -179,6 +194,7 @@ class PatientControler {
         layout: 'userLayout',
         title: 'Trang chủ',
         patient: req.session.patient,
+        notification:notification,
         navP: () => 'nav',
         sidebarP: () => 'patientSidebar',
         cssP: () => 'style',
@@ -195,6 +211,7 @@ class PatientControler {
         layout: 'userLayout',
         title: 'Trang chủ',
         patient: req.session.patient,
+        notification:notification,
         navP: () => 'nav',
         sidebarP: () => 'patientSidebar',
         cssP: () => 'style',
@@ -208,6 +225,10 @@ class PatientControler {
   }
   //[GET]/package/:packageID
   async packageDetail(req, res) {
+    if(!req.session.patient){
+      res.redirect('/signin');
+      return;
+    }
     const packageID = req.params.packageID;
     const packageDetail = await db.getPackageDetail(packageID);
     const suppliesOfPackage = await db.getSuppliesOfPackage(packageID);
@@ -221,6 +242,7 @@ class PatientControler {
       let price = supply.price;
       defaultPrice += count * price;
     })
+    const notification = await db.getNotification(req.session.patient.patient_id);
     res.render("./Patient/packageDetail", {
       layout: "userLayout",
       title: "Gói nhu yếu phẩm",
@@ -229,6 +251,7 @@ class PatientControler {
       patient: req.session.patient,
       supplies2: remainingPackage,
       defaultPrice: defaultPrice,
+      notification:notification,
       navP: () => 'nav',
       sidebarP: () => 'patientSidebar',
       cssP: () => 'style',
@@ -251,8 +274,9 @@ class PatientControler {
       res.redirect('/signin');
       return;
     }
-    const payLimitPertime = 1000000;
-    //let receive_id = await db.getMainAccount();
+    let paymentInfo = await db.getPaymentInfomation();
+    const payLimitPertime = paymentInfo.payment_limit;
+    
     let payload = { account_id: req.session.patient.username };
     let token = jwt.sign(payload, jwtOptions.secretOrKey);
     let totalPayment = req.body.totalPayment;
@@ -266,6 +290,7 @@ class PatientControler {
     }
     
     var balance = 0;
+    const notification = await db.getNotification(req.session.patient.patient_id);
     axios.get('http://localhost:3003/balance', {
       params: {
         account_id: req.session.patient.username
@@ -283,6 +308,7 @@ class PatientControler {
             payLimitPertime:payLimitPertime,
             patient: req.session.patient,
             totalGrand: totalPayment,
+            notification:notification,
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
             cssP: () => 'style',
@@ -298,10 +324,11 @@ class PatientControler {
       console.log(error);
     });
     const orderList = await db.getOrderListDetail(req.session.patient.patient_id);
-    
+  
+    let receive_id =paymentInfo.maint_account;
     axios.post('http://localhost:3003/addPayment', {
       transfer_id: req.session.patient.username,
-      receive_id: '234567891',
+      receive_id: receive_id,
       totalPayment:totalPayment
     }, {
       headers: {
@@ -312,6 +339,8 @@ class PatientControler {
       for(var i=0;i<checkedOrder.length;i++){
         await db.setOrderStatus(checkedOrder[i]);
       }
+      var date = new Date();
+      await db.addNotification(req.session.patient.patient_id,date,"Thanh toán thành công");
       res.render('Patient/payment', {
         layout: 'userLayout',
         title: 'Lịch sử thanh toán',
@@ -319,6 +348,7 @@ class PatientControler {
         payLimitPertime:payLimitPertime,
         patient: req.session.patient,
         totalGrand: totalPayment,
+        notification:notification,
         navP: () => 'nav',
         sidebarP: () => 'patientSidebar',
         cssP: () => 'style',
@@ -337,6 +367,7 @@ class PatientControler {
         patient: req.session.patient,
         totalGrand: totalPayment,
         balance:balance,
+        notification:notification,
         navP: () => 'nav',
         sidebarP: () => 'patientSidebar',
         cssP: () => 'style',
@@ -353,6 +384,7 @@ class PatientControler {
   }
   async buyPackage(req, res) {
     if (req.session.patient) {
+      const notification = await db.getNotification(req.session.patient.patient_id);
       const packageID = req.params.packageID;
       const patientID = req.session.patient.patient_id;
       let date = new Date();
@@ -427,6 +459,7 @@ class PatientControler {
             patient: req.session.patient,
             supplies2: remainingPackage,
             defaultPrice: defaultPrice,
+            notification:notification,
             navP: () => 'nav',
             sidebarP: () => 'patientSidebar',
             cssP: () => 'style',

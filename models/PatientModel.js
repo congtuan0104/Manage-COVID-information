@@ -4,6 +4,14 @@ const db = require('./dbConfig');
 
 
 module.exports = {
+    getNotification: async (patient_id)=>{
+        const res = await db.any("SELECT *, TO_CHAR(time,'dd/MM/yyyy hh:MI:ss') AS time FROM notification WHERE patient_id =$1",[patient_id]);
+        return res;
+    },
+    addNotification: async (patient_id,time,message)=>{
+        await db.none(`INSERT INTO notification(patient_id,time,message)
+        VALUES('${patient_id}','${time}','${message}')`);
+    },
     getNumberOfPage: async (tblName,nElementOfPage) => {
         let numberOfPage;
         const res = await db.any('SELECT COUNT(*) AS number FROM $1:name',tblName);
@@ -217,8 +225,8 @@ module.exports = {
         var res = await db.none(`UPDATE account SET password = $1 WHERE username = $2`, [password,username]);
         return res;
     },
-    getMainAccount: async() =>{
-        const res = await db.one(`SELECT main_account FROM payment`);
+    getPaymentInfomation: async() =>{
+        const res = await db.one(`SELECT * FROM payment`);
         if (res.length == 0) return null;
         return res;
     }
