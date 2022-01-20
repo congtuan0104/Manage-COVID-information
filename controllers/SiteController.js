@@ -329,6 +329,9 @@ class SiteController {
         if (req.user) {
             req.logOut();
         }
+        if (req.session.user) {
+            req.session.destroy();
+        }
         return res.redirect('/signin');
     }
 }
