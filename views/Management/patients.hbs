@@ -27,25 +27,21 @@
     <div class="row align-items-center border-bottom py-4">
         <div class="col-2">
             <div class="row" style=" font-weight:bold">Họ tên
-                <a href="#">
+                <a href="/manager/patientsSortByName">
                     <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
                 </a>
             </div>
         </div>
         <div class="col-2" style="font-weight:bold">CMND
-            <a href="#">
-                <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
-            </a>
+
         </div>
         <div class="col-2" style=" font-weight:bold">Năm sinh</div>
         <div class="col-1" style="font-weight:bold; font-size: 16px;">Trạng thái
-            <a href="#">
+            <a href="/manager/patientsSortByStatus">
                 <i class="bx bxs-sort-alt" style="font-size: 15px;"></i>
             </a>
         </div>
-        <div class="col-3" style=" font-weight:bold">Địa chỉ<a href="#">
-                <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
-            </a> </div>
+        <div class="col-3" style=" font-weight:bold">Địa chỉ </div>
         <div class="col-2" style="font-weight:bold">Chi tiết và sửa đổi</div>
     </div>
 
@@ -65,12 +61,43 @@
         </div>
     </div>
     {{/each}}
-    <div class="row text-center mt-3">
-        <div class="col">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#dialog1">
-                <i class='bx bx-plus-circle'></i> Thêm người bệnh
-            </button>
-        </div>
+
+</div>
+
+<div class="fixed-bottom" style="bottom: 10px; right:10px;">
+    <button class="btn btn-success float-right rounded-circle justify-content-center" aria-controls="collapseExample"
+        data-toggle="modal" data-target="#dialog1" style="border: 3px solid rgb(110, 192, 28);">
+        <i class="fa fa-plus text-white" aria-hidden="true" style="font-size:40px;"></i>
+    </button>
+</div>
+
+<div class="row text-center mt-3 mb-3">
+    <div class="col">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <i class="fa fa-step-backward" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="page-item  disabled"><a class="page-link" href="#">1</a></li>
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <i class="fa fa-step-forward" aria-hidden="true"></i>
+                </a>
+            </li>
+
+        </ul>
     </div>
 </div>
 
@@ -92,27 +119,48 @@
                         </div>
                         <div class="col-sm-12 mt-4">
                             <label for="">CMND</label>
-                            <input type="text" class="form-control" id="identity_card" name="identity_card"
+                            <input type="number" class="form-control" id="identity_card" name="identity_card"
                                 placeholder="Nhập CMND" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Năm sinh</label>
-                            <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Năm sinh"
+                            <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Năm sinh"
                                 required>
                         </div>
-
                         <div class="col-sm-12 mt-4">
-                            <label for="">Trạng thái</label>
+                                <label for="address">Địa chỉ</label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                    placeholder="Số nhà, tên đường, khu phố" required>
+
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Trạng thái (F)</label>
                             <input type="number" class="form-control" id="status" value="0" name="status"
                                 placeholder="Tình trạng hiện tại" required>
                         </div>
 
                         <div class="col-sm-12 mt-4">
                             <label for="">Nơi điều trị</label>
-                            <input type="text" class="form-control" id="address" name="address"
-                                placeholder="Nhập nơi điều trị" required>
+                            <select name="place_id" class="custom-select">
+                                {{#each listTreatmentPlace}}
+                                <option value='{{this.place_id}}'>
+                                    {{this.place_name}}
+                                </option>
+                                {{/each}}
+                            </select>
                         </div>
+
+                        <div class="col-sm-12 mt-4">
+                            <label for="">Người liên quan (nếu có)</label>
+                            <select name="relatedPatientID" class="custom-select">
+                                <option value ='0' >Không có người liên quan</option>
+                                {{#each patients}}
+                                <option value='{{this.patient_id}}'> {{this.patient_name}} (CMND: {{this.identity_card}}) </option>
+                                {{/each}}
+                            </select>
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">

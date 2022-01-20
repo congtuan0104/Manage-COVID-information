@@ -87,6 +87,14 @@ module.exports = {
     return res;
   },
 
+  getPatientByIdentityCard: async (identity_card) => {
+    const res = await db.one("SELECT * FROM patient WHERE identity_card = $1", [
+      identity_card,
+    ]);
+    if (res.length == 0) return null;
+    return res;
+  },
+
   getPatientDetail: async (patientID) => {
     const res = await db.one("SELECT * FROM patient WHERE patient_id=$1", [
       patientID,
@@ -110,27 +118,109 @@ module.exports = {
     return res;
   },
 
+  getTreatmentPlaceByName: async (place_name) => {
+    const res = await db.one(
+      "SELECT * FROM treatment_place WHERE place_name=$1",
+      [place_name]
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
+
   getListTreatmentPlace: async () => {
     const res = await db.any("SELECT * FROM treatment_place");
     if (res.length == 0) return null;
     return res;
   },
+
+  getIdRelatedPatient: async (patient_id) => {
+    let res = [];
+    let related1 = await db.any(
+      "SELECT * FROM related_patients WHERE patient_id1 = $1",
+      [patient_id]
+    );
+    for (let i = 0; i < related1.length; i++) {
+      res.push(related1[i].patient_id2);
+    }
+    let related2 = await db.any(
+      "SELECT * FROM related_patients WHERE patient_id2 = $1",
+      [patient_id]
+    );
+    for (let i = 0; i < related2.length; i++) {
+      res.push(related2[i].patient_id1);
+    }
+    return res;
+  },
+
   // Thêm người bệnh
   addPatient: async (
     patient_name,
     identity_card,
     birthday,
     address,
-    status
+    status,
+    place_id
   ) => {
-    await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status)
-        VALUES('${patient_name}', '${identity_card}','${birthday}','${address}','${status}')`);
+    await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status,place_id)
+        VALUES('${patient_name}', '${identity_card}','${birthday}','${address}','${status}','${place_id}')`);
   },
 
   //Thêm một sản phẩm mới và lấy id của sản phẩm đó
   // Sửa thông tin người bệnh
-  updatePatientInfor: async (patientID, patientName) => {
+  updatePatientInfor: async (
+    patientID,
+    patient_name,
+    identity_card,
+    birthday,
+    address,
+    status,
+    place_id
+  ) => {
+    const res = await db.none(
+      `
+      UPDATE patient
+      SET patient_name=$2,  identity_card=$3, birthday = $4, address = $5, status = $6, place_id = $7
+      WHERE patient_id = $1`,
+      [
+        patientID,
+        patient_name,
+        identity_card,
+        birthday,
+        address,
+        status,
+        place_id,
+      ]
+    );
+    if (res) {
+      console.log(res);
+      return 0;
+    }
+    return 1;
+  },
 
+  updatePatientStatus: async (patientID, patient_status) => {
+    const res = await db.none(
+      `
+    UPDATE patient
+    SET status = $2
+    WHERE patient_id = $1`,
+      [patientID, patient_status]
+    );
+    if (res) {
+      console.log(res);
+      return 0;
+    }
+    return 1;
+  },
+
+  addRelatedPatient: async (patient_id1, patient_id2) => {
+    await db.none(`INSERT INTO related_patients(patient_id1, patient_id2)
+        VALUES('${patient_id1}', '${patient_id2}')`);
+  },
+
+  addAccount: async (username) => {
+    await db.none(`INSERT INTO account(username, role)
+        values ('${username}', 0)`);
   },
 
   //Thêm một sản phẩm mới
@@ -219,55 +309,62 @@ module.exports = {
     const res = await db.any(
       `SELECT p.supplies_id, supplies_name, quantity_limit
                                  FROM package_detail p, supplies s 
-                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`, [packageID]);
-        if (res.length == 0) return null;
-        return res;
-    },
+                                WHERE package_id=$1 AND p.supplies_id=s.supplies_id`,
+      [packageID]
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
 
+  // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
+  getRemainingPackage: async (packageID) => {
+    const res = await db.any(
+      `SELECT supplies_id, supplies_name from supplies where supplies_id not in
+        (SELECT supplies_id FROM package_detail WHERE package_id=$1)`,
+      [packageID]
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
 
-    // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
-    getRemainingPackage: async (packageID) => {
-        const res = await db.any(`SELECT supplies_id, supplies_name from supplies where supplies_id not in
-        (SELECT supplies_id FROM package_detail WHERE package_id=$1)`, [packageID]);
-        if (res.length == 0) return null;
-        return res;
-    },
-
-
-    //Xoá gói sản phẩm
-    deletePackage: async (packageID) => {
-        const res = await db.none(`UPDATE package SET status = 0 WHERE package_id=$1`, [packageID]);
-        if (res) {
-            console.log(res);
-            return 0;
-        }
-        return 1;
-    },
-
-
-    //Lấy số liệu thống kê của một ngày
-    getStatistic: async(date) =>{
-        const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
-         FROM statistical WHERE date='${date}'`);
-        if (res.length == 0) return null;
-        return res;
-    },
-
-
-    //Lấy số liệu thống kê trong khoảng thời gian
-    getRangeStatistic: async(start,end,orderBy) =>{
-        const res = await db.any(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
-        FROM statistical WHERE date>='${start}' AND date<='${end}'
-        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`,orderBy);
-        if (res.length == 0) return null;
-        return res;
-    },
-
-    getTotalCases: async(date)=> {
-        const res = await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
-         FROM statistical WHERE date<='${date}'`);
-        if (res.length == 0) return null;
-        return res;
+  //Xoá gói sản phẩm
+  deletePackage: async (packageID) => {
+    const res = await db.none(
+      `UPDATE package SET status = 0 WHERE package_id=$1`,
+      [packageID]
+    );
+    if (res) {
+      console.log(res);
+      return 0;
     }
+    return 1;
+  },
 
-}
+  //Lấy số liệu thống kê của một ngày
+  getStatistic: async (date) => {
+    const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
+         FROM statistical WHERE date='${date}'`);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Lấy số liệu thống kê trong khoảng thời gian
+  getRangeStatistic: async (start, end, orderBy) => {
+    const res = await db.any(
+      `SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
+        FROM statistical WHERE date>='${start}' AND date<='${end}'
+        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`,
+      orderBy
+    );
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  getTotalCases: async (date) => {
+    const res =
+      await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
+         FROM statistical WHERE date<='${date}'`);
+    if (res.length == 0) return null;
+    return res;
+  },
+};

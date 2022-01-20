@@ -1,5 +1,5 @@
 <div class="container rounded bg-white mt-0 mb-2 py-0">
-    <form method="post" action="/manager/updatePatientInfo">
+    <form  action="/manager/updatePatientInfo" method="post">
         <div class="row">
             <div class="col-md-3 border-right ">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
@@ -11,23 +11,24 @@
             </div>
             <div class="col-md-4 border-right">
                 <div class="p-3 py-5">
+                    <input type="hidden" name="patientID" value="{{patient.patient_id}}">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Thông tin cá nhân</h4>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-12"><label class="labels">Họ Tên</label><input type="text"
-                                class="form-control" value="{{patient.patient_name}}" placeholder="Họ Tên"></div>
+                                class="form-control" name = "patient_name" value="{{patient.patient_name}}" placeholder="Họ Tên" ></div>
                         <div class="col-md-12"><label class="labels">Năm sinh</label><input type="text"
-                                class="form-control" value="{{patient.birthday}}" placeholder="Năm sinh"></div>
+                                class="form-control" name = "birthday" value="{{patient.birthday}}" placeholder="Năm sinh"></div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label class="labels">Địa chỉ nơi ở</label>
-                            <input type="text" class="form-control" placeholder="Địa chỉ" value="{{patient.address}}">
+                            <input type="text" class="form-control" name="address" placeholder="Địa chỉ" value="{{patient.address}}">
                         </div>
                         <div class="col-md-12">
                             <label class="labels">CMND</label>
-                            <input type="text" class="form-control" placeholder="CMND"
+                            <input type="text" class="form-control" name ="identity_card" placeholder="CMND"
                                 value="{{patient.identity_card}}">
                         </div>
                     </div>
@@ -43,20 +44,31 @@
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label class="labels">Trạng thái hiện tại (F) </label>
-                            <input type="number" class="form-control" placeholder="Trạng thái"
+                            <input type="number" class="form-control" name="status" placeholder="Trạng thái"
                                 value="{{patient.status}}" min="0">
+                        </div>
+                         <div class="col-md-12">
+                            <label class="labels">Lịch sử điều trị/cách ly</label>
+                            <input type="text" class="form-control" name="treatment_history_name" placeholder="Lịch sử điều trị"
+                                value="{{treatmentPlace.place_name}}">
                         </div>
                         <div class="col-md-12">
                             <label class="labels">Địa chỉ điều trị/cách ly</label>
-                            <select name="place_id" class="custom-select" >
+                            <input type="text" class="form-control" name="treatment_place_name" placeholder="Đỉa chỉ điều trị"
+                                value="{{treatmentPlace.place_name}}">
+                            
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="labels">Chuyển nơi điều trị đến</label>
+                            <select name="new_place_id" class="custom-select" >
                                 {{#each listTreatmentPlace}}
-                                    <option value="{{this.place_id}}" 
-                                        {{#ifStr "{{this.place_id}}" "{{treatmentPlace.place_id}}"}} selected {{/ifStr}}>
-                                        {{this.place_name}}
-                                    </option>
+                                    <option value='{{this.place_id}}'>{{this.place_name}}</option>
                                 {{/each}}
                             </select>
                         </div>
+
                         <div class="col-md-12">
                             <h4 class="pt-4">Danh sách người liên quan Covid</h4>
                             <div class="container mt-3 mb-4">
@@ -68,23 +80,25 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Họ tên</th>
-                                                            <th>Năm sinh</th>
+                                                            <th>CMND</th>
                                                             <th class="text-center">Trạng thái</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {{#each relatedPatients}}
                                                         <tr class="candidates-list">
                                                             <td>
-                                                                <div class="">Trần Thái Bảo</span>
+                                                                <div class="">{{this.patient_name}}</span>
                                                             </td>
                                                             <td>
-                                                                <div class="">1999</span>
+                                                                <div class="">{{this.identity_card}}</span>
                                                             </td>
                                                             <td>
                                                                 <div class="text-center"
-                                                                    class="candidate-list-time order-1">F0</span>
+                                                                    class="candidate-list-time order-1">F{{this.status}}</span>
                                                             </td>
                                                         </tr>
+                                                        {{/each}}
                                                     </tbody>
                                                 </table>
                                                 <div class="text-center mt-3 mt-sm-3">
