@@ -64,7 +64,7 @@ class ManagerController {
             pageList: pageList,
             numberOfPage: numberOfPage,
             cssP: () => 'style-supplies',
-            scriptP: () => 'script',
+            scriptP: () => 'sortScript',
         });
 
     }
@@ -94,7 +94,7 @@ class ManagerController {
             packages: packageList,
             supplies: supplies,
             cssP: () => "style-supplies",
-            scriptP: () => "script",
+            scriptP: () => "sortScript",
         });
     }
 
@@ -272,6 +272,10 @@ class ManagerController {
         if (parseInt(day) < 10) day = '0' + day;
         const startDay = year + '-' + month + '-' + day;
         const staOverTime = await db.getRangeStatistic(startDay, today, 'ASC');
+        const packageList = await db.getPackageList(1);
+        const suppliesList = await db.getSuppliesList(1);
+        const suppliesConsume = await db.getSuppliesConsume(startDay, today, suppliesList[0].supplies_id);
+        const packageConsume = await db.getPackageConsume(startDay, today, packageList[0].package_id);
 
         res.render("./Management/statistical", {
             layout: "managementLayout",
@@ -279,6 +283,10 @@ class ManagerController {
             staOverTime: staOverTime,
             startDay: startDay,
             today: today,
+            supplies: suppliesList,
+            package: packageList,
+            packageConsume: packageConsume,
+            suppliesConsume: suppliesConsume,
             cssP: () => "style-supplies",
             scriptP: () => "statisticScript",
             footerP: () => "footer",
@@ -302,6 +310,132 @@ class ManagerController {
         const end = req.query.end;
         const sta = await db.getRangeStatistic(start, end, 'ASC');
         res.send(sta);
+    }
+
+
+    //[GET]/packageConsume  --> Xem thống kê trong một khoảng thời gian
+    async packageConsume(req, res) {
+        const start = req.query.start;
+        const end = req.query.end;
+        const packageID = req.query.packageID;
+        const sta = await db.getPackageConsume(start, end, packageID);
+        res.send(sta);
+    }
+
+
+    //[GET]/suppliesConsume  --> Xem thống kê trong một khoảng thời gian
+    async suppliesConsume(req, res) {
+        const start = req.query.start;
+        const end = req.query.end;
+        const suppliesID = req.query.suppliesID;
+        const sta = await db.getSuppliesConsume(start, end, suppliesID);
+        res.send(sta);
+    }
+
+
+    //[GET]/search 
+    async search(req, res) {
+        const q = req.query.q;
+        const type = req.query.type;
+        if (type == 1) {
+            const patientList = await db.getPatient(q);
+
+            res.render("./Management/patients", {
+                layout: "managementLayout",
+                title: "Bệnh nhân",
+                patients: patientList,
+                cssP: () => "style-supplies",
+                scriptP: () => "script",
+                scriptP: () => "script",
+                footerP: () => "footer",
+            });
+            return;
+        }
+
+        if (type == 2) {
+            const suppliesList = await db.getSupplies(q);
+
+            if (suppliesList) {
+                for (var i = 0; i < suppliesList.length; i++) {
+                    suppliesList[i].img = await db.getSuppliesImg(suppliesList[i].supplies_id);
+                }
+            }
+
+            res.render('./Management/supplies', {
+                layout: 'managementLayout',
+                title: 'Nhu yếu phẩm',
+                supplies: suppliesList,
+                cssP: () => 'style-supplies',
+                scriptP: () => 'script',
+            });
+            return;
+        }
+
+        if (type == 3) {
+            const packageList = await db.getPackage(q);
+            const supplies = await db.getAllSupplies();
+            if (packageList) {
+                packageList.forEach((element) => {
+                    if (element.time_limit == "d") element.time_limit = "ngày";
+                    if (element.time_limit == "w") element.time_limit = "tuần";
+                    if (element.time_limit == "m") element.time_limit = "tháng";
+                });
+            }
+            res.render("./Management/packages", {
+                layout: "managementLayout",
+                title: "Gói nhu yếu phẩm",
+                packages: packageList,
+                supplies: supplies,
+                cssP: () => "style-supplies",
+                scriptP: () => "script",
+            });
+            return;
+        }
+
+    }
+
+
+    //[GET]/sort
+    async sort(req, res) {
+        const list = req.query.list;
+        const sortBy = req.query.sortBy;
+        const sortOption = req.query.sortOption;
+        if (list == 'supplies') {
+            const suppliesList = await db.getSuppliesSorted(sortBy, sortOption);
+            for (var i = 0; i < suppliesList.length; i++) {
+                suppliesList[i].img = await db.getSuppliesImg(suppliesList[i].supplies_id);
+            }
+            res.send(suppliesList);
+            return;
+        }
+
+        if(list=='package'){
+            const packageList = await db.getPackageSorted(sortBy, sortOption);
+            res.send(packageList);
+            return;
+        }
+
+    }
+
+
+    //[GET]/suppliesFilter
+    async suppliesFilter(req, res) {
+        const min = req.query.min;
+        const max = req.query.max;
+        const suppliesList = await db.suppliesFilter(min,max);
+        for (var i = 0; i < suppliesList.length; i++) {
+            suppliesList[i].img = await db.getSuppliesImg(suppliesList[i].supplies_id);
+        }
+        res.send(suppliesList);
+
+    }
+
+
+    //[GET]/packageFilter
+    async packageFilter(req, res) {
+        const time = req.query.time;
+        const packageList = await db.packageFilter(time);
+        res.send(packageList);
     }
 }
 

@@ -6,6 +6,12 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).array('pro-image',10);
 const managerController = require("../controllers/ManagerController");
 
+route.get('/packageFilter', managerController.packageFilter);
+route.get('/suppliesFilter', managerController.suppliesFilter);
+route.get('/sortList', managerController.sort);
+route.get('/search', managerController.search);
+route.get('/suppliesConsume', managerController.suppliesConsume);
+route.get('/packageConsume', managerController.packageConsume);
 route.get('/searchRange', managerController.searchRange);
 route.get('/searchStatistic',managerController.searchStatistic);
 route.get('/statistic', managerController.statistical);

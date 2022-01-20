@@ -1,5 +1,6 @@
 <script>
-    const staOverTime = document.getElementById('staOverTime').getContext('2d');
+
+    var staOverTime = document.getElementById('staOverTime').getContext('2d');
     var Chart1 = new Chart(staOverTime, {
         type: 'line',
         data: {
@@ -40,6 +41,15 @@
                     'rgba(153, 102, 255, 1)',
                 ],
                 borderWidth: 1
+            },
+            {
+                label: 'Khỏi bệnh',
+                data: [{{#each staOverTime}} {{cured}}, {{/each}}],
+              
+                borderColor: [
+                    'rgba(50, 102, 200, 1)',
+                ],
+                borderWidth: 1
             }]
         },
         options: {
@@ -52,8 +62,97 @@
     });
 
 
+    var staOverTime2 = document.getElementById('staOverTime2').getContext('2d');
+    var Chart2 = new Chart(staOverTime2, {
+        type: 'bar',
+        data: {
+            labels: [{{#each staOverTime}} '{{date}}', {{/each}}],
+            datasets: [{
+                label: 'Thanh toán',
+                data: [{{#each staOverTime}} {{payment}}, {{/each}}],
+
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            },
+
+            {
+                label: 'Dư nợ',
+                data: [{{#each staOverTime}} {{debt}}, {{/each}}],
+              
+                backgroundColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    var staOverTime3 = document.getElementById('staOverTime3').getContext('2d');
+    var Chart3 = new Chart(staOverTime3, {
+        type: 'bar',
+        data: {
+            labels: [{{#each packageConsume}} '{{date}}', {{/each}}],
+            datasets: [{
+                label: 'Tiêu thụ',
+                data: [{{#each packageConsume}} {{consume}}, {{/each}}],
+
+
+                backgroundColor: [
+                    'rgba(100, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    var staOverTime4 = document.getElementById('staOverTime4').getContext('2d');
+    var Chart4 = new Chart(staOverTime4, {
+        type: 'bar',
+        data: {
+            labels: [{{#each suppliesConsume}} '{{date}}', {{/each}}],
+            datasets: [{
+                label: 'Tiêu thụ',
+                data: [{{#each suppliesConsume}} {{consume}}, {{/each}}],
+
+
+                backgroundColor: [
+                    'rgba(100, 29, 10, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+
     const staToday = document.getElementById('staToday').getContext('2d');
-    const Chart2 = new Chart(staToday, {
+    const Chart0 = new Chart(staToday, {
         type: 'doughnut',
         data: {
             
@@ -111,7 +210,6 @@
         const xhr = new XMLHttpRequest();
         xhr.onload = function(){
             const res = JSON.parse(this.responseText);
-
             document.getElementById("updateSta").innerHTML = "";
             var tempStr= "";
             res.forEach((row) => {               
@@ -129,13 +227,155 @@
             });
             document.getElementById("updateSta").innerHTML = tempStr;
 
-            document.getElementById("dynamicChart").innerHTML="";
-
+            var l=res.length - Chart1.data.datasets[0].data.length;
+            if(l<0){
+                l=l*(-1);
+                for(var k=0;k<l;k++){
+                    Chart1.data.labels.pop();
+                    Chart1.data.datasets.forEach((dataset) => {
+                       dataset.data.pop();           
+                    });
+                }
+            }
+            for(var j=0;j<res.length;j++){
+                Chart1.data.labels[j] = res[j].date;
+                Chart1.data.datasets[0].data[j] = res[j].f0;
+                Chart1.data.datasets[1].data[j] = res[j].f1;
+                Chart1.data.datasets[2].data[j] = res[j].f2;
+                Chart1.data.datasets[3].data[j] = res[j].f3;
+                Chart1.data.datasets[4].data[j] = res[j].cured;
+            }
+            //Chart1.data.datasets[0].data[1] = 12;
+            Chart1.update();
         }
         xhr.open("GET", "/manager/searchRange?start="+startDay+"&end="+endDay);
         xhr.send();
+    }
 
-        
+
+        function searchRange2(){
+        const startDay = $('[name="startDay2"]').val();
+        const endDay = $('[name="endDay2"]').val();
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            const res = JSON.parse(this.responseText);
+            document.getElementById("updateSta2").innerHTML = "";
+            var tempStr= "";
+            res.forEach((row) => {               
+                tempStr = tempStr + 
+                `<div class="row align-items-center border-bottom py-4">
+                <div class="col">
+                    <div class="row">${row.date}</div> 
+                </div>
+                <div class="col">${row.payment}</div>
+                <div class="col text-right">${row.debt}</div>
+            </div>`;
+            });
+            document.getElementById("updateSta2").innerHTML = tempStr;
+
+            var l=res.length - Chart2.data.datasets[0].data.length;
+            if(l<0){
+                l=l*(-1);
+                for(var k=0;k<l;k++){
+                    Chart2.data.labels.pop();
+                    Chart2.data.datasets.forEach((dataset) => {
+                       dataset.data.pop();           
+                    });
+                }
+            }
+            for(var j=0;j<res.length;j++){
+                Chart2.data.labels[j] = res[j].date;
+                Chart2.data.datasets[0].data[j] = res[j].payment;
+                Chart2.data.datasets[1].data[j] = res[j].debt;
+            }
+            Chart2.update();
+        }
+        xhr.open("GET", "/manager/searchRange?start="+startDay+"&end="+endDay);
+        xhr.send();
+    }
+
+
+    function searchRange3(){
+        const startDay = $('[name="startDay3"]').val();
+        const endDay = $('[name="endDay3"]').val();
+        const packageID = $('[name="packageID"]').val();
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            const res = JSON.parse(this.responseText);
+            document.getElementById("updateSta3").innerHTML = "";
+            var tempStr= "";
+            res.forEach((row) => {               
+                tempStr = tempStr + 
+                `<div class="row align-items-center border-bottom py-4">
+                <div class="col">
+                    <div class="row">${row.date}</div> 
+                </div>
+                <div class="col">${row.consume}</div>
+            </div>`;
+            });
+            document.getElementById("updateSta3").innerHTML = tempStr;
+
+            var l=res.length - Chart3.data.datasets[0].data.length;
+            if(l<0){
+                l=l*(-1);
+                for(var k=0;k<l;k++){
+                    Chart3.data.labels.pop();
+                    Chart3.data.datasets.forEach((dataset) => {
+                       dataset.data.pop();           
+                    });
+                }
+            }
+            for(var j=0;j<res.length;j++){
+                Chart3.data.labels[j] = res[j].date;
+                Chart3.data.datasets[0].data[j] = res[j].consume;
+            }
+            Chart3.update();
+        }
+        xhr.open("GET", "/manager/packageConsume?start="+startDay+"&end="+endDay+"&packageID="+packageID);
+        xhr.send();
+    }
+
+
+    function searchRange4(){
+        const startDay = $('[name="startDay4"]').val();
+        const endDay = $('[name="endDay4"]').val();
+        const suppliesID = $('[name="suppliesID"]').val();
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            const res = JSON.parse(this.responseText);
+            document.getElementById("updateSta4").innerHTML = "";
+            var tempStr= "";
+            res.forEach((row) => {               
+                tempStr = tempStr + 
+                `<div class="row align-items-center border-bottom py-4">
+                <div class="col">
+                    <div class="row">${row.date}</div> 
+                </div>
+                <div class="col">${row.consume}</div>
+            </div>`;
+            });
+            document.getElementById("updateSta4").innerHTML = tempStr;
+
+            var l=res.length - Chart4.data.datasets[0].data.length;
+            if(l<0){
+                l=l*(-1);
+                for(var k=0;k<l;k++){
+                    Chart4.data.labels.pop();
+                    Chart4.data.datasets.forEach((dataset) => {
+                       dataset.data.pop();           
+                    });
+                }
+            }
+            for(var j=0;j<res.length;j++){
+                Chart4.data.labels[j] = res[j].date;
+                Chart4.data.datasets[0].data[j] = res[j].consume;
+            }
+            Chart4.update();
+        }
+        xhr.open("GET", "/manager/suppliesConsume?start="+startDay+"&end="+endDay+"&suppliesID="+suppliesID);
+        xhr.send();
     }
 
 
@@ -150,5 +390,42 @@
         $('#titleTable1').show();
         $('#updateSta').show();
     }
+
+    function showChart2(){
+        $('#titleTable2').hide();
+        $('#updateSta2').hide();
+        $('#staOverTime2').show();
+    }
+
+    function showDetail2(){
+        $('#staOverTime2').hide();
+        $('#titleTable2').show();
+        $('#updateSta2').show();
+    }
+
+    function showChart3(){
+        $('#titleTable3').hide();
+        $('#updateSta3').hide();
+        $('#staOverTime3').show();
+    }
+
+    function showDetail3(){
+        $('#staOverTime3').hide();
+        $('#titleTable3').show();
+        $('#updateSta3').show();
+    }
+
+    function showChart4(){
+        $('#titleTable4').hide();
+        $('#updateSta4').hide();
+        $('#staOverTime4').show();
+    }
+
+    function showDetail4(){
+        $('#staOverTime4').hide();
+        $('#titleTable4').show();
+        $('#updateSta4').show();
+    }
+
 </script>
 

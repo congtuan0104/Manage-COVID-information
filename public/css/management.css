@@ -142,7 +142,7 @@ nav .sidebar-button i {
     margin: 0 20px;
 }
 
-nav .search-box input {
+nav .search-box #test {
     height: 100%;
     width: 100%;
     outline: none;
@@ -150,8 +150,21 @@ nav .search-box input {
     border: 2px solid #EFEEF1;
     border-radius: 6px;
     font-size: 18px;
-    padding: 0 15px;
+    padding: 0 15px 0 0;
 }
+
+#ip001 {
+    height: 100%;
+    border: 0;
+}
+
+#ip002 {
+    margin-right: 30px;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    border-radius: 0;
+}
+
 
 nav .search-box .bx-search {
     position: absolute;

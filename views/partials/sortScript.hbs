@@ -1,0 +1,276 @@
+<script>
+
+    function sortSupplies() {
+        const sortBy = $('[name="sortBy"]').val();
+        const sortOption = $('[name="sortOption"]').val();
+
+        if (!sortBy) return;
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const res = JSON.parse(this.responseText);
+            document.getElementById("products").innerHTML = "";
+
+            var tempStr = "";
+            res.forEach((row) => {
+                var imgT = "";
+                if (row.img) {
+                    for (var i = 0; i < row.img.length; i++) {
+                        if (i == 0) {
+                            imgT = imgT + `<div class="carousel-item active">
+                                    <img src="${row.img[i].image_url}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>`
+                        }
+                        else {
+                            imgT = imgT + `<div class="carousel-item">
+                                    <img src="${row.img[i].image_url}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>`
+                        }
+
+                    }
+                }
+                else {
+                    imgT = imgT + `<img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">`;
+                }
+
+                console.log(imgT);
+                tempStr = tempStr +
+                    `<div class="item col-xs-3 col-lg-4 mb-4">
+            <div class="thumbnail card w-100 package">
+                <div class="img-event">
+                    <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies${row.supplies_id}">
+
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">`
+
+                    + imgT +
+
+                    `</div>
+
+                        </div>
+
+
+                    </a>
+                </div>
+                <div class="caption card-body">
+                    <a class="text-primary text-decoration-none" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies${row.supplies_id}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            ${row.supplies_name}
+                        </h4>
+                    </a>
+                    <div class="row">
+                        <a class="text-primary text-decoration-none col-10 text-left" data-toggle="modal"
+                            style="cursor: pointer;" data-target="#edtSupplies${row.supplies_id}">
+                            <span class="lead text-secondary">
+                                <span class="money">${row.price}</span>đ/${row.unit}
+                            </span>
+                        </a>
+                        <div class="col-2">
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deleteSupplies${row.supplies_id}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            });
+            document.getElementById("products").innerHTML = tempStr;
+
+        }
+        xhr.open("GET", "/manager/sortList?sortBy=" + sortBy + "&sortOption=" + sortOption + "&list=supplies");
+        xhr.send();
+    }
+
+
+
+    function sortPackage() {
+        const sortBy = $('[name="sortBy"]').val();
+        const sortOption = $('[name="sortOption"]').val();
+
+        if (!sortBy) return;
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const res = JSON.parse(this.responseText);
+            console.log(res);
+            document.getElementById("products").innerHTML = "";
+
+            var tempStr = "";
+            res.forEach((row) => {
+                if (row.time_limit == 'd') row.time_limit = 'ngày';
+                if (row.time_limit == 'w') row.time_limit = 'tuần';
+                if (row.time_limit == 'm') row.time_limit = 'tháng';
+                tempStr = tempStr +
+                    `<div class="item col-xs-3 col-lg-4 mb-4">
+            <div class="thumbnail card w-100 package">
+                <a class="img-event" href="/manager/packages/${row.package_id}">
+                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                </a>
+                <div class="caption card-body">
+                    <a class="text-decoration-none" href="/manager/packages/${row.package_id}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            ${row.package_name}
+                        </h4>
+                    </a>
+                    <div class="row">
+                        <a class="col-10 text-left text-decoration-none text-dark"
+                            href="/manager/packages/${row.package_id}">
+                            <p class="lead">Tối đa ${row.package_limit} gói/${row.time_limit}</p>
+                            <h6>Số lượng sản phẩm: ${row.slsp}</h6>
+                        </a>
+                        <div class="col-2">
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deletePackage${row.package_id}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            });
+            document.getElementById("products").innerHTML = tempStr;
+
+        }
+        xhr.open("GET", "/manager/sortList?sortBy=" + sortBy + "&sortOption=" + sortOption + "&list=package");
+        xhr.send();
+    }
+
+
+    function suppliesFilter() {
+        const min = $('[name="minPrice"]').val();
+        const max = $('[name="maxPrice"]').val();
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const res = JSON.parse(this.responseText);
+            document.getElementById("products").innerHTML = "";
+
+            var tempStr = "";
+            res.forEach((row) => {
+                var imgT = "";
+                if (row.img) {
+                    for (var i = 0; i < row.img.length; i++) {
+                        if (i == 0) {
+                            imgT = imgT + `<div class="carousel-item active">
+                                    <img src="${row.img[i].image_url}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>`
+                        }
+                        else {
+                            imgT = imgT + `<div class="carousel-item">
+                                    <img src="${row.img[i].image_url}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>`
+                        }
+
+                    }
+                }
+                else {
+                    imgT = imgT + `<img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">`;
+                }
+
+                console.log(imgT);
+                tempStr = tempStr +
+                    `<div class="item col-xs-3 col-lg-4 mb-4">
+            <div class="thumbnail card w-100 package">
+                <div class="img-event">
+                    <a class="text-primary" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies${row.supplies_id}">
+
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">`
+
+                    + imgT +
+
+                    `</div>
+
+                        </div>
+
+
+                    </a>
+                </div>
+                <div class="caption card-body">
+                    <a class="text-primary text-decoration-none" data-toggle="modal" style="cursor: pointer;"
+                        data-target="#edtSupplies${row.supplies_id}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            ${row.supplies_name}
+                        </h4>
+                    </a>
+                    <div class="row">
+                        <a class="text-primary text-decoration-none col-10 text-left" data-toggle="modal"
+                            style="cursor: pointer;" data-target="#edtSupplies${row.supplies_id}">
+                            <span class="lead text-secondary">
+                                <span class="money">${row.price}</span>đ/${row.unit}
+                            </span>
+                        </a>
+                        <div class="col-2">
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deleteSupplies${row.supplies_id}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            });
+            document.getElementById("products").innerHTML = tempStr;
+
+        }
+        xhr.open("GET", "/manager/suppliesFilter?min=" + min + "&max=" + max);
+        xhr.send();
+    }
+
+
+    function packageFilter(time) {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const res = JSON.parse(this.responseText);
+            console.log(res);
+            document.getElementById("products").innerHTML = "";
+
+            var tempStr = "";
+            res.forEach((row) => {
+                if (row.time_limit == 'd') row.time_limit = 'ngày';
+                if (row.time_limit == 'w') row.time_limit = 'tuần';
+                if (row.time_limit == 'm') row.time_limit = 'tháng';
+                tempStr = tempStr +
+                    `<div class="item col-xs-3 col-lg-4 mb-4">
+            <div class="thumbnail card w-100 package">
+                <a class="img-event" href="/manager/packages/${row.package_id}">
+                    <img class="group list-group-image img-fluid" src="/img/product-mix3.png" alt="" />
+                </a>
+                <div class="caption card-body">
+                    <a class="text-decoration-none" href="/manager/packages/${row.package_id}">
+                        <h4 class="group card-title inner list-group-item-heading text-left text-primary">
+                            ${row.package_name}
+                        </h4>
+                    </a>
+                    <div class="row">
+                        <a class="col-10 text-left text-decoration-none text-dark"
+                            href="/manager/packages/${row.package_id}">
+                            <p class="lead">Tối đa ${row.package_limit} gói/${row.time_limit}</p>
+                            <h6>Số lượng sản phẩm: ${row.slsp}</h6>
+                        </a>
+                        <div class="col-2">
+                            <a class="text-danger" data-toggle="modal" style="cursor: pointer;"
+                                data-target="#deletePackage${row.package_id}">
+                                <i class='fa fa-trash-o' style="font-size: 35px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            });
+            document.getElementById("products").innerHTML = tempStr;
+
+        }
+        xhr.open("GET", "/manager/packageFilter?time=" + time);
+        xhr.send();
+    }
+
+</script>

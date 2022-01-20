@@ -87,3 +87,6 @@ for (let i = 0, len = money.length; i < len; i++) {
     money[i].classList.add("currSign");
 }
 
+function setType(type){
+    $('input[name="type"]').val(type);
+}

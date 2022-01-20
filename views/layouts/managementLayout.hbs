@@ -12,7 +12,7 @@
     <link rel="icon" href="/img/logo.png">
     <link rel="stylesheet" href="/css/management.css">
     {{>(cssP)}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"
         integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,31 +29,31 @@
         </a>
         <ul class="nav-links">
             <li>
-                <a href="/manager" {{#eq title 'Trang chủ'}}class="active"{{/eq}}>
+                <a href="/manager" {{#eq title 'Trang chủ' }}class="active" {{/eq}}>
                     <i class='bx bx-grid-alt'></i>
                     <span class="links_name">Trang chính</span>
                 </a>
             </li>
             <li>
-                <a href="/manager/patients" {{#eq title 'Bệnh nhân'}}class="active"{{/eq}}>
+                <a href="/manager/patients" {{#eq title 'Bệnh nhân' }}class="active" {{/eq}}>
                     <i class='fa fa-user'></i>
                     <span class="links_name">Quản lý người bệnh</span>
                 </a>
             </li>
             <li>
-                <a href="/manager/supplies" {{#eq title 'Nhu yếu phẩm'}}class="active"{{/eq}}>
+                <a href="/manager/supplies" {{#eq title 'Nhu yếu phẩm' }}class="active" {{/eq}}>
                     <i class='bx bx-box'></i>
                     <span class="links_name">Nhu yếu phẩm</span>
                 </a>
             </li>
             <li>
-                <a href="/manager/packages" {{#eq title 'Gói nhu yếu phẩm'}}class="active"{{/eq}}>
+                <a href="/manager/packages" {{#eq title 'Gói nhu yếu phẩm' }}class="active" {{/eq}}>
                     <i class='bx bx-package'></i>
                     <span class="links_name">Gói nhu yếu phẩm</span>
                 </a>
             </li>
             <li>
-                <a href="/manager/statistic" {{#eq title 'Thống kê'}}class="active"{{/eq}}>
+                <a href="/manager/statistic" {{#eq title 'Thống kê' }}class="active" {{/eq}}>
                     <i class='bx bx-pie-chart-alt-2'></i>
                     <span class="links_name">Thống kê</span>
                 </a>
@@ -95,16 +95,34 @@
                 <i class='bx bx-menu sidebarBtn'></i>
                 <span class="dashboard">{{{title}}}</span>
             </div>
-            <div class="search-box">
-                <input type="text" placeholder="Nhập thông tin cần tìm kiếm...">
-                <i class='bx bx-search'></i>
-            </div>
-            <div class="dropleft position-relative">
+            <form class="search-box" method="get" action="/manager/search">
+                <div class="input-group" id="test">
+                    <input type="text" class="form-control" name="q" id="ip001" placeholder="Nhập tên bệnh nhân, sản phẩm cần tìm...">
+                    <input type="hidden" name="type" value="1">
+                    <div class="input-group-append" id="ip002">
+                        <button class="btn btn-outline-success dropdown-toggle" 
+                            style="border:0; border-radius:3px" type="button" data-toggle="dropdown"
+                            aria-expanded="false"></button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="setType(1)">Bệnh nhân</a>
+                            <a class="dropdown-item" onclick="setType(2)">Sản phẩm</a>
+                            <a class="dropdown-item" onclick="setType(3)">Gói sản phẩm</a>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">
+                    <i class='bx bx-search'></i>
+                </button>
+
+
+
+            </form>
+            <div class="dropdown position-relative">
                 <div class="text-success" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" href="#">
                     <div class="profile-details">
                         <img src="/img/logo.png" alt="">
-                        <span class="admin_name text-success">Tên người quản lý</span>
+                        <span class="admin_name text-success">{{#with manager}}{{manager_name}}{{/with}}</span>
                     </div>
 
                 </div>

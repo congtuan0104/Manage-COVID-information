@@ -220,54 +220,138 @@ module.exports = {
       `SELECT p.supplies_id, supplies_name, quantity_limit
                                  FROM package_detail p, supplies s 
                                 WHERE package_id=$1 AND p.supplies_id=s.supplies_id`, [packageID]);
-        if (res.length == 0) return null;
-        return res;
-    },
+    if (res.length == 0) return null;
+    return res;
+  },
 
 
-    // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
-    getRemainingPackage: async (packageID) => {
-        const res = await db.any(`SELECT supplies_id, supplies_name from supplies where supplies_id not in
+  // Lấy danh sách các sản phẩm không nằm trong gói nhu yếu phẩm
+  getRemainingPackage: async (packageID) => {
+    const res = await db.any(`SELECT supplies_id, supplies_name from supplies where supplies_id not in
         (SELECT supplies_id FROM package_detail WHERE package_id=$1)`, [packageID]);
-        if (res.length == 0) return null;
-        return res;
-    },
+    if (res.length == 0) return null;
+    return res;
+  },
 
 
-    //Xoá gói sản phẩm
-    deletePackage: async (packageID) => {
-        const res = await db.none(`UPDATE package SET status = 0 WHERE package_id=$1`, [packageID]);
-        if (res) {
-            console.log(res);
-            return 0;
-        }
-        return 1;
-    },
-
-
-    //Lấy số liệu thống kê của một ngày
-    getStatistic: async(date) =>{
-        const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
-         FROM statistical WHERE date='${date}'`);
-        if (res.length == 0) return null;
-        return res;
-    },
-
-
-    //Lấy số liệu thống kê trong khoảng thời gian
-    getRangeStatistic: async(start,end,orderBy) =>{
-        const res = await db.any(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
-        FROM statistical WHERE date>='${start}' AND date<='${end}'
-        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`,orderBy);
-        if (res.length == 0) return null;
-        return res;
-    },
-
-    getTotalCases: async(date)=> {
-        const res = await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
-         FROM statistical WHERE date<='${date}'`);
-        if (res.length == 0) return null;
-        return res;
+  //Xoá gói sản phẩm
+  deletePackage: async (packageID) => {
+    const res = await db.none(`UPDATE package SET status = 0 WHERE package_id=$1`, [packageID]);
+    if (res) {
+      console.log(res);
+      return 0;
     }
+    return 1;
+  },
+
+
+  //Lấy số liệu thống kê của một ngày
+  getStatistic: async (date) => {
+    const res = await db.one(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date
+         FROM statistical WHERE date='${date}'`);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+
+  //Lấy số liệu thống kê trong khoảng thời gian
+  getRangeStatistic: async (start, end, orderBy) => {
+    const res = await db.any(`SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date 
+        FROM statistical WHERE date>='${start}' AND date<='${end}'
+        ORDER BY TO_CHAR(date,'dd-mm-yyyy') $1:raw`, orderBy);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  getTotalCases: async (date) => {
+    const res = await db.one(`SELECT SUM(f0) AS TotalCases, SUM(cured) AS TotalRecovered
+         FROM statistical WHERE date<='${date}'`);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Thống kê tiêu thụ gói sản phẩm
+  getPackageConsume: async (start, end, packageID) => {
+    const res = await db.any(`
+        SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date FROM package_consumption 
+        WHERE date>='${start}' AND date<='${end}' AND package_id=${packageID}
+      `);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  // Thống kê tiêu thụ sản phẩm
+  getSuppliesConsume: async (start, end, suppliesID) => {
+    const res = await db.any(`
+        SELECT *, TO_CHAR(date,'dd-mm-yyyy') AS date FROM supplies_consumption 
+        WHERE date>='${start}' AND date<='${end}' AND supplies_id=${suppliesID}
+      `);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Tìm kiếm bệnh nhân theo tên
+  getPatient: async (name) => {
+    const res = await db.any("SELECT *, TO_CHAR(birthday,'dd-mm-yyyy') AS birthday FROM patient WHERE patient_name LIKE '%$1:value%'", name);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Tìm kiếm gói sản phẩm theo tên
+  getPackage: async (name) => {
+    const res = await db.any(`
+      SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
+      FROM Package p, Package_Detail pd
+      WHERE p.Package_ID = pd.Package_ID AND Status=1 AND package_name LIKE '%$1:value%'
+      GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
+      ORDER BY p.Package_ID`, name);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+  //Tìm kiếm sản phẩm theo tên
+  getSupplies: async (name) => {
+    const res = await db.any("SELECT * FROM supplies WHERE supplies_name LIKE '%$1:value%'", name);
+    if (res.length == 0) return null;
+    return res;
+  },
+
+
+  getSuppliesSorted: async (sortBy, sortOption) => {
+    const res = await db.any(`SELECT * FROM supplies  ORDER BY $1:raw $2:raw`, [sortBy, sortOption]);
+    if(res.length==0) return null;
+    return res;
+  },
+
+
+  getPackageSorted: async (sortBy, sortOption) => {
+    const res = await db.any(`
+      SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
+      FROM Package p, Package_Detail pd
+      WHERE p.Package_ID = pd.Package_ID AND Status=1
+      GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
+      ORDER BY $1:raw $2:raw`, [sortBy, sortOption]);
+    if(res.length==0) return null;
+    return res;
+  },
+
+  suppliesFilter: async (min, max) => {
+    const res = await db.any(`
+    SELECT * FROM supplies WHERE price >= ${min} AND price <= ${max} ORDER BY price ASC`);
+    if(res.length==0) return null;
+    return res;
+  },
+
+
+  packageFilter: async (time) => {
+    const res = await db.any(`
+      SELECT p.Package_ID,Package_Name,Package_Limit, Time_Limit,COUNT(*) AS SLSP
+      FROM Package p, Package_Detail pd
+      WHERE p.Package_ID = pd.Package_ID AND Status=1 AND Time_Limit='${time}'
+      GROUP BY p.Package_ID,Package_Name,Package_Limit, Time_Limit
+      ORDER BY package_name ASC`);
+    if(res.length==0) return null;
+    return res;
+  },
 
 }

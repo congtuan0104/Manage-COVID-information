@@ -1,9 +1,40 @@
 <div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
     <div class="row my-3">
-        <div class="col-sm-12 col-md-10 text-left text-secondary">
-            <h4><b>CÁC GÓI NHU YẾU PHẨM</b></h4>
+        <div class="col-sm-12 col-md-6 text-left text-secondary">
+            <div class="dropright btn">
+                <a class="dropdown-toggle text-decoration-none text-secondary" id="dropdownMenuButton3"
+                    data-toggle="dropdown" style="cursor:pointer; font-size:24px" aria-expanded="false">
+                    <b>CÁC GÓI NHU YẾU PHẨM</b>
+                </a>
+
+                <div class="dropdown-menu px-3" aria-labelledby="dropdownMenuButton">
+                    <label for="">Lọc các gói giới hạn theo</label>
+                    <a class="dropdown-item" onclick="packageFilter('d')">Ngày</a>
+                    <a class="dropdown-item" onclick="packageFilter('w')">Tuần</a>
+                    <a class="dropdown-item" onclick="packageFilter('m')">Tháng</a>
+
+
+                    <button class="btn btn-outline-primary my-3" type="submit" onclick="packageFilter()">
+                        <i class='fa fa-filter'></i> Lọc
+                    </button>
+
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12 col-md-2">
+        <div class="col-sm-4 col-md-2 text-left text-secondary">
+            <select class="form-control" name="sortBy" onchange="sortPackage()">
+                <option value="">Sắp xếp theo</option>
+                <option value="Package_name">> Tên</option>
+                <option value="SLSP">> SLSP trong gói</option>
+            </select>
+        </div>
+        <div class="col-sm-4 col-md-2 text-left text-secondary">
+            <select class="form-control" name="sortOption" onchange="sortPackage()">
+                <option value="ASC">Tăng dần</option>
+                <option value="DESC">Giảm dần</option>
+            </select>
+        </div>
+        <div class="col-sm-4 col-md-2">
             <div class="pull-right">
                 <div class="btn-group">
                     <button class="btn btn-info" id="list">
@@ -16,7 +47,9 @@
             </div>
         </div>
     </div>
+
     <div id="products" class="row view-group">
+        {{#if packages}}
         {{#each packages}}
         <div class="item col-xs-3 col-lg-4 mb-4">
             <div class="thumbnail card w-100 package">
@@ -46,8 +79,12 @@
             </div>
         </div>
         {{/each}}
-
+        {{else}}
+        <h3 class="text-primary my-5">Không tìm thấy gói sản phẩm</h3>
+        {{/if}}
     </div>
+
+
 
     <div class="row">
         <div class="col-3"></div>
@@ -159,7 +196,7 @@
                                 aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
                     </div>
                     <h5>Bạn có chắc muốn xoá <span class="text-primary">{{this.package_name}}</span> ?</h5>
-                    
+
                 </div>
 
                 <div class="modal-footer">

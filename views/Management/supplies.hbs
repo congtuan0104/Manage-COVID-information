@@ -1,9 +1,43 @@
 <div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
     <div class="row my-3">
-        <div class="col-sm-12 col-md-10 text-left text-secondary">
-            <h4><b>DANH SÁCH SẢN PHẨM</b></h4>
+        <div class="col-sm-12 col-md-6 text-left text-secondary">
+            <div class="dropright btn">
+                <a class="dropdown-toggle text-decoration-none text-secondary" id="dropdownMenuButton3"
+                    data-toggle="dropdown" style="cursor:pointer; font-size:24px" aria-expanded="false">
+                    <b>DANH SÁCH SẢN PHẨM</b>
+                </a>
+
+                <div class="dropdown-menu px-3" aria-labelledby="dropdownMenuButton">                  
+                    <label for="">Giá từ (VNĐ)</label>
+                    <input type="number" name="minPrice" step="1000" min="0" value="1000"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
+                    <label for="" class="mt-2">Đến (VNĐ)</label>
+                    <input type="number" name="maxPrice" step="1000" min="0" value="20000"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
+
+                    <button class="btn btn-outline-primary my-3" type="submit" onclick="suppliesFilter()">
+                        <i class='fa fa-filter'></i> Lọc
+                    </button>
+
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12 col-md-2">
+        <div class="col-sm-4 col-md-2 text-left text-secondary">
+            <select class="form-control" name="sortBy" onchange="sortSupplies()">
+                <option value="">Sắp xếp theo</option>
+                <option value="supplies_name">> Tên</option>
+                <option value="price">> Giá</option>
+            </select>
+        </div>
+        <div class="col-sm-4 col-md-2 text-left text-secondary">
+            <select class="form-control" name="sortOption" onchange="sortSupplies()">
+                <option value="ASC">Tăng dần</option>
+                <option value="DESC">Giảm dần</option>
+            </select>
+        </div>
+        <div class="col-sm-4 col-md-2">
             <div class="pull-right">
                 <div class="btn-group">
                     <button class="btn btn-info" id="list">
@@ -16,6 +50,7 @@
             </div>
         </div>
     </div>
+    {{#if supplies}}
     <div id="products" class="row view-group">
         {{#each supplies}}
 
@@ -72,9 +107,13 @@
         {{/each}}
 
     </div>
+    {{else}}
+    <h3 class="text-primary my-5">Không tìm thấy sản phẩm</h3>
+    {{/if}}
 
     <div class="row text-center mt-3 mb-3">
         <div class="col">
+            {{#if page}}
             <ul class="pagination justify-content-center">
                 <li class="page-item{{#eq page 1}} disabled{{/eq}}">
                     <a class="page-link" href="/manager/?page=1">
@@ -103,6 +142,7 @@
                 </li>
 
             </ul>
+            {{/if}}
         </div>
     </div>
 
@@ -214,7 +254,10 @@
                             <input type="text" class="form-control" id="unit" name="unit" value="{{this.unit}}"
                                 required>
                         </div>
-                        {{!-- <div class="col-sm-12">
+                        {{#if img}}
+                        
+                        {{else}}
+                        <div class="col-sm-12">
                             <div class="container">
                                 <fieldset class="form-group">
                                     <a href="javascript:void(0)" onclick="$('#pro-image').click()">Thêm ảnh</a>
@@ -225,7 +268,9 @@
 
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
+                        {{/if}}
+                        
                     </div>
                 </div>
 

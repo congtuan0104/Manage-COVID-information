@@ -1,40 +1,31 @@
 <div class="container-md px-5 py-3 text-center" style="background-color: white;border-radius:25px">
     <div class="row">
         <div class="col">
-            <div class="row">
-                <h4 class=" pb-2 text-left text-secondary">
+            <div class="dropright btn">
+                <a class="dropdown-toggle text-decoration-none text-secondary" id="dropdownMenuButton"
+                    data-toggle="dropdown" style="cursor:pointer; font-size:24px" aria-expanded="false">
                     <b>SỐ LƯỢNG BỆNH NHÂN THEO THỜI GIAN</b>
+                </a>
 
-                    <div class="dropdown">
-                        <a class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-expanded="false">
-                            Lọc dữ liệu <i class="fa fa-filter"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <div class="input-group">
-                                <label for="startDay">Từ </label>
-                                <input type="date" name="startDay" id="startDay" value="{{startDay}}"
-                                    style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
-                                    class="form-control" onchange="getDistrict(this.value)">
-                                <input type="date" name="endDay" id="endDay" value="{{today}}"
-                                    style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
-                                    class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"
-                                        onclick="searchRange()">
-                                        <i class='fa fa-filter'></i>
-                                    </button>
-                                </span>
-                            </div>
+                <div class="dropdown-menu px-3" aria-labelledby="dropdownMenuButton">
+                    <label for="startDay">Từ ngày</label>
+                    <input type="date" name="startDay" id="startDay" value="{{startDay}}"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
+                    <label for="endDay" class="mt-2">Đến ngày</label>
+                    <input type="date" name="endDay" id="endDay" value="{{today}}"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
 
-                        </div>
-                    </div>
+                    <button class="btn btn-outline-primary my-3" type="submit" onclick="searchRange()">
+                        <i class='fa fa-filter'></i> Lọc
+                    </button>
 
-                </h4>
-
+                </div>
             </div>
         </div>
-        <div class="col pr-5">
+
+        <div class="col-sm-3 col-md-5 pr-5">
             <div class="pull-right">
                 <div class="btn-group">
                     <button class="btn btn-info" onclick="showChart()">
@@ -61,7 +52,7 @@
         <div class="col-2" style="font-weight:bold">SL F3 </div>
         <div class="col-2" style="font-weight:bold">Khỏi bệnh</div>
     </div>
-    <canvas id="staOverTime" class="mb-5" width="100%"></canvas>
+    <canvas id="staOverTime" class="mt-3 mb-5" width="100%"></canvas>
     <div id="updateSta" style="display: none;">
         {{#each staOverTime}}
         <div class="row align-items-center border-bottom py-4">
@@ -73,6 +64,211 @@
             <div class="col-2">{{this.f2}}</div>
             <div class="col-2">{{this.f3}}</div>
             <div class="col-2">{{this.cured}}</div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>
+
+<div class="container-md px-5 py-3 text-center mt-5" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <div class="dropright btn">
+                <a class="dropdown-toggle text-decoration-none text-secondary" id="dropdownMenuButton"
+                    data-toggle="dropdown" style="cursor:pointer; font-size:24px" aria-expanded="false">
+                    <b>THỐNG KÊ THANH TOÁN</b>
+                </a>
+
+                <div class="dropdown-menu px-3" aria-labelledby="dropdownMenuButton">
+                    <label for="startDay">Từ ngày</label>
+                    <input type="date" name="startDay2" id="startDay2" value="{{startDay}}"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
+                    <label for="endDay" class="mt-2">Đến ngày</label>
+                    <input type="date" name="endDay2" id="endDay2" value="{{today}}"
+                        style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                        class="form-control">
+
+                    <button class="btn btn-outline-primary my-3" type="submit" onclick="searchRange2()">
+                        <i class='fa fa-filter'></i> Lọc
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-md-7 pr-5">
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-info" onclick="showChart2()">
+                        <i class="fa fa-line-chart"></i> Biểu đồ
+                    </button>
+                    <button class="btn btn-danger" onclick="showDetail2()">
+                        <i class="fa fa-database"></i> Số liệu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center border-bottom py-4" id="titleTable2" style="display: none;">
+        <div class="col">
+            <div class="row" style=" font-weight:bold">Ngày
+                <a href="#">
+                    <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col" style="font-weight:bold">Đã thanh toán (VNĐ)</div>
+        <div class="col text-right" style="font-weight:bold">Dư nợ (VNĐ)</div>
+    </div>
+    <canvas id="staOverTime2" class="mt-3 mb-5" width="100%"></canvas>
+    <div id="updateSta2" style="display: none;">
+        {{#each staOverTime}}
+        <div class="row align-items-center border-bottom py-4">
+            <div class="col">
+                <div class="row">{{this.date}}</div>
+            </div>
+            <div class="col money">{{this.payment}}</div>
+            <div class="col money text-right">{{this.debt}}</div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>
+
+<div class="container-md px-5 py-3 text-center mt-5" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <h4 class="text-left text-secondary"><b>THỐNG KÊ TIÊU THỤ GÓI SẢN PHẨM</b></h4>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-3 text-left">
+            <label for="">Gói sản phẩm </label>
+            <select class="form-control" name="packageID" onchange="searchRange3()">
+                {{#each package}}
+                <option {{#eq @index 0}}selected{{/eq}} value="{{package_id}}">{{package_name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-3 text-left">
+            <label for="">Ngày bắt đầu</label>
+            <input type="date" name="startDay3" id="startDay3" value="{{startDay}}" onchange="searchRange3()"
+                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                class="form-control">
+        </div>
+        <div class="col-3 text-left">
+            <label for="">Ngày kết thúc</label>
+            <input type="date" name="endDay3" id="endDay3" value="{{today}}" onchange="searchRange3()"
+                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                class="form-control">
+        </div>
+        <div class="col-3 pt-3">
+            <div class="pull-right mt-3">
+                <div class="btn-group">
+                    <button class="btn btn-info" onclick="showChart3()">
+                        <i class="fa fa-line-chart"></i> Biểu đồ
+                    </button>
+                    <button class="btn btn-danger" onclick="showDetail3()">
+                        <i class="fa fa-database"></i> Số liệu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+            
+    </div>
+    <div class="row align-items-center border-bottom py-4" id="titleTable3" style="display: none;">
+        <div class="col">
+            <div class="row" style=" font-weight:bold">Ngày
+                <a href="#">
+                    <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col" style="font-weight:bold">Tiêu thụ (gói)</div>
+
+
+    </div>
+    <canvas id="staOverTime3" class="mt-3 mb-5" width="100%"></canvas>
+    <div id="updateSta3" style="display: none;">
+        {{#each packageConsume}}
+        <div class="row align-items-center border-bottom py-4">
+            <div class="col">
+                <div class="row">{{this.date}}</div>
+            </div>
+            <div class="col money">{{this.consume}}</div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>
+
+
+<div class="container-md px-5 py-3 text-center mt-5" style="background-color: white;border-radius:25px">
+    <div class="row">
+        <div class="col">
+            <h4 class="text-left text-secondary"><b>THỐNG KÊ TIÊU THỤ SẢN PHẨM</b></h4>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-3 text-left">
+            <label for="">Sản phẩm </label>
+            <select class="form-control" name="suppliesID" onchange="searchRange4()">
+                {{#each supplies}}
+                <option {{#eq @index 0}}selected{{/eq}} value="{{supplies_id}}">{{supplies_name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-3 text-left">
+            <label for="">Ngày bắt đầu</label>
+            <input type="date" name="startDay4" id="startDay4" value="{{startDay}}" onchange="searchRange4()"
+                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                class="form-control">
+        </div>
+        <div class="col-3 text-left">
+            <label for="">Ngày kết thúc</label>
+            <input type="date" name="endDay4" id="endDay4" value="{{today}}" onchange="searchRange4()"
+                style="border:1px solid rgba(0, 106, 255, 0.715); margin-right:5px; border-radius:3px;"
+                class="form-control">
+        </div>
+        <div class="col-3 pt-3">
+            <div class="pull-right mt-3">
+                <div class="btn-group">
+                    <button class="btn btn-info" onclick="showChart4()">
+                        <i class="fa fa-line-chart"></i> Biểu đồ
+                    </button>
+                    <button class="btn btn-danger" onclick="showDetail4()">
+                        <i class="fa fa-database"></i> Số liệu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+            
+    </div>
+    <div class="row align-items-center border-bottom py-4" id="titleTable4" style="display: none;">
+        <div class="col">
+            <div class="row" style=" font-weight:bold">Ngày
+                <a href="#">
+                    <i class="bx bxs-sort-alt" style="font-size: 20px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col" style="font-weight:bold">Tiêu thụ (sản phẩm)</div>
+
+
+    </div>
+    <canvas id="staOverTime4" class="mt-3 mb-5" width="100%"></canvas>
+    <div id="updateSta4" style="display: none;">
+        {{#each suppliesConsume}}
+        <div class="row align-items-center border-bottom py-4">
+            <div class="col">
+                <div class="row">{{this.date}}</div>
+            </div>
+            <div class="col money">{{this.consume}}</div>
         </div>
         {{/each}}
     </div>
