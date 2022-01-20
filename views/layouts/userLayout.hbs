@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="icon" href="/img/logo.png">
     <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet" href="/css/management.css">
     {{>(cssP)}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -33,25 +34,23 @@
             <div class="dropleft position-relative">
                 <div class="text-success" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" href="#">
-                    <div class="profile-details">
+                    <div onclick="" class="profile-details">
                         <img src="/img/logo.png" alt="">
                         <span class="admin_name text-success">{{#with patient}}{{patient_name}}{{/with}}</span>
                     </div>
 
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <div class="dropdown-item" href="#">
-                        <div class="text">
-                            <i class='bi bi-credit-card'></i>
-                            <p> HD001 thanh toán thành công</p>
+
+                    {{#each notification}}
+                        <div class="dropdown-item" href="#">
+                            <div class="text">
+                                <i class='bx bx-list-ul'></i>
+                                <p> {{this.message}}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="dropdown-item" href="#">
-                        <div class="text">
-                            <i class='bx bx-list-ul'></i>
-                            <p>Người quản lí vừa cập nhật thông tin</p>
-                        </div>
-                    </div>
+                    {{/each}}
+
                 </div>
             </div>
 
@@ -69,6 +68,7 @@
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/user.js"></script>
+    <script src="/js/management.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     {{>(scriptP)}}
 

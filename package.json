@@ -21,6 +21,7 @@
   "homepage": "https://github.com/congtuan0104/Manage-COVID-information#readme",
   "dependencies": {
     "@google-cloud/storage": "^5.17.0",
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^11.0.0",
@@ -32,12 +33,15 @@
     "firebase-admin": "^10.0.1",
     "multer": "^1.4.4",
     "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.1",
     "pg-promise": "^10.11.1",
     "xhr2": "^0.2.1"
   },
   "devDependencies": {
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
     "nodemon": "^2.0.15"
   }
 }
