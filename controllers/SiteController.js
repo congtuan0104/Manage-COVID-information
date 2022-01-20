@@ -1,4 +1,5 @@
 const siteM = require('../models/SiteModel');
+const managerM = require('../models/ManagerModel');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
@@ -12,7 +13,7 @@ jwtOptions.secretOrKey = 'mySecretKey';
 
 class SiteController {
     //[GET]/
-    home(req, res) {
+    async home(req, res) {
         var logined, fullname;
         if (req.user) logined = true;
         else logined = false;
@@ -25,10 +26,31 @@ class SiteController {
         else if (req.session.user) {
             fullname = req.session.user.patient_name;
         }
+        //today
+        var day = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const today = year + '-' + month + '-' + day;
+        const totalCases = await managerM.getTotalCases(today);
+        const f0Cases = totalCases.totalcases - totalCases.totalrecovered;
+        //yesterday
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        const yesterday = date.getFullYear() + '-' + date.getMonth() + 1 + '-' + date.getDate();
+        const totalCases_2 = await managerM.getTotalCases(yesterday);
+        const increaseCases = {
+            total: totalCases.totalcases - totalCases_2.totalcases, 
+            percentf0: Math.round((f0Cases/totalCases.totalcases)*100),  
+            percentRecovered: Math.round((totalCases.totalrecovered/totalCases.totalcases)*100),      
+        }
         res.render('home', {
             title: 'Trang chủ',
             logined: logined,
             fullname: fullname,
+            totalCases: totalCases,
+            f0Cases: f0Cases,  
+            increaseCases: increaseCases,         
+            today: day + '/' + month + '/' + year,
             navP: () => 'nav',
             cssP: () => 'style',
             scriptP: () => 'script',

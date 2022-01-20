@@ -58,6 +58,6 @@ module.exports.localStrategy = app => {
             done(new Error('error'), null);
         }
     });
-    // app.use(passport.initialize());
-    // app.use(passport.session());
+    app.use(passport.initialize());
+    app.use(passport.session());
 };
