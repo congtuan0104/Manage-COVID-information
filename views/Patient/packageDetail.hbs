@@ -1,5 +1,13 @@
+<div class="row">
+    {{#if msg}}
+    <div class="alert alert-danger" role="alert">
+        {{msg}}
+    </div>
+    {{/if}}
+</div>
 <div class="row mx-2">
-    <div class="col-5 mx-3 mb-4 h-100" style="border-radius:25px;min-width:350px;">
+    
+    <div class="col-3 mx-3 mb-4 h-100" style="border-radius:25px;min-width:350px;">
 
         <div class="row pt-4 pb-2 px-4 mx-1 mb-4" style="background-color: white; border-radius:25px;min-width:350px;">
             <div class="text-center mb-4">
@@ -30,9 +38,9 @@
                     <div class="form-group">
                         <label for="limitTime">> Giới hạn theo</label>
                         <select class="form-control" name="limitTime" required id="" disabled>
-                            <option selected value="d">ngày</option>
-                            <option value="w">tuần</option>
-                            <option value="m">tháng</option>
+                            <option {{#eq package.time_limit "d"}}selected{{/eq}} value="d">ngày</option>
+                            <option {{#eq package.time_limit "w"}}selected{{/eq}} value="w">tuần</option>
+                            <option {{#eq package.time_limit "m"}}selected{{/eq}} value="m">tháng</option>
                         </select>
                     </div>
                 </form>
@@ -62,8 +70,24 @@
                 </div>
             </div>
             {{#each supplies1}}
+            
             <div class="row">
                 <div class="col-12">
+                    <div>
+                        <div style="width: 100px;" id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {{#if img}}
+                                {{#each img}}
+                                <div class="carousel-item {{#eq @index 0}}active{{/eq}}">
+                                    <img src="{{this.image_url}}" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                </div>
+                                {{/each}}
+                                {{else}}
+                                <img src="/img/product-mix2.png" class="d-block w-100" alt="Hình minh hoạ sản phẩm">
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
                 <div class="input-group row">
                     <div class="col-5 mt-2 mb-2">
                         <div class="input-group-prepend h-100">
@@ -92,7 +116,6 @@
             </div>
             </div>
             {{/each}}
-            
             <div class="col-12 text-right">
                 <h4  id="cost">Tổng giá thành: {{defaultPrice}} VNĐ</h4>
                 <input id="lastCost" type="number" class="form-control" name="grandTotal"

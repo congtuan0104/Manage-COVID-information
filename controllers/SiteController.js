@@ -2,6 +2,13 @@ const siteM = require('../models/SiteModel');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const saltRounds = 10;
+var jwt = require('jsonwebtoken');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+var jwtOptions = {};
+
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = 'mySecretKey';
 
 class SiteController {
     //[GET]/
