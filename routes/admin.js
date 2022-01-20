@@ -16,6 +16,12 @@ route.get("/edit-location/:Id", adminController.getEditLocation);
 
 route.get("/account/:ManagerId", adminController.getAccount);
 
+route.get("/delete-location/:Id", adminController.deleteLocation);
+
+route.get("/account/lock/:ManagerId", adminController.lockAccount);
+
+route.get("/account/activate/:ManagerId", adminController.activateAccount);
+
 route.post("/edit-location/:Id", adminController.postEditLocation);
 
 route.post("/add-location", adminController.postAddLocation);

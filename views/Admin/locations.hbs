@@ -2,7 +2,7 @@
   class="container-md px-5 py-3 text-center"
   style="background-color: white;border-radius:25px"
 >
-  <table class="table">
+  <table class="table table-striped table-bordered" id="sortTable">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -10,6 +10,8 @@
         <th scope="col">Địa chỉ </th>
         <th scope="col">Sức chứa</th>
         <th scope="col">Số lượng tiếp nhận hiện tại</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -21,6 +23,7 @@
           <td>{{this.max_capacity}}</td>
           <td>{{this.cur_capacity}}</td>
           <td><a href="/admin/edit-location/{{this.place_id}}">Điều chỉnh</a></td>
+          <td><a href="/admin/delete-location/{{this.place_id}}">Xóa</a></td>
         </tr>
       {{/each}}
     </tbody>
@@ -32,4 +35,5 @@
       role="button"
     >Thêm địa điểm</a>
   </div>
+
 </div>

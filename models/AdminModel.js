@@ -58,4 +58,15 @@ module.exports = {
   addManager: async (manager) => {
     const res = await dbModel.add(manager, managerTableName);
   },
+  deleteLocation: async (locationId) => {
+    const res = await dbModel.delete(
+      treamentPlaceTableName,
+      "place_id",
+      locationId
+    );
+  },
+  updateManager: async (manager) => {
+    await dbModel.update(managerTableName, "manager_id", manager);
+    return;
+  },
 };

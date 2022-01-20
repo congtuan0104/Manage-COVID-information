@@ -26,6 +26,29 @@ class AdminController {
       footerP: () => "footer",
     });
   }
+
+  async deleteLocation(req, res, next) {
+    const locationId = req.params.Id;
+    await adminM.deleteLocation(locationId);
+    res.redirect("/admin/locations");
+  }
+
+  async lockAccount(req, res, next) {
+    const managerId = req.params.ManagerId;
+    let manager = (await adminM.getManager(managerId))[0];
+    manager.status = 0;
+    console.log("lock account:", manager);
+    await adminM.updateManager(manager);
+    res.redirect(`/admin/account/${managerId}`);
+  }
+  async activateAccount(req, res, next) {
+    const managerId = req.params.ManagerId;
+    let manager = (await adminM.getManager(managerId))[0];
+    manager.status = 1;
+    await adminM.updateManager(manager);
+    res.redirect(`/admin/account/${managerId}`);
+  }
+
   async getLocations(req, res, next) {
     res.render("./Admin/locations", {
       layout: "adminLayout",
@@ -64,7 +87,7 @@ class AdminController {
   async getAccount(req, res, next) {
     const managerId = req.params.ManagerId;
     const manager = (await adminM.getManager(managerId))[0];
-    console.log("getAccount: ", manager);
+    // console.log("getAccount: ", manager);
     const history = await adminM.getManagerHistory(managerId);
     res.render("./Admin/account", {
       layout: "adminLayout",

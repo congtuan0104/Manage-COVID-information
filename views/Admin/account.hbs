@@ -1,7 +1,9 @@
 <div class="card">
   <div class="card-body">
     <p class="card-text">Tên quản lý: {{Manager.manager_name}}</p>
-    <p class="card-text">Trạng thái: {{Manager.status}}</p>
+    <p class="card-text">Trạng thái:
+      {{#if Manager.status}} Đã kích hoạt{{/if}}
+      {{#unless Manager.status}}Khoá{{/unless}}</p>
     <p class="card-text">Tên tài khoản: {{Manager.username}}</p>
     <p class="card-text">Lịch sử hoạt động</p>
     <table class="table">
@@ -24,7 +26,19 @@
         {{/each}}
       </tbody>
     </table>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Khóa tài khoản</a>
-
+    {{#if Manager.status}}
+      <a
+        class="btn btn-primary btn-lg"
+        href="/admin/account/lock/{{Manager.manager_id}}"
+        role="button"
+      >Khóa tài khoản</a>
+    {{/if}}
+    {{#unless Manager.status}}
+    <a
+        class="btn btn-primary btn-lg"
+        href="/admin/account/activate/{{Manager.manager_id}}"
+        role="button"
+      >Kích hoạt tài khoản</a>
+    {{/unless}}</p>
   </div>
 </div>
