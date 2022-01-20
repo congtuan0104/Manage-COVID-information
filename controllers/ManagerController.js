@@ -1,6 +1,14 @@
 const { async } = require('@firebase/util');
 const { addPatient } = require('../models/ManagerModel');
 const db = require('../models/ManagerModel');
+var jwt = require('jsonwebtoken');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const { user } = require("pg/lib/defaults");
+var jwtOptions = {};
+const axios = require('axios'); 
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = 'mySecretKey';
 
 class ManagerController {
     //[GET]/
@@ -54,7 +62,6 @@ class ManagerController {
         for (var i = 0; i < suppliesList.length; i++) {
             suppliesList[i].img = await db.getSuppliesImg(suppliesList[i].supplies_id);
         }
-
 
         res.render('./Management/supplies', {
             layout: 'managementLayout',
@@ -142,8 +149,6 @@ class ManagerController {
         const patientDetail = await db.getPatientDetail(patientID);
         const treatmentPlace = await db.getTreatmentPlaceByID(patientDetail.place_id);
         const listTreatmentPlace = await db.getListTreatmentPlace();
-
-
         var d = new Date(patientDetail.birthday);
         patientDetail.birthday = d.getUTCFullYear();
 
@@ -163,11 +168,93 @@ class ManagerController {
     async addPatient(req, res) {
         const patient_name = req.body.patient_name;
         const identity_card = req.body.identity_card;
+        const username = identity_card;
         const birthday = req.body.birthday;
         const address = req.body.address;
         const status = req.body.status;
-        await db.addPatient(patient_name, identity_card, birthday, address, status);
-        res.redirect("/manager/patients");
+        var isExistPatient = await db.isExistPatient(username);
+        if(isExistPatient){
+            const patientsList = await db.getPatientList();
+            for (let i = 0; i < patientsList.length; i++) {
+                var d = new Date(patientsList[i].birthday);
+                patientsList[i].birthday = d.getUTCFullYear();
+            }
+            res.render("./Management/patients", {
+                layout: "managementLayout",
+                title: "Bệnh nhân",
+                patients: patientsList,
+                cssP: () => "style-supplies",
+                scriptP: () => "script",
+                scriptP: () => "script",
+                footerP: () => "footer",
+                msg:"CMND đã tồn tại",
+                color: "danger"
+            });
+            return;
+        }
+        let date = new Date();
+        let day = date.getUTCDate();
+        let month = date.getUTCMonth() + 1;
+        let year = date.getUTCFullYear();
+        let hour = date.getHours();
+        let minutes = date.getUTCMinutes();
+        let second = date.getUTCSeconds();
+        const dateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
+        await db.addNewAccount(username,dateStr,0);
+        await db.addPatient(patient_name, identity_card, birthday, address, status,username);
+        let managerId = '234567891';
+        let payload = { account_id: managerId };
+        let token = jwt.sign(payload, jwtOptions.secretOrKey);
+        axios.post('http://localhost:3003/addAccount', {
+            account_id: username
+            }, {
+            headers: {
+                'Authorization': 'Bearer  '+token
+            }
+            }).then(async function (response) {
+                console.log(response.data);
+            if(response.data.msg=='success'){
+                const patientsList = await db.getPatientList();
+
+                for (let i = 0; i < patientsList.length; i++) {
+                    var d = new Date(patientsList[i].birthday);
+                    patientsList[i].birthday = d.getUTCFullYear();
+                }
+                res.render("./Management/patients", {
+                    layout: "managementLayout",
+                    title: "Bệnh nhân",
+                    patients: patientsList,
+                    cssP: () => "style-supplies",
+                    scriptP: () => "script",
+                    scriptP: () => "script",
+                    footerP: () => "footer",
+                    msg:"Thêm thành công",
+                    color: "success"
+                });
+            }
+            else{
+                const patientsList = await db.getPatientList();
+
+                for (let i = 0; i < patientsList.length; i++) {
+                    var d = new Date(patientsList[i].birthday);
+                    patientsList[i].birthday = d.getUTCFullYear();
+                }
+                res.render("./Management/patients", {
+                    layout: "managementLayout",
+                    title: "Bệnh nhân",
+                    patients: patientsList,
+                    cssP: () => "style-supplies",
+                    scriptP: () => "script",
+                    scriptP: () => "script",
+                    footerP: () => "footer",
+                    msg:"Thêm thất bại",
+                    color: "danger"
+                });
+            }
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
     }
 
     //[POST]/addSupplies

@@ -115,16 +115,30 @@ module.exports = {
     if (res.length == 0) return null;
     return res;
   },
+  // Thêm tài khoản 
+  addNewAccount: async (username,modified_at,role)=>{
+    await db.none(`INSERT INTO account(username, modified_at,role)
+    VALUES('${username}', '${modified_at}', '${role}')`);
+    const res = await db.one('SELECT * FROM account WHERE username =$1',username);
+    if (res.length == 0) return null;
+    return res;
+},
+isExistPatient: async(username)=>{
+  const res = await db.any("SELECT * FROM account WHERE username=$1 ", [username]);
+  if(res.length == 0) return false;
+  return true;
+},
   // Thêm người bệnh
   addPatient: async (
     patient_name,
     identity_card,
     birthday,
     address,
-    status
+    status,
+    username
   ) => {
-    await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status)
-        VALUES('${patient_name}', '${identity_card}','${birthday}','${address}','${status}')`);
+    await db.none(`INSERT INTO patient(patient_name, identity_card,birthday,address,status,username)
+        VALUES('${patient_name}', '${identity_card}','${birthday}','${address}','${status}','${username}')`);
   },
 
   //Thêm một sản phẩm mới và lấy id của sản phẩm đó

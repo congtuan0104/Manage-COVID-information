@@ -1,4 +1,7 @@
+const passport = require('passport');
+const { user, password } = require('pg/lib/defaults');
 const db = require('./dbConfig');
+
 
 module.exports = {
     getNumberOfPage: async (tblName,nElementOfPage) => {
@@ -68,6 +71,14 @@ module.exports = {
         return res;
     },
 
+    //Xem ảnh mô tả của nhu yếu phẩm
+    getSuppliesImg: async (suppliesID) => {
+        const res = await db.any(
+        `SELECT image_url FROM supplies_image WHERE supplies_id = ${suppliesID}`
+        );
+        if (res.length == 0) return null;
+        return res;
+    },
     // Lấy danh sách các sản phẩm trong gói nhu yếu phẩm
     getSuppliesOfPackage: async (packageID)=> {
         const res = await db.any(`SELECT *
@@ -88,8 +99,8 @@ module.exports = {
     addPackage: async(patient_id,timeorder,package_id,quantity,grand_total,status)=>{
         await db.none(`INSERT INTO orders(patient_id,timeorder,package_id,quantity,grand_total,status)
         VALUES('${patient_id}','${timeorder}','${package_id}','${quantity}','${grand_total}','${status}')`);
-        const orderID=db.one('`SELECT MAX(order_id) FROM orders');
-        return orderID;
+        const allOrders = await db.any('SELECT * FROM orders');
+        return allOrders.length;
     },
     // Thêm đơn hàng
     addOrderDetail: async(order_id,supplies_id,quantity,total)=>{
@@ -98,16 +109,24 @@ module.exports = {
     },
     //Danh sách đơn hàng
     getOrderList: async (patient_id)=> {
-        const res = await db.any("SELECT *, TO_CHAR(timeorder,'dd/mm/yyyy hh:mm:ss') AS timeorder FROM orders WHERE patient_id = $1",[patient_id]);
+        const res = await db.any("SELECT *, TO_CHAR(timeorder,'dd/MM/yyyy hh:MI:ss') AS timeorder FROM orders WHERE patient_id = $1",[patient_id]);
+        
         return res;
     },
     getOrderDetailByOrderId: async (order_id)=>{
-        const res = await db.any("SELECT *FROM order_detail WHERE order_id = $1",[order_id]);
+        const res = await db.any("SELECT * FROM order_detail, supplies WHERE order_detail.order_id = $1 AND supplies.supplies_id = order_detail.supplies_id",[order_id]);
+        return res;
+    },
+    getOrderById: async (order_id) =>{
+        const res = await db.any("SELECT * FROM orders WHERE order_id = $1",[order_id]);
         return res;
     },
     getOrderListDetail: async (patient_id)=> {
-        const res = await db.any("SELECT *, TO_CHAR(timeorder,'dd/mm/yyyy hh:mm:ss') AS timeorder FROM orders,package,patient WHERE orders.patient_id = $1 AND orders.patient_id = patient.patient_id AND package.package_id = orders.package_id",[patient_id]);
+        const res = await db.any("SELECT *, TO_CHAR(orders.timeorder,'dd/MM/yyyy hh:MI:ss') AS timeorder, patient.status AS patient_status,orders.status AS order_status FROM orders,package,patient WHERE orders.patient_id = $1 AND orders.patient_id = patient.patient_id AND package.package_id = orders.package_id",[patient_id]);
         return res;
+    },
+    setOrderStatus: async(order_id)=>{
+        await db.none(`UPDATE orders SET status = 1 WHERE order_id = $1`,[order_id]);
     },
     addPackageConsumption: async (package_id,date)=>{
         await db.none(`INSERT INTO package_consumption(package_id, date,consume)
@@ -121,7 +140,7 @@ module.exports = {
         if(res.length == 0) return false;
         return true;
     },
-    getOrderListByIdByDate: async(packageID)=>{
+    getOrderListByIdByDate: async(packageID,patient_id)=>{
         let now = new Date(Date.now());
         let day  = now.getUTCDate();
         let month = now.getUTCMonth()+1;
@@ -138,11 +157,11 @@ module.exports = {
         minutes = lastDate.getMinutes();
         second = lastDate.getSeconds();
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
-        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
+        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3 AND patient_id = $4`,[packageID,lastDateStr,currentDate,patient_id]);
         if(res.length==0) return null;
         return res;
     },
-    getOrderListByIdByWeek: async(packageID)=>{
+    getOrderListByIdByWeek: async(packageID,patient_id)=>{
         let now = new Date(Date.now());
         let day  = now.getUTCDate();
         let month = now.getUTCMonth()+1;
@@ -159,7 +178,7 @@ module.exports = {
         minutes = lastDate.getMinutes();
         second = lastDate.getSeconds();
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
-        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
+        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3 AND patient_id = $4`,[packageID,lastDateStr,currentDate,patient_id]);
         if(res.length==0) return null;
         return res;
     },
@@ -180,7 +199,7 @@ module.exports = {
         minutes = lastDate.getMinutes();
         second = lastDate.getSeconds();
         const lastDateStr = `${year}-${month}-${day} ${hour}:${minutes}:${second}`;
-        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3`,[packageID,lastDateStr,currentDate]);
+        const res = await db.any(`SELECT * from orders where package_id=$1 and timeorder >=$2 and timeorder <=$3 AND patient_id = $4`,[packageID,lastDateStr,currentDate,patient_id]);
         if(res.length==0) return null;
         return res;
     },
@@ -188,5 +207,20 @@ module.exports = {
         const res = await db.any("SELECT *,TO_CHAR(update_time,'dd/mm/yyyy hh:mm:ss') AS update_time FROM treatment_history,treatment_place WHERE treatment_history.patient_id=$1 AND treatment_history.place_id = treatment_place.place_id", [patient_id]);
         if(res.length == 0) return null;
         return res;
+    },
+    getUserAccount: async(username)=>{
+        const res = await db.one("SELECT * FROM account WHERE username=$1 ", [username]);
+        if(res.length == 0) return null;
+        return res;
+    },
+    changePassword: async(username, password) =>{
+        var res = await db.none(`UPDATE account SET password = $1 WHERE username = $2`, [password,username]);
+        return res;
+    },
+    getMainAccount: async() =>{
+        const res = await db.one(`SELECT main_account FROM payment`);
+        if (res.length == 0) return null;
+        return res;
     }
+    
 }
