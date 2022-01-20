@@ -5,9 +5,23 @@ const saltRounds = 10;
 
 class SiteController {
     //[GET]/
-    home(req, res, next) {
+    home(req, res) {
+        var logined, fullname;
+        if (req.user) logined = true;
+        else logined = false;
+        if (req.session.admin) {
+            fullname = req.session.admin.manager_name;
+        }
+        else if (req.session.manager) {
+            fullname = req.session.manager.manager_name;
+        }
+        else if (req.session.user) {
+            fullname = req.session.user.patient_name;
+        }
         res.render('home', {
             title: 'Trang chủ',
+            logined: logined,
+            fullname: fullname,
             navP: () => 'nav',
             cssP: () => 'style',
             scriptP: () => 'script',
@@ -15,13 +29,13 @@ class SiteController {
         });
     }
     //[GET]/signup
-    async signup(req, res, next) {
+    async signup(req, res) {
         if (req.user) {
             return res.redirect('/');
         }
-        const users = await siteM.all('account');
-        const provinces = await siteM.all('province');          
-        if (users.length > 0) {
+        const admin = await siteM.get(2, 'account', 'role');
+        const provinces = await siteM.all('province');
+        if (admin) {
             res.render('./Account/userSignUp', {
                 title: 'Đăng ký',
                 provinces: provinces,
@@ -43,7 +57,7 @@ class SiteController {
         }
     }
     //[POST]/adminSignUp
-    async adminSignUp(req, res, next) {
+    async adminSignUp(req, res) {
         const username = req.body.username;
         const pwd = req.body.pwd;
         const repwd = req.body.repwd;
@@ -78,7 +92,13 @@ class SiteController {
             password: pwdHashed,
             role: 2
         };
+        let newManager = {
+            manager_name: req.body.fullname,
+            status: 2,
+            username: username
+        };
         await siteM.add(newUser, 'account');
+        await siteM.add(newManager, 'manager');
         res.render('./Account/adminSignUp', {
             title: 'Đăng ký',
             navP: () => 'accountNav',
@@ -90,10 +110,10 @@ class SiteController {
         });
     }
     //[POST]/userSignUp
-    async userSignUp(req, res, next) {
+    async userSignUp(req, res) {
         const username = req.body.username;
         const pwd = req.body.pwd;
-        const repwd = req.body.repwd;      
+        const repwd = req.body.repwd;
         const user = await siteM.get(username, 'account', 'username');
         if (user) {
             res.render('./Account/userSignUp', {
@@ -149,6 +169,9 @@ class SiteController {
     }
     //[GET]/signin
     signin(req, res, next) {
+        if (req.user) {
+            return res.redirect('/');
+        }
         res.render('./Account/signin', {
             title: 'Đăng nhập',
             navP: () => 'accountNav',
@@ -158,7 +181,11 @@ class SiteController {
         });
     }
     //[POST]/signin
-    doSignIn(req, res, next) {
+    async doSignIn(req, res, next) {
+        const user = await siteM.get(req.body.username, 'account', 'username');
+        if (user && !user.password) {
+            return res.redirect('/createNewPwd?username=' + user.username);
+        }
         passport.authenticate('local', (err, user, info) => {
             if (err) {
                 return res.render('./Account/signin', {
@@ -194,8 +221,8 @@ class SiteController {
                         color: 'danger'
                     });
                 }
-                if (user.role === 2) {  
-                    req.session.admin = await siteM.get(user.username, 'manager', 'username');                
+                if (user.role === 2) {
+                    req.session.admin = await siteM.get(user.username, 'manager', 'username');
                     return res.redirect('/');
                 }
                 if (user.role === 1) {
@@ -205,22 +232,75 @@ class SiteController {
                 if (user.role === 0) {
                     const temp = await siteM.get(user.username, 'patient', 'username');
                     req.session.patient = temp;
-                    console.log(req.session.patient);
                     //res.redirect('/')
                     return res.redirect('/user');
                 }
             });
         })(req, res, next);
     }
-    async getDistrict(req, res) {       
+    //[GET]/getDistrict
+    async getDistrict(req, res) {
         const province = await siteM.get(req.query.province_name, 'province', 'province_name');
         const districts = await siteM.getN(province.province_id, 'district', 'province_id');
         res.send(districts);
     }
-    async getWard(req, res) {       
+    //[GET]/getWard
+    async getWard(req, res) {
         const district = await siteM.get(req.query.district_name, 'district', 'district_name');
         const wards = await siteM.getN(district.district_id, 'ward', 'district_id');
         res.send(wards);
+    }
+    //[GET]/createNewPwd
+    async createNewPwd(req, res) {
+        if (req.user || !req.query.username) {
+            return res.redirect('/');
+        }
+        const user = await siteM.get(req.query.username, 'account', 'username');
+        if (user && user.password) {
+            return res.redirect('/signin');
+        }       
+        res.render('./Account/createNewPwd', {
+            title: 'Tạo mật khẩu mới',
+            navP: () => 'accountNav',
+            cssP: () => 'style',
+            scriptP: () => 'script',
+            footerP: () => 'footer',
+            username: req.query.username,
+            msg: 'Đây là lần đầu bạn đăng nhập. Vui lòng tạo mật khẩu mới.',
+            color: 'warning'
+        });        
+    }
+    //[POST]/createNewPwd
+    async doCreateNewPwd(req, res) {
+        const username = req.body.username;       
+        const pwd = req.body.pwd;
+        const repwd = req.body.repwd;              
+        if (pwd != repwd) {
+            res.render('./Account/createNewPwd', {
+                title: 'Tạo mật khẩu mới',              
+                navP: () => 'accountNav',
+                cssP: () => 'style',
+                scriptP: () => 'script',
+                footerP: () => 'footer',
+                username: username,
+                msg: 'Mật khẩu nhập lại không trùng khớp',
+                color: 'danger',
+            });
+            return;
+        }
+        const pwdHashed = await bcrypt.hash(pwd, saltRounds);
+        let entity = {           
+            password: pwdHashed,
+        };
+        await siteM.update('account', entity, 'username', username);
+        res.redirect('/signin');
+    }
+    //[GET]/log-out
+    logOut(req, res) {
+        if (req.user) {
+            req.logOut();
+        }
+        return res.redirect('/signin');
     }
 }
 

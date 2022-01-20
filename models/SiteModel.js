@@ -36,7 +36,7 @@ module.exports = {
             }
             return null;
         } catch (error) {
-            console.log('error siteM/get:', error);
+            console.log('error siteM/getN:', error);
         }
     },
     add: async (entity, tblName) => {
@@ -49,4 +49,14 @@ module.exports = {
             console.log('error siteM/add:', error);
         }
     },
+    update: async (tblName, entity, fieldName, value) => {
+        const table = new pgp.helpers.TableName({table: tblName, schema: schema});
+        const qStr = pgp.helpers.update(entity, null, table) + `WHERE "${fieldName}" = '${value}'`;
+        try {
+            const res = db.any(qStr);
+            return res;
+        } catch (error) {
+            console.log('error siteM/update:', error);
+        }
+    }
 };
