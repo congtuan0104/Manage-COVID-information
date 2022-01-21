@@ -13,7 +13,7 @@ const https = require("https");
 
 const options = {
   key: fs.readFileSync("cert/key.pem"),
-  cert: fs.readFileSync("cert/cert.pem"),
+  cert: fs.readFileSync("cert/cert.crt"),
 };
 
 const hbs = handlebars.create({
@@ -50,7 +50,7 @@ const hbs = handlebars.create({
       return parseInt(s1) - parseInt(s2);
     },
 
-    for(from, to, incr, block) {
+    for (from, to, incr, block) {
       var accum = "";
       for (var i = from; i < to; i += incr) accum += block.fn(i);
       return accum;
@@ -75,9 +75,8 @@ app.use(express.static(__dirname + '/public'));
 require('./passport').localStrategy(app);
 app.use(express.urlencoded({
 
-    extended: true,
-  })
-);
+  extended: true,
+}));
 app.use(express.json());
 app.use(cors());
 

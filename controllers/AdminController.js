@@ -7,10 +7,10 @@ class AdminController {
   async getManagers(req, res, next) {
     const managers = await adminM.getAllManagers();
     // const managers = accounts.filter(manger => manager.status == "1" || manager.status == "0");
-    console.log("get all managers: ", managers);
-    console.log(managers.filter((manager) => {
-      return manager.status == "1" || manager.status == "0";
-    }));
+    // console.log("get all managers: ", managers);
+    // console.log(managers.filter((manager) => {
+    //   return manager.status == "1" || manager.status == "0";
+    // }));
     res.render("./Admin/managers", {
       layout: "adminLayout",
       title: "Quản lý tài khoản",
@@ -83,7 +83,7 @@ class AdminController {
     const id = req.params.Id;
     const location = await adminM.getTreatmentLocation(id);
     const provinces = await siteM.all("province");
-    console.log(location);
+    // console.log(location);
     res.render("./Admin/editLocation", {
       layout: "adminLayout",
       Location: location,
@@ -101,7 +101,7 @@ class AdminController {
 
     // console.log("getAccount: ", manager);
     const history = await adminM.getManagerHistory(managerId);
-    console.log('get history:', history);
+    // console.log('get history:', history);
     if (history) {
       history.forEach((h) => {
         // console.log(new Date(h.update_time).getMonth(), new Date(h.update_time).getDate(), new Date(h.update_time).getFullYear());
@@ -122,7 +122,7 @@ class AdminController {
   }
 
   async getDistrict(req, res) {
-    console.log("get district: ", req.query.province_name);
+    // console.log("get district: ", req.query.province_name);
     const province = await siteM.get(
       req.query.province_name,
       "province",
@@ -138,7 +138,7 @@ class AdminController {
   }
   //[GET]/getWard
   async getWard(req, res) {
-    console.log("getWard: ", req.query.district_name);
+    // console.log("getWard: ", req.query.district_name);
     const district = await siteM.get(
       req.query.district_name,
       "district",
@@ -188,7 +188,7 @@ class AdminController {
       status: 1,
       username: req.body.username,
     };
-    console.log("add manager: ", managerEntity);
+
     await adminM.addManager(managerEntity);
     res.redirect("/admin");
   }

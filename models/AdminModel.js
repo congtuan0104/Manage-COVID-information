@@ -34,7 +34,7 @@ module.exports = {
     return history;
   },
   getTreatmentLocation: async (id) => {
-    console.log("Call get treatment location", id);
+    // console.log("Call get treatment location", id);
     const location = await dbModel.get(id, treamentPlaceTableName, "place_id");
     return location;
   },
