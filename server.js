@@ -13,7 +13,7 @@ const https = require("https");
 
 const options = {
   key: fs.readFileSync("cert/key.pem"),
-  cert: fs.readFileSync("cert/cert.crt"),
+  cert: fs.readFileSync("cert/cert.pem"),
 };
 
 const hbs = handlebars.create({
