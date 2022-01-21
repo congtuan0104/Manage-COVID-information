@@ -11,6 +11,7 @@
         }
     });
     function getDistrict() {
+        
         $('#ward').empty();
         $('#ward').append('<option selected>Chọn Phường/Xã...</option>');
         const province_name = $('#province').val();
@@ -20,7 +21,7 @@
             return;
         }
         $.ajax({
-            url: "getDistrict",
+            url: "/getDistrict",
             type: "get",
             data: {
                 province_name: province_name
@@ -36,6 +37,7 @@
                 console.log(xhr);
             }
         });
+        
     }
     function getWard() {
         const district_name = $('#district').val();
@@ -45,7 +47,7 @@
             return;
         }
         $.ajax({
-            url: "getWard",
+            url: "/getWard",
             type: "get",
             data: {
                 district_name: district_name

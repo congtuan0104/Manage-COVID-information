@@ -18,7 +18,10 @@
         <tr>
           <th scope="row">{{this.manager_id}}</th>
           <td>{{this.manager_name}}</td>
-          <td>{{this.status}}</td>
+          <td>
+              {{#if this.status}} Đã kích hoạt{{/if}}
+              {{#unless this.status}}Khoá{{/unless}}
+          </td>
           <td>{{this.username}}</td>
           <td><a href="/admin/account/{{this.manager_id}}">Xem thêm</a></td>
         </tr>
