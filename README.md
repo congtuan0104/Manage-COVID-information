@@ -1,6 +1,5 @@
 # Manage-COVID-information
 Đồ án Lập trình ứng dụng WEB - HCMUS
-# ĐỒ ÁN 2 - CSDL Nâng cao - HCMUS
 
 ## Video demo: [Link](https://youtu.be/wasud1bI2RI)
 
